@@ -1,0 +1,136 @@
+
+# Tracing/log export belongs to the separately selected lily_trace.toml.
+
+[server]
+host = "0.0.0.0"
+port = 8080
+max_connections = 5000
+max_multipart_part_bytes = 8388608
+max_multipart_parts = 128
+max_multipart_metadata_bytes = 16384
+connection_idle_timeout_secs = 30
+tls_enabled = false
+request_timeout_secs = 60
+
+[lifecycle]
+shutdown_timeout_secs = 30
+
+[postgresql]
+mode = "single"
+connection_string = "postgresql://user:pass@localhost:5432/myapp"
+
+[postgresql.pool]
+max_size = 10
+connect_timeout_secs = 30
+acquire_timeout_secs = 5
+recycle_timeout_secs = 5
+shutdown_timeout_secs = 10
+
+[postgresql.tls]
+# Development-only plaintext example. Production mode requires "verify-full".
+mode = "disable"
+
+[cache]
+provider = "redis"
+redis_url = "redis://localhost:6379/0"
+use_tls = false
+key_namespace = "lily"
+default_ttl_secs = 3600
+pool_size = 16
+connection_timeout_secs = 5
+operation_timeout_secs = 2
+scan_page_size = 100
+max_scan_results = 1000
+
+[websocket]
+enabled = true
+host = "127.0.0.1"
+port = 8081
+endpoint_path = "/ws"
+max_connections = 1000
+ping_interval_secs = 30
+idle_timeout_secs = 60
+max_message_size_bytes = 1048576
+max_frame_size_bytes = 262144
+max_outbound_message_size_bytes = 1048576
+handshake_timeout_secs = 10
+connection_middleware_timeout_secs = 10
+message_timeout_secs = 30
+message_cleanup_timeout_secs = 10
+connection_lifecycle_timeout_secs = 30
+supported_protocols = ["lily.v2"]
+allowed_origins = ["http://localhost:3000"]
+allow_any_origin = false
+allow_missing_origin = false
+require_subprotocol = false
+inbound_queue_capacity = 16
+inbound_queue_max_bytes = 1048576
+outbound_queue_capacity = 256
+outbound_queue_max_bytes = 1048576
+outbound_admission_timeout_millis = 5000
+write_timeout_millis = 5000
+write_buffer_size_bytes = 131072
+max_write_buffer_size_bytes = 2097152
+max_rooms_per_connection = 128
+max_room_name_length = 128
+# Forwarded client identity is ignored unless the direct socket peer belongs
+# to one of these explicitly trusted networks.
+trusted_proxy_cidrs = []
+max_forwarded_hops = 16
+pong_timeout_secs = 10
+
+# Redis-backed distributed WebSocket fan-out is opt-in. Merely configuring
+# this section does not enable it; select `RedisWebSocketBackplane` on
+# `WsAppBuilder`. One adapter uses one stable Redis URL and does not perform
+# native Redis Cluster/Sentinel discovery.
+#
+# [websocket.backplane]
+# redis_url = "${secret:websocket.redis_url}"
+# use_tls = true
+# custom_ca_bundle = "/run/secrets/redis-ca.pem"
+# application_namespace = "orders-api"
+# environment_namespace = "production"
+# channel_namespace = "events"
+# publish_capacity = 64
+# ingress_capacity = 256
+# connection_timeout_millis = 5000
+# operation_timeout_millis = 2000
+# reconnect_initial_delay_millis = 100
+# reconnect_max_delay_millis = 5000
+# reconnect_jitter_ratio = 0.2
+
+# `[websocket_client]` is optional. Its single and factory-cell profiles expose
+# `backoff_multiplier`, `jitter_ratio`, and `max_frame_size` when an outbound
+# WebSocket connection is configured.
+
+# `[http_client_factory]` operational values are inherited by every named
+# client. A named client may override any of them; `additional_ca_bundle` is
+# intentionally named-client-only so private trust roots cannot bleed between
+# dependencies.
+#
+# [http_client_factory]
+# protocol = "auto"
+# max_in_flight_requests = 1024
+# max_in_flight_requests_per_origin = 256
+# max_request_body_bytes = 16777216
+# max_response_body_bytes = 16777216
+# max_header_count = 128
+# max_header_bytes = 65536
+# pool_idle_timeout_secs = 90
+# pool_max_idle_per_host = 32
+# max_retained_origins = 64
+#
+# [http_client_factory.clients.inventory]
+# base_address = "https://inventory.example.test/api"
+# protocol = "http2"
+# additional_ca_bundle = "/run/secrets/inventory-ca.pem"
+
+# HTTP CORS and rate-limit policies are application-owned. Configure CORS via
+# `AppBuilder::cors(CorsPolicy)` and rate limiting via application middleware
+# or an edge/distributed policy engine; `[security]` is not a LilyConfig field.
+
+# Custom sections are also supported
+[custom]
+feature_flags = ["feature_a", "feature_b"]
+api_version = "v1"
+debug_mode = false
