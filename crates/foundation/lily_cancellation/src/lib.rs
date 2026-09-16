@@ -1,14 +1,24 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+//! Shared, read-only cancellation of an accepted execution.
+//!
+//! Execution owners signal cooperative cancellation; application callbacks and
+//! infrastructure observe the same [`ExecutionCancellation`] view. Observation
+//! does not terminate a task or complete resource cleanup. The crate is
+//! independent of HTTP, database, and error contracts.
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+#![deny(missing_docs)]
+#![deny(rustdoc::broken_intra_doc_links)]
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+mod execution;
+
+pub use execution::ExecutionCancellation;
+
+/// Cross-crate framework construction seams, not application callback APIs.
+#[doc(hidden)]
+pub mod __private {
+    pub use crate::execution::ExecutionCancellationSource;
+
+    /// Creates an inactive view for an object outside a managed execution.
+    pub const fn inactive_execution_cancellation() -> crate::ExecutionCancellation {
+        crate::ExecutionCancellation::inactive()
     }
 }
