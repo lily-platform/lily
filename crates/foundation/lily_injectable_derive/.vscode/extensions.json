@@ -1,0 +1,15 @@
+{
+    "recommendations": [
+        "rust-lang.rust-analyzer",
+        "vadimcn.vscode-lldb",
+        "serayuzgur.crates",
+        "tamasfe.even-better-toml",
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml",
+        "ms-vscode.cmake-tools",
+        "ms-vscode.cpptools"
+    ],
+    "unwantedRecommendations": [
+        "ms-vscode.cpptools-extension-pack"
+    ]
+}

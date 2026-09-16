@@ -1,0 +1,5 @@
+error: service interfaces must use trait-object syntax, for example `interface = dyn PaymentService`
+ --> tests/ui/interface_requires_dyn.rs:7:23
+  |
+7 | #[service(interface = PaymentService)]
+  |                       ^^^^^^^^^^^^^^

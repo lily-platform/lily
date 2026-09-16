@@ -1,6 +1,36 @@
 [package]
 name = "lily_injectable_derive"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+exclude = ["examples/**", "tests/**"]
+
+[lib]
+proc-macro = true
 
 [dependencies]
+proc-macro2 = "1.0"
+proc-macro-crate = "3"
+quote = "1.0"
+syn = { version = "2.0", features = ["full"] }
+lily_injection_registry = { version = "0.1.0", path = "../lily_injection_registry" }
+lily_mongo_service = { version = "0.1.0", path = "../../integrations/lily_mongo_service" }
+lily_error = { version = "0.1.0", path = "../lily_error" }
+lily_trace = { version = "0.1.0", path = "../../integrations/lily_trace" }
+[dev-dependencies]
+lily_injection = { path = "../lily_injection" }
+lily_mongo_repository = { version = "0.1.0", path = "../../integrations/lily_mongo_repository" }
+tokio = { version = "1.0", features = ["full"] }
+futures = "0.3"
+mongodb = { workspace = true }
+serde = { version = "1.0", features = ["derive"] }
+async-trait = "0.1"
+linkme = { workspace = true }
+trybuild = "1.0"

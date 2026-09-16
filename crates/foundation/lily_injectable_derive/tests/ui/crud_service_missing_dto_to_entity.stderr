@@ -1,0 +1,44 @@
+error[E0277]: the trait bound `Entity: From<ReadOnlyDto>` is not satisfied
+  --> tests/ui/crud_service_missing_dto_to_entity.rs:16:10
+   |
+16 | #[derive(CrudService)]
+   |          ^^^^^^^^^^^ unsatisfied trait bound
+   |
+help: the trait `From<ReadOnlyDto>` is not implemented for `Entity`
+      but trait `From<GoodDto>` is implemented for it
+  --> tests/ui/crud_support.rs
+   |
+   | impl From<GoodDto> for Entity {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: for that trait implementation, expected `GoodDto`, found `ReadOnlyDto`
+   = note: required for `ReadOnlyDto` to implement `Into<Entity>`
+   = note: this error originates in the derive macro `CrudService` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `Entity: From<ReadOnlyDto>` is not satisfied
+  --> tests/ui/crud_service_missing_dto_to_entity.rs:17:15
+   |
+17 | #[entity_type(Entity)]
+   |               ^^^^^^ unsatisfied trait bound
+   |
+help: the trait `From<ReadOnlyDto>` is not implemented for `Entity`
+      but trait `From<GoodDto>` is implemented for it
+  --> tests/ui/crud_support.rs
+   |
+   | impl From<GoodDto> for Entity {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: for that trait implementation, expected `GoodDto`, found `ReadOnlyDto`
+
+error[E0277]: the trait bound `Entity: From<ReadOnlyDto>` is not satisfied
+  --> tests/ui/crud_service_missing_dto_to_entity.rs:16:10
+   |
+16 | #[derive(CrudService)]
+   |          ^^^^^^^^^^^ unsatisfied trait bound
+   |
+help: the trait `From<ReadOnlyDto>` is not implemented for `Entity`
+      but trait `From<GoodDto>` is implemented for it
+  --> tests/ui/crud_support.rs
+   |
+   | impl From<GoodDto> for Entity {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: for that trait implementation, expected `GoodDto`, found `ReadOnlyDto`
+   = note: this error originates in the derive macro `CrudService` (in Nightly builds, run with -Z macro-backtrace for more info)

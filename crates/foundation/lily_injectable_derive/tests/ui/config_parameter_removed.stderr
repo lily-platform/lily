@@ -1,0 +1,5 @@
+error: Unknown service parameter: config
+ --> tests/ui/config_parameter_removed.rs:5:11
+  |
+5 | #[service(config = AppConfig)]
+  |           ^^^^^^

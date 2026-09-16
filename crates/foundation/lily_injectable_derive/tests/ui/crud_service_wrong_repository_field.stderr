@@ -1,0 +1,9 @@
+error[E0308]: mismatched types
+ --> tests/ui/crud_service_wrong_repository_field.rs:6:10
+  |
+6 | #[derive(CrudService)]
+  |          ^^^^^^^^^^^ expected `&Arc<Repository>`, found `&String`
+  |
+  = note: expected reference `&Arc<Repository>`
+             found reference `&std::string::String`
+  = note: this error originates in the derive macro `CrudService` (in Nightly builds, run with -Z macro-backtrace for more info)

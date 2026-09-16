@@ -1,0 +1,17 @@
+error[E0277]: the trait bound `NotARepository: MongoRepository<Entity>` is not satisfied
+  --> tests/ui/crud_service_repository_trait_missing.rs:10:10
+   |
+10 | #[derive(CrudService)]
+   |          ^^^^^^^^^^^ unsatisfied trait bound
+   |
+help: the trait `MongoRepository<Entity>` is not implemented for `NotARepository`
+  --> tests/ui/crud_service_repository_trait_missing.rs:8:1
+   |
+ 8 | struct NotARepository;
+   | ^^^^^^^^^^^^^^^^^^^^^
+help: the trait `MongoRepository<Entity>` is implemented for `Repository`
+  --> tests/ui/crud_support.rs
+   |
+   | impl MongoRepository<Entity> for Repository {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = note: this error originates in the derive macro `CrudService` (in Nightly builds, run with -Z macro-backtrace for more info)

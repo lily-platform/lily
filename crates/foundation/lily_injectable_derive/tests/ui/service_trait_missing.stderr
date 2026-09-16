@@ -1,0 +1,30 @@
+error[E0277]: the trait bound `MissingServiceTrait: ServiceTrait` is not satisfied
+ --> tests/ui/service_trait_missing.rs:4:8
+  |
+4 | struct MissingServiceTrait;
+  |        ^^^^^^^^^^^^^^^^^^^ unsatisfied trait bound
+  |
+help: the trait `ServiceTrait` is not implemented for `MissingServiceTrait`
+ --> tests/ui/service_trait_missing.rs:4:1
+  |
+4 | struct MissingServiceTrait;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: required by a bound in `assert_impl`
+ --> tests/ui/service_trait_missing.rs:3:10
+  |
+3 | #[derive(Injectable)]
+  |          ^^^^^^^^^^ required by this bound in `assert_impl`
+  = note: this error originates in the derive macro `Injectable` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `MissingServiceTrait: ServiceTrait` is not satisfied
+ --> tests/ui/service_trait_missing.rs:3:10
+  |
+3 | #[derive(Injectable)]
+  |          ^^^^^^^^^^ unsatisfied trait bound
+  |
+help: the trait `ServiceTrait` is not implemented for `MissingServiceTrait`
+ --> tests/ui/service_trait_missing.rs:4:1
+  |
+4 | struct MissingServiceTrait;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  = note: this error originates in the derive macro `Injectable` (in Nightly builds, run with -Z macro-backtrace for more info)
