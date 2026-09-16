@@ -1,6 +1,53 @@
 [package]
 name = "lily_trace"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
 
 [dependencies]
+pin-project-lite = { workspace = true }
+# Tracing core
+tracing = "0.1"
+tracing-log = "0.2"
+tracing-serde = "0.2"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json", "fmt", "registry"] }
+tracing-opentelemetry = "0.31"
+tracing-appender = "0.2"
+rolling-file = { workspace = true }
+
+# OpenTelemetry
+opentelemetry = "0.30"
+opentelemetry_sdk = { version = "0.30", features = ["rt-tokio", "trace", "logs", "metrics", "experimental_metrics_custom_reader"] }
+opentelemetry-otlp = { version = "0.30", features = ["grpc-tonic", "trace", "logs", "metrics", "tls-roots"] }
+tonic = { version = "0.13", features = ["tls-native-roots"] }
+
+# Async runtime
+tokio = { version = "1.0", features = ["full"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.8"
+thiserror = { workspace = true }
+async-trait = { workspace = true }
+futures-util = "0.3"
+
+# Macro support
+lily_trace_macros = { version = "0.1.0", path = "../lily_trace_macros" }
+lily_core = { version = "0.1.0", path = "../../foundation/lily_core" }
+lily_shutdown = { version = "0.1.0", path = "../../foundation/lily_shutdown" }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+lily_monitoring = { version = "0.1.0", path = "../../foundation/lily_monitoring" }
+
+[features]
+default = ["console"]
+console = []

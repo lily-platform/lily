@@ -1,0 +1,30 @@
+# OTLP Export Test Configuration
+
+enabled = true
+level = "info"
+service_name = "otlp-test-service"
+service_version = "1.0.0"
+environment = "test"
+
+enable_events = true
+max_attributes = 128
+
+[global_attributes]
+test_type = "otlp_export"
+environment = "local"
+
+[sampling]
+strategy = "always"
+rate = 1.0
+
+[export]
+console = false
+
+# OpenTelemetry OTLP export
+[export.otlp]
+endpoint = "http://localhost:4317"
+protocol = "grpc"
+timeout = 10
+
+[export.otlp.headers]
+# x-api-key = "your-api-key-here"

@@ -1,0 +1,61 @@
+# Lily Trace Advanced Configuration Example
+# This demonstrates all available configuration options
+
+enabled = true
+level = "debug"
+service_name = "advanced-trace-demo"
+service_version = "1.0.0"
+environment = "development"
+
+# Enable span events
+enable_events = true
+max_attributes = 256
+max_event_attributes = 128
+max_events_per_span = 128
+
+# Global attributes added to all spans
+[global_attributes]
+team = "platform"
+region = "us-east-1"
+deployment = "canary"
+
+# Sampling configuration
+[sampling]
+strategy = "probability"  # Options: always, never, probability
+rate = 0.8  # 80% sampling rate
+
+# Export configuration
+[export]
+console = false  # Console output for development
+
+# Bounded JSONL file export
+[export.file]
+path = "./advanced-trace.jsonl"
+rotation = "daily" # Options: hourly, daily
+max_file_bytes = 134217728
+max_files = 7
+buffered_lines = 4096
+max_record_bytes = 16384
+
+# OpenTelemetry OTLP export
+# [export.otlp]
+# endpoint = "http://localhost:4317"
+# protocol = "grpc"
+# timeout = 10
+
+# [export.otlp.headers]
+# authorization = "Bearer your-token-here"
+# x-custom-header = "value"
+
+# Dynamic filtering rules
+[[filters]]
+target = "hyper"
+level = "warn"
+
+[[filters]]
+target = "tokio"
+level = "error"
+
+[[filters]]
+target = "advanced_trace_demo"
+level = "trace"

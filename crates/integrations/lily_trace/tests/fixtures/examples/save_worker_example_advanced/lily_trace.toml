@@ -1,0 +1,21 @@
+# =============================================================================
+# Distributed Tracing Configuration - SaveWorker Example Advanced
+# =============================================================================
+
+enabled = true
+level = "debug"
+service_name = "save-worker-example-advanced"
+service_version = "1.0.0"
+environment = "development"
+
+[sampling]
+strategy = "always"
+rate = 1.0
+
+[export]
+console = true
+
+[export.otlp]
+endpoint = "http://localhost:4317"
+protocol = "grpc"
+timeout = 10

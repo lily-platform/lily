@@ -1,0 +1,5 @@
+error: level must be one of trace, debug, info, warn, or error
+ --> tests/ui/fail_unknown_level.rs:3:14
+  |
+3 | #[lily_trace(level = "verbose")]
+  |              ^^^^^^^^^^^^^^^^^

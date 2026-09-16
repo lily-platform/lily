@@ -1,6 +1,26 @@
 [package]
 name = "lily_trace_macros"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[lib]
+proc-macro = true
 
 [dependencies]
+syn = { version = "2.0", features = ["full", "extra-traits", "visit-mut"] }
+quote = "1.0"
+proc-macro2 = "1.0"
+
+[dev-dependencies]
+trybuild = "1.0"
+tracing = { workspace = true }
+async-trait = { workspace = true }
+trace_runtime = { package = "lily_trace", version = "0.1.0", path = "../lily_trace" }

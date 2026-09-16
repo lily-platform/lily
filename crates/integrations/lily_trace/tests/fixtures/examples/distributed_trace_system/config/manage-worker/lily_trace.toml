@@ -1,0 +1,23 @@
+environment = "development"
+enabled = true
+level = "info"
+service_name = "trace-example-manage-consumer"
+service_version = "1.0.0"
+
+[[cells]]
+id = "trace-flow-manage-worker-id"
+worker_type = "TraceFlowManageWorker"
+worker_name = "trace-flow"
+kind = "manage_worker"
+
+[sampling]
+strategy = "always"
+rate = 1.0
+
+[export]
+console = true
+
+[export.otlp]
+endpoint = "http://127.0.0.1:4317"
+protocol = "tonic"
+timeout = 10
