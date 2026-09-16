@@ -1,0 +1,5 @@
+error: ClickHouse order_by must list one or more columns declared by this struct
+ --> tests/ui/fail_schema_unknown_order_column.rs:5:8
+  |
+5 | struct AuditEvent {
+  |        ^^^^^^^^^^

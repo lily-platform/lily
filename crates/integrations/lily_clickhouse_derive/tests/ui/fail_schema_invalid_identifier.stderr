@@ -1,0 +1,5 @@
+error: ClickHouse table name is not a safe identifier
+ --> tests/ui/fail_schema_invalid_identifier.rs:5:8
+  |
+5 | struct AuditEvent {
+  |        ^^^^^^^^^^

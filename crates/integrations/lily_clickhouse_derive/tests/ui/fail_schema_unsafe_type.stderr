@@ -1,0 +1,6 @@
+error: ClickHouse type override contains unsupported tokens or syntax
+ --> tests/ui/fail_schema_unsafe_type.rs:6:5
+  |
+6 | /     #[clickhouse(type = "String); DROP TABLE users; --")]
+7 | |     id: u64,
+  | |___________^

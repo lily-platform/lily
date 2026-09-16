@@ -1,0 +1,5 @@
+error: ClickHouse v1 supports only engine = "MergeTree()"; use an explicit reviewed migration for other engines
+ --> tests/ui/fail_schema_invalid_engine.rs:5:8
+  |
+5 | struct AuditEvent {
+  |        ^^^^^^^^^^

@@ -1,0 +1,5 @@
+error: Unsupported attribute. Use: table, order_by, or engine
+ --> tests/ui/fail_schema_unknown_attribute.rs:4:14
+  |
+4 | #[clickhouse(unknown = "value")]
+  |              ^^^^^^^^^^^^^^^^^

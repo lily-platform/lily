@@ -1,0 +1,5 @@
+error: ClickhouseRepository requires #[table_type(YourTableType)] attribute
+ --> tests/ui/fail_repository_missing_table.rs:7:8
+  |
+7 | struct AuditRepository {
+  |        ^^^^^^^^^^^^^^^
