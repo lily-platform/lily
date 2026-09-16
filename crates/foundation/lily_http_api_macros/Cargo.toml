@@ -1,0 +1,6 @@
+[package]
+name = "lily_http_api_macros"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
