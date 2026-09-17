@@ -2119,6 +2119,7 @@ name = "lily"
 version = "0.1.0"
 dependencies = [
  "lily_background_service",
+ "lily_cancellation",
  "lily_clickhouse",
  "lily_config",
  "lily_consumer",
@@ -2134,6 +2135,7 @@ dependencies = [
  "lily_trace",
  "lily_websocket",
  "lily_websocket_client",
+ "lily_websocket_redis",
 ]
 
 [[package]]
@@ -2795,6 +2797,22 @@ dependencies = [
  "quote",
  "syn 2.0.118",
  "url",
+]
+
+[[package]]
+name = "lily_websocket_redis"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "futures-util",
+ "lily_config",
+ "lily_injection",
+ "lily_websocket",
+ "rand 0.8.8",
+ "redis",
+ "rustls-pki-types",
+ "tokio",
+ "tokio-util",
 ]
 
 [[package]]

@@ -12,6 +12,9 @@ pub use lily_http_api as http_api;
 #[cfg(feature = "websocket")]
 pub use lily_websocket as websocket;
 
+#[cfg(feature = "websocket-redis")]
+pub use lily_websocket_redis as websocket_redis;
+
 #[cfg(feature = "__clickhouse")]
 pub use lily_clickhouse as clickhouse;
 
@@ -50,6 +53,9 @@ pub use lily_error as error;
 
 #[cfg(feature = "background-service")]
 pub use lily_background_service as background_service;
+
+#[cfg(feature = "cancellation")]
+pub use lily_cancellation as cancellation;
 
 /// Expansion support for derives re-exported by the application facades.
 /// This module is an implementation detail, not an application import path.

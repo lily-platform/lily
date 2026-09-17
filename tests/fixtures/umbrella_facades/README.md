@@ -20,8 +20,10 @@ fetch dependencies first with `cargo fetch` for both this workspace and
 The validator runs each package separately so Cargo feature unification cannot
 hide missing dependencies. It checks:
 
-- all 16 component modules, their base defaults and every native feature mapping;
+- all 18 component modules, their base defaults and every native feature mapping;
 - no optional dependencies for the empty facade;
+- standalone cancellation and Redis WebSocket adapter features; backplane
+  composition explicitly selects both `websocket` and `websocket-redis`;
 - single/factory separation and low-level adapter features without DI registration;
 - all three framework macros and their DI root re-exports with no explicit
   `injection` feature, plus standalone DI identity, scope and disposal contracts;
