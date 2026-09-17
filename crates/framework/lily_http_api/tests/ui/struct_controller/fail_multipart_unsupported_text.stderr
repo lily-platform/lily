@@ -1,0 +1,5 @@
+error: multipart text fields must use String, Option<String>, or Vec<String>
+ --> tests/ui/struct_controller/fail_multipart_unsupported_text.rs:5:5
+  |
+5 |     count: u32,
+  |     ^^^^^^^^^^

@@ -1,0 +1,5 @@
+error: an action using PassthroughResponseContext must return a typed response or NoContent
+  --> tests/ui/struct_controller/fail_passthrough_unit_return.rs:14:72
+   |
+14 |     async fn invalid(&self, _response: PassthroughResponseContext<'_>) -> Result<(), HttpApiError> {
+   |                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^

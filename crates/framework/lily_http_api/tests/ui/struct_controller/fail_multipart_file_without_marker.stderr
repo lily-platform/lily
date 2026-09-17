@@ -1,0 +1,5 @@
+error: FormFile fields require #[form_file]
+ --> tests/ui/struct_controller/fail_multipart_file_without_marker.rs:5:5
+  |
+5 |     file: FormFile,
+  |     ^^^^^^^^^^^^^^

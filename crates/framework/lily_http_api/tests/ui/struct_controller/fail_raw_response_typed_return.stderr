@@ -1,0 +1,5 @@
+error: an action using &mut Response must return () or Result<(), E> where E: IntoResponse + Send
+  --> tests/ui/struct_controller/fail_raw_response_typed_return.rs:17:7
+   |
+17 |     ) -> Result<String, HttpApiError> {
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

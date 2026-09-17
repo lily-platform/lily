@@ -1,0 +1,5 @@
+error: generic controllers are not supported
+ --> tests/ui/struct_controller/fail_generic_controller.rs:7:25
+  |
+7 | struct GenericController<T>(T);
+  |                         ^^^

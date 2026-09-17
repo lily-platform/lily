@@ -1,0 +1,5 @@
+error: generic controller actions are not supported
+  --> tests/ui/struct_controller/fail_generic_action.rs:14:19
+   |
+14 |     async fn index<T>(&self) -> Result<(), HttpApiError> {
+   |                   ^^^

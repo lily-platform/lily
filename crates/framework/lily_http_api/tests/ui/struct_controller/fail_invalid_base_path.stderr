@@ -1,0 +1,5 @@
+error: controller base path must start with '/'
+ --> tests/ui/struct_controller/fail_invalid_base_path.rs:6:13
+  |
+6 | #[base_path("api/invalid")]
+  |             ^^^^^^^^^^^^^

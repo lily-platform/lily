@@ -1,0 +1,6 @@
+error: #[form_file] fields must use FormFile, Option<FormFile>, or Vec<FormFile>
+ --> tests/ui/struct_controller/fail_multipart_marker_wrong_type.rs:5:5
+  |
+5 | /     #[form_file]
+6 | |     title: String,
+  | |_________________^

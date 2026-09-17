@@ -1,0 +1,5 @@
+error: controller actions accept at most one &mut Response binding
+  --> tests/ui/struct_controller/fail_duplicate_raw_response.rs:17:9
+   |
+17 |         _second: &mut Response,
+   |         ^^^^^^^^^^^^^^^^^^^^^^

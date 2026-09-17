@@ -1,0 +1,5 @@
+error: duplicate action CORS authority
+  --> tests/ui/struct_controller/fail_duplicate_cors.rs:18:5
+   |
+18 |     #[cors(SecondCors)]
+   |     ^^^^^^^^^^^^^^^^^^^

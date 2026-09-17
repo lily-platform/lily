@@ -2,5 +2,46 @@
 name = "lily_http_client"
 version = "0.1.0"
 edition = "2024"
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
 
 [dependencies]
+tokio = { workspace = true, features = ["full"] }
+futures = { workspace = true }
+bytes = { workspace = true }
+url = { workspace = true }
+http = { workspace = true }
+mime = { workspace = true }
+hyper = { workspace = true }
+hyper-util = { workspace = true }
+http-body-util = { workspace = true }
+hyper-rustls = { workspace = true }
+rustls = { workspace = true, features = ["ring"] }
+rustls-pki-types = { workspace = true }
+webpki-roots = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+opentelemetry = "0.30"
+anyhow = "1.0"
+async-trait = "0.1"
+base64 = "0.21"
+tower-service = "0.3"
+lily_trace = { version = "0.1.0", path = "../../integrations/lily_trace" }
+lily_config = { version = "0.1.0", path = "../lily_config" }
+lily_injection = { version = "0.1.0", path = "../lily_injection" }
+lily_error = { version = "0.1.0", path = "../lily_error" }
+lily_web_core = { version = "0.1.0", path = "../lily_web_core" }
+lily_injection_registry = { version = "0.1.0", path = "../lily_injection_registry" }
+linkme = {workspace = true}
+
+[dev-dependencies]
+tokio-rustls = { workspace = true }
+tracing-subscriber = { workspace = true }
+tempfile = { workspace = true }

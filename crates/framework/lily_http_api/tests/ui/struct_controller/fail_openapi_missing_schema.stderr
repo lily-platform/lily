@@ -1,0 +1,29 @@
+error[E0277]: the trait bound `Input: ToSchema` is not satisfied
+  --> tests/ui/struct_controller/fail_openapi_missing_schema.rs:29:46
+   |
+29 |     async fn action(&self, Json(input): Json<Input>) -> String {
+   |                                              ^^^^^ unsatisfied trait bound
+   |
+help: the trait `ToSchema` is not implemented for `Input`
+  --> tests/ui/struct_controller/fail_openapi_missing_schema.rs:10:1
+   |
+10 | struct Input {
+   | ^^^^^^^^^^^^
+   = help: the following other types implement trait `ToSchema`:
+             &'t [T]
+             &'t mut [T]
+             &str
+             ()
+             BTreeMap<K, T>
+             BTreeSet<K>
+             Box<T>
+             Cow<'a, T>
+           and $N others
+note: required by a bound in `lily_http_api::__private::openapi_schema_ref`
+  --> src/private.rs
+   |
+   | pub fn openapi_schema_ref<T>() -> utoipa::openapi::Ref
+   |        ------------------ required by a bound in this function
+   | where
+   |     T: utoipa::ToSchema,
+   |        ^^^^^^^^^^^^^^^^ required by this bound in `openapi_schema_ref`

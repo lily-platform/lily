@@ -1,0 +1,5 @@
+error: get action attribute must contain exactly one string literal
+  --> tests/ui/struct_controller/fail_unknown_action_argument.rs:13:14
+   |
+13 |     #[get("/", unexpected)]
+   |              ^

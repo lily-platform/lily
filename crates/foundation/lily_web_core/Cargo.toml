@@ -1,0 +1,52 @@
+[package]
+name = "lily_web_core"
+version = "0.1.0"
+edition = "2024"
+description = "Core HTTP request, response, buffer, and TLS types for Lily"
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+async-trait = { workspace = true }
+futures = { workspace = true }
+pin-project-lite = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { version = "1", features = ["full"] }
+bytes = { workspace = true }
+thiserror = { workspace = true }
+percent-encoding = { workspace = true }
+smallvec = { workspace = true }
+zeroize = { workspace = true }
+itoa = { workspace = true }
+log = { workspace = true }
+rustls = { workspace = true }
+rustls-pki-types = { workspace = true }
+
+lily_core = { version = "0.1.0", path = "../lily_core" }
+lily_cancellation = { workspace = true }
+tracing = { workspace = true }
+lily_error = { version = "0.1.0", path = "../lily_error" }
+httpdate = { workspace = true }
+http = { workspace = true }
+cookie = { workspace = true }
+multer = { workspace = true }
+mime = { workspace = true }
+mime_guess = { workspace = true }
+url = { workspace = true }
+cap-std = { workspace = true }
+cap-fs-ext = { workspace = true }
+
+[features]
+default = []
+
+[dev-dependencies]
+rcgen = { workspace = true }
+tempfile = { workspace = true }
+tokio-rustls = { workspace = true }
+tokio = { workspace = true, features = ["test-util"] }

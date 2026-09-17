@@ -1,0 +1,4 @@
+GET http://[invalid HTTP/1.1
+Host: fuzz.invalid
+
+

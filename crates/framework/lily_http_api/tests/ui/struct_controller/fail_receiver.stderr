@@ -1,0 +1,5 @@
+error: controller action receiver must be immutable &self
+  --> tests/ui/struct_controller/fail_receiver.rs:14:20
+   |
+14 |     async fn index(&mut self) -> Result<(), HttpApiError> {
+   |                    ^^^^^^^^^

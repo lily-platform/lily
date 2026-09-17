@@ -1,0 +1,7 @@
+error: &mut Response and PassthroughResponseContext cannot be used by the same controller action
+  --> tests/ui/struct_controller/fail_passthrough_with_raw_response.rs:15:9
+   |
+15 | /         &self,
+16 | |         _raw: &mut Response,
+17 | |         _passthrough: PassthroughResponseContext<'_>,
+   | |_____________________________________________________^

@@ -1,0 +1,60 @@
+error[E0277]: the trait bound `UnknownExtractor: FromRequestParts` is not satisfied
+  --> tests/ui/struct_controller/fail_unimplemented_typed_extractor.rs:18:19
+   |
+18 |         _unknown: UnknownExtractor,
+   |                   ^^^^^^^^^^^^^^^^ unsatisfied trait bound
+   |
+help: the trait `FromRequestParts` is not implemented for `UnknownExtractor`
+  --> tests/ui/struct_controller/fail_unimplemented_typed_extractor.rs:5:1
+   |
+ 5 | struct UnknownExtractor;
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `FromRequestParts`:
+             ClientIp
+             ExecutionCancellation
+             Local<T>
+             Option<E>
+             Principal
+             RequestCookies
+             Service<T>
+             TypedHeader<T>
+           and $N others
+note: required by a bound in `lily_http_api::__private::extract_request_parts`
+  --> src/extractor/mod.rs
+   |
+   | pub async fn extract_request_parts<E>(
+   |              --------------------- required by a bound in this function
+...
+   |     E: FromRequestParts,
+   |        ^^^^^^^^^^^^^^^^ required by this bound in `extract_request_parts`
+
+error[E0277]: the trait bound `UnknownExtractor: FromRequestParts` is not satisfied
+  --> tests/ui/struct_controller/fail_unimplemented_typed_extractor.rs:13:1
+   |
+13 | #[controller]
+   | ^^^^^^^^^^^^^ unsatisfied trait bound
+   |
+help: the trait `FromRequestParts` is not implemented for `UnknownExtractor`
+  --> tests/ui/struct_controller/fail_unimplemented_typed_extractor.rs:5:1
+   |
+ 5 | struct UnknownExtractor;
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `FromRequestParts`:
+             ClientIp
+             ExecutionCancellation
+             Local<T>
+             Option<E>
+             Principal
+             RequestCookies
+             Service<T>
+             TypedHeader<T>
+           and $N others
+note: required by a bound in `lily_http_api::__private::extract_request_parts`
+  --> src/extractor/mod.rs
+   |
+   | pub async fn extract_request_parts<E>(
+   |              --------------------- required by a bound in this function
+...
+   |     E: FromRequestParts,
+   |        ^^^^^^^^^^^^^^^^ required by this bound in `extract_request_parts`
+   = note: this error originates in the attribute macro `controller` (in Nightly builds, run with -Z macro-backtrace for more info)

@@ -1,0 +1,5 @@
+error: controller actions accept at most one PassthroughResponseContext binding
+  --> tests/ui/struct_controller/fail_duplicate_passthrough_response.rs:17:9
+   |
+17 |         _second: PassthroughResponseContext<'_>,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

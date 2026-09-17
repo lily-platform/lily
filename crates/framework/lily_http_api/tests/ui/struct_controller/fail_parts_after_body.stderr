@@ -1,0 +1,5 @@
+error: request-parts extractors must appear before the action body extractor
+  --> tests/ui/struct_controller/fail_parts_after_body.rs:17:43
+   |
+17 |     async fn index(&self, _body: RawBody, _parts: TestParts) -> Result<(), HttpApiError> {
+   |                                           ^^^^^^^^^^^^^^^^^
