@@ -10,3 +10,12 @@ and integrations.
 
 Packages are being migrated into this workspace. See individual crate
 READMEs and API documentation for the available functionality.
+
+## License
+
+Lily is dual-licensed under either the [MIT License](LICENSE-MIT) or the
+[Apache License, Version 2.0](LICENSE-APACHE), at your option.
+
+Unless you explicitly state otherwise, any contribution intentionally submitted
+for inclusion in Lily by you shall be dual-licensed as above, without any
+additional terms or conditions.
