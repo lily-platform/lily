@@ -401,7 +401,15 @@ impl ApplicationContainerBuild {
         }
     }
 
-    /// Return the immutable rollback budget captured when this build began.
+    /// Shorten the integration's rollback budget before rollback starts.
+    /// No timer starts during successful application construction.
+    #[doc(hidden)]
+    pub fn limit_rollback_timeout(&mut self, timeout: Duration) {
+        assert!(self.rollback_started.get().is_none());
+        self.rollback_timeout = self.rollback_timeout.min(timeout);
+    }
+
+    /// Return the effective rollback budget, including integration caps.
     #[doc(hidden)]
     pub fn rollback_timeout(&self) -> Duration {
         self.rollback_timeout

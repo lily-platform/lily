@@ -1,0 +1,5 @@
+error: delivery_guarantee must be `at_least_once` or `transactional_inbox`
+  --> tests/ui/fail_delivery_guarantee_invalid.rs:11:30
+   |
+11 |         delivery_guarantee = "exactly_once"
+   |                              ^^^^^^^^^^^^^^

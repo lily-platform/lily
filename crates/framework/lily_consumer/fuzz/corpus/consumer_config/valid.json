@@ -1,0 +1,1 @@
+j{"rabbitmq":{"consumer":{},"topology":{"queues":[{"name":"orders.created","exchange_name":"OrderWorker","routing_key":"orders.created","retention":{"main_max_messages":100000,"main_max_bytes":1073741824,"retry_bucket_max_messages":10000,"retry_bucket_max_bytes":268435456,"dead_letter_max_messages":10000,"dead_letter_max_bytes":268435456}}]}}}

@@ -1,0 +1,5 @@
+error: Queue handler extractors must be owned values; references are not supported
+ --> tests/ui/fail_reference_extractor.rs:8:39
+  |
+8 |     async fn handle(&self, _borrowed: &str) -> Result<(), String> {
+  |                                       ^^^^

@@ -1,0 +1,57 @@
+# Lily Queue Client Factory Mode Configuration Example
+# =====================================================
+
+[server]
+host = "127.0.0.1"
+port = 8080
+
+[queue_client]
+mode = "factory"  # Use factory mode for multiple queue client connections
+
+# Queue Client Cell 1 - Production RabbitMQ
+[[queue_client.cells]]
+name = "production"
+username = "prod_user"
+password = "prod_password"
+hostname = "rabbitmq-prod.example.com"
+port = 5671
+vhost = "/production"
+use_tls = true
+pool_size = 10
+connection_timeout_secs = 10
+confirm_timeout_secs = 10
+heartbeat_secs = 30
+max_reconnect_attempts = 5
+reconnect_backoff_millis = 250
+
+# Queue Client Cell 2 - Staging RabbitMQ
+[[queue_client.cells]]
+name = "staging"
+username = "staging_user"
+password = "staging_password"
+hostname = "rabbitmq-staging.example.com"
+port = 5671
+vhost = "/staging"
+use_tls = true
+pool_size = 5
+connection_timeout_secs = 10
+confirm_timeout_secs = 10
+heartbeat_secs = 30
+max_reconnect_attempts = 5
+reconnect_backoff_millis = 250
+
+# Queue Client Cell 3 - Local Development
+[[queue_client.cells]]
+name = "local"
+username = "guest"
+password = "guest"
+hostname = "localhost"
+port = 5672
+vhost = "/"
+use_tls = false
+pool_size = 3
+connection_timeout_secs = 10
+confirm_timeout_secs = 10
+heartbeat_secs = 30
+max_reconnect_attempts = 5
+reconnect_backoff_millis = 250

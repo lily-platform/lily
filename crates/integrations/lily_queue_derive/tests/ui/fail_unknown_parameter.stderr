@@ -1,0 +1,5 @@
+error: unknown #[queue] argument; policy belongs in rabbitmq.topology.queues
+ --> tests/ui/fail_unknown_parameter.rs:7:61
+  |
+7 |     #[queue("audit.created", version = 1, content = "json", unknown = true)]
+  |                                                             ^^^^^^^

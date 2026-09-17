@@ -1,0 +1,78 @@
+[package]
+name = "lily-consumer-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+arbitrary = { version = "1", features = ["derive"] }
+libfuzzer-sys = "0.4"
+lily_config = { path = "../../../foundation/lily_config" }
+lily_consumer = { path = "..", features = ["fuzzing"] }
+lily_queue = { path = "../../../integrations/lily_queue", features = ["fuzzing"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["rt", "sync", "test-util", "time"] }
+toml = "0.8"
+
+[[bin]]
+name = "consumer_config"
+path = "fuzz_targets/consumer_config.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "consumer_plan"
+path = "fuzz_targets/consumer_plan.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "consumer_shutdown_state"
+path = "fuzz_targets/consumer_shutdown_state.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "consumer_runtime_ownership"
+path = "fuzz_targets/consumer_runtime_ownership.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "queue_delivery_envelope"
+path = "fuzz_targets/queue_delivery_envelope.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "queue_amqp_metadata"
+path = "fuzz_targets/queue_amqp_metadata.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "queue_extractor_plan"
+path = "fuzz_targets/queue_extractor_plan.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "queue_settlement_state"
+path = "fuzz_targets/queue_settlement_state.rs"
+test = false
+doc = false
+bench = false
+
+[workspace]
+members = ["."]

@@ -1,0 +1,1 @@
+j{"definitions":[{"name":"orders.created","exchange_name":"OrderWorker","routing_key":"orders.created"}],"handlers":[{"queue_name":"orders.created","service_type_name":"OrderWorker","method_name":"handle_zero","handler_name":"app::OrderWorker::handle_zero","schema_version":0,"content_kind":"json","payload_kind":1,"payload_type_name":"Json<OrderCreated>"}],"trace_cells":[]}

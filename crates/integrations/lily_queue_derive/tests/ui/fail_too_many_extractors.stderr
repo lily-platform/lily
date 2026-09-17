@@ -1,0 +1,11 @@
+error: Queue handlers accept at most 16 typed extractor arguments
+  --> tests/ui/fail_too_many_extractors.rs:10:9
+   |
+10 | /         &self,
+11 | |         _a: String,
+12 | |         _b: String,
+13 | |         _c: String,
+...  |
+26 | |         _p: String,
+27 | |         _q: String,
+   | |___________________^

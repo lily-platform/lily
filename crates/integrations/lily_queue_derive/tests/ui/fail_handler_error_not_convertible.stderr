@@ -1,0 +1,8 @@
+error[E0277]: the trait bound `QueueHandlerError: From<String>` is not satisfied
+ --> tests/ui/fail_handler_error_not_convertible.rs:5:1
+  |
+5 | #[queue_service]
+  | ^^^^^^^^^^^^^^^^ the trait `From<String>` is not implemented for `QueueHandlerError`
+  |
+  = note: required for `String` to implement `Into<QueueHandlerError>`
+  = note: this error originates in the attribute macro `queue_service` (in Nightly builds, run with -Z macro-backtrace for more info)

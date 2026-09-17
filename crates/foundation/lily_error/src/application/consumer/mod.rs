@@ -468,6 +468,12 @@ impl ConsumerError {
 
     /// Convert a Tokio task join failure without exposing its panic payload.
     pub fn managed_task(error: tokio::task::JoinError) -> Self {
+        Self::managed_task_shared(Arc::new(error))
+    }
+
+    /// Convert the same retained task join error without losing its source.
+    #[doc(hidden)]
+    pub fn managed_task_shared(error: Arc<tokio::task::JoinError>) -> Self {
         let kind = if error.is_panic() {
             ConsumerManagedTaskFailureKind::Panicked
         } else {
@@ -475,7 +481,7 @@ impl ConsumerError {
         };
         Self::ManagedRuntimeTask {
             kind,
-            source: SharedConsumerErrorSource::new(error),
+            source: SharedConsumerErrorSource(error),
         }
     }
 

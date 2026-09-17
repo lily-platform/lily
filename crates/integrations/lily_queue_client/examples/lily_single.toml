@@ -1,0 +1,22 @@
+# Lily Queue Client Single Mode Configuration Example
+# ====================================================
+
+[server]
+host = "127.0.0.1"
+port = 8080
+
+[queue_client]
+mode = "single"  # Use single mode for one queue client connection (default)
+username = "guest"
+password = "guest"
+hostname = "localhost"
+port = 5672
+vhost = "/"
+use_tls = false
+pool_size = 5
+connection_timeout_secs = 10
+confirm_timeout_secs = 10
+heartbeat_secs = 30
+max_reconnect_attempts = 5
+reconnect_backoff_millis = 250
+persistence_enabled = true

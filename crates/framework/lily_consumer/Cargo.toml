@@ -1,6 +1,73 @@
 [package]
 name = "lily_consumer"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+exclude = ["fuzz/**"]
+
+[features]
+default = []
+asyncapi = ["dep:lily_asyncapi", "lily_queue/asyncapi"]
+fuzzing = ["lily_queue/test-support"]
+transactional-inbox-mongodb = [
+    "dep:lily_mongodb",
+    "lily_config/transactional-inbox-mongodb",
+    "lily_mongodb/single",
+    "lily_queue/transactional-inbox-mongodb",
+]
+transactional-inbox-mongodb-factory = [
+    "dep:lily_mongodb",
+    "lily_config/transactional-inbox-mongodb",
+    "lily_mongodb/factory",
+    "lily_queue/transactional-inbox-mongodb-factory",
+]
+transactional-inbox-postgresql = [
+    "dep:lily_postgresql",
+    "lily_config/transactional-inbox-postgresql",
+    "lily_postgresql/single",
+    "lily_queue/transactional-inbox-postgresql",
+]
+transactional-inbox-postgresql-factory = [
+    "dep:lily_postgresql",
+    "lily_config/transactional-inbox-postgresql",
+    "lily_postgresql/factory",
+    "lily_queue/transactional-inbox-postgresql-factory",
+]
 
 [dependencies]
+tokio = { workspace = true }
+tokio-util = { workspace = true }
+lily_injection = { version = "0.1.0", path = "../../foundation/lily_injection" }
+lily_error = { version = "0.1.0", path = "../../foundation/lily_error" }
+lily_config = { version = "0.1.0", path = "../../foundation/lily_config" }
+lily_queue = { version = "=0.1.0", path = "../../integrations/lily_queue" }
+lily_asyncapi = { version = "=0.1.0", path = "../../integrations/lily_asyncapi", optional = true }
+lily_mongodb = { version = "0.1.0", path = "../../integrations/lily_mongodb", default-features = false, optional = true }
+lily_postgresql = { version = "0.1.0", path = "../../integrations/lily_postgresql", default-features = false, optional = true }
+lily_trace = { version = "0.1.0", path = "../../integrations/lily_trace" }
+lily_shutdown = { version = "0.1.0", path = "../../foundation/lily_shutdown" }
+tracing = { workspace = true }
+serde = { workspace = true }
+futures-util = "0.3"
+
+[dev-dependencies]
+async-trait = "0.1"
+tokio = { workspace = true, features = ["test-util"] }
+serde_json = { workspace = true }
+toml = { workspace = true }
+tempfile = { workspace = true }
+lapin = { workspace = true }
+lily_queue = { version = "=0.1.0", path = "../../integrations/lily_queue", features = ["test-support"] }
+lily_mongodb = { version = "0.1.0", path = "../../integrations/lily_mongodb", default-features = false, features = ["test-support"] }
+lily_postgresql = { version = "0.1.0", path = "../../integrations/lily_postgresql", default-features = false, features = ["test-support"] }
+uuid = { version = "1.11", features = ["v4"] }
+reqwest = { version = "0.12.28", default-features = false, features = ["json", "rustls-tls"] }
+urlencoding = { workspace = true }
+tokio-postgres = "0.7.13"

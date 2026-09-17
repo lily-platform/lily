@@ -1278,10 +1278,11 @@ pub struct QueueDefinition {
     /// retry attempt. The routing hash is FNV-1a 64 over the canonical event
     /// ID bytes followed by the retry attempt as four-byte big-endian data.
     pub retry_jitter_ratio: f64,
-    /// Aggregate budget for one delivery execution, including extraction,
-    /// handler execution and delivery-scope cleanup (default: 30000). The
-    /// queue adapter reserves a bounded tail for mandatory scope cleanup and
-    /// exposes the earlier application-work cutoff as `DeliveryDeadline`.
+    /// Aggregate delivery budget for middleware, guards, extraction, handler,
+    /// normal exit and scope cleanup (default: 30000). The queue adapter
+    /// reserves a bounded tail for cooperative cancellation, termination hooks
+    /// and DI disposal; all normal callbacks share the earlier cutoff exposed
+    /// as `DeliveryDeadline`.
     pub delivery_execution_timeout_millis: Option<u64>,
     /// Maximum wait for one original-delivery ACK or NACK operation
     /// (default: 5000).
