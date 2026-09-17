@@ -110,3 +110,9 @@ facade, including renamed dependencies, framework-only builds, singleton/factory
 modes and negative compile checks. Run its documented validation command from
 the repository. Runnable HTTP, WebSocket and Consumer examples are a subsequent
 stage; ClickHouse is tested as a facade contract only.
+
+## Runnable examples
+
+The [connected examples](../../examples/README.md) use only the `lily` facade
+as their direct Lily dependency. They include shared services, HTTP/WebSocket/Consumer
+hosts, real clients, Docker Compose and end-to-end verification.

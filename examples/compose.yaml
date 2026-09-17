@@ -1,0 +1,130 @@
+name: lily-examples
+
+x-app-environment: &app-environment
+  LILY_CONFIG_MODE: development
+  LILY_CONFIG_PATH: /work/lily.toml
+  LILY__POSTGRESQL__CONNECTION_STRING: postgres://lily:lily_example@postgres:5432/lily_examples
+  LILY__DATABASE__CONNECTION_STRING: mongodb://mongodb:27017/
+  LILY__CACHE__REDIS_URL: redis://redis:6379/
+  LILY__QUEUE_CLIENT__HOSTNAME: rabbitmq
+  LILY__QUEUE_CLIENT__PORT: "5672"
+  LILY__RABBITMQ__CONSUMER__HOSTNAME: rabbitmq
+  LILY__RABBITMQ__CONSUMER__PORT: "5672"
+  EXAMPLE_HTTP_BIND: 0.0.0.0:58100
+  EXAMPLE_WS_BIND: 0.0.0.0:58101
+  EXAMPLE_HTTP_URL: http://http-api:58100
+  EXAMPLE_WS_URL: ws://websocket:58101/ws
+  EXAMPLE_RABBIT_URL: http://rabbitmq:15672
+
+x-app: &app
+  image: lily-examples:local
+  build:
+    context: ..
+    dockerfile: examples/Dockerfile
+  environment: *app-environment
+  init: true
+  stop_grace_period: 25s
+  volumes:
+    - traces:/work/logs
+  depends_on:
+    postgres: { condition: service_healthy }
+    mongodb: { condition: service_healthy }
+    redis: { condition: service_healthy }
+    rabbitmq: { condition: service_healthy }
+
+services:
+  postgres:
+    image: postgres:17@sha256:a426e44bac0b759c95894d68e1a0ac03ecc20b619f498a91aae373bf06d8508d
+    environment:
+      POSTGRES_USER: lily
+      POSTGRES_PASSWORD: lily_example
+      POSTGRES_DB: lily_examples
+    ports: ["127.0.0.1:55432:5432"]
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./sql/001_schema.sql:/docker-entrypoint-initdb.d/001_schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lily -d lily_examples && psql -U lily -d lily_examples -tAc 'SELECT count(*) FROM example_processed_events' >/dev/null"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  mongodb:
+    # MongoDB 8.2.11. Digest avoids the moving `latest` tag.
+    image: mongo@sha256:b8806ee8207318a30316eca72257da4c146025a80fdcdb4c597e596af9233ee3
+    ports: ["127.0.0.1:57017:27017"]
+    volumes: ["mongo-data:/data/db"]
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "quit(db.adminCommand({ping: 1}).ok ? 0 : 1)"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+  redis:
+    image: redis:7.4-alpine@sha256:ff02b58f971e7d7d156a1267e283fcbbeee91773b6aa36c49dac28ecfe28eadf
+    command: ["redis-server", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru"]
+    ports: ["127.0.0.1:56379:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  rabbitmq:
+    image: rabbitmq:4.3.4-management@sha256:eb5295d083325da5929a5ade766684d4019ffd2bce8bc7e43d6f9a05cafc8646
+    environment:
+      RABBITMQ_DEFAULT_USER: lily
+      RABBITMQ_DEFAULT_PASS: lily_example
+    ports: ["127.0.0.1:55672:5672", "127.0.0.1:55673:15672"]
+    volumes: ["rabbit-data:/var/lib/rabbitmq"]
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 3s
+      timeout: 5s
+      retries: 30
+
+  consumer:
+    <<: *app
+    command: ["lily-example-consumer"]
+    healthcheck:
+      test: ["CMD", "lily-example-client", "consumer-health"]
+      interval: 3s
+      timeout: 8s
+      retries: 30
+
+  http-api:
+    <<: *app
+    command: ["lily-example-http"]
+    ports: ["127.0.0.1:58100:58100"]
+    depends_on:
+      consumer: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "lily-example-client", "health"]
+      interval: 3s
+      timeout: 8s
+      retries: 30
+
+  websocket:
+    <<: *app
+    command: ["lily-example-websocket"]
+    ports: ["127.0.0.1:58101:58101"]
+    healthcheck:
+      test: ["CMD", "lily-example-client", "ws-health"]
+      interval: 3s
+      timeout: 8s
+      retries: 30
+
+  client:
+    <<: *app
+    profiles: ["tools"]
+    command: ["lily-example-client", "smoke"]
+    depends_on:
+      http-api: { condition: service_healthy }
+      websocket: { condition: service_healthy }
+      consumer: { condition: service_healthy }
+
+volumes:
+  postgres-data:
+  mongo-data:
+  rabbit-data:
+  traces:

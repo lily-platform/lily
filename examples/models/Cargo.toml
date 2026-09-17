@@ -1,0 +1,11 @@
+[package]
+workspace = ".."
+name = "lily-example-models"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+serde.workspace = true
+schemars.workspace = true

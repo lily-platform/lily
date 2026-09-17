@@ -8,8 +8,9 @@ and integrations.
 - `crates/integrations`: database, messaging, and other integrations.
 - `crates/lily`: the application-facing facade.
 
-Packages are being migrated into this workspace. See individual crate
-READMEs and API documentation for the available functionality.
+See individual crate READMEs and API documentation for available functionality.
+The [connected examples](examples/README.md) run HTTP, WebSocket and Consumer
+applications with shared DI services, real databases, messaging and facade clients.
 
 ## License
 

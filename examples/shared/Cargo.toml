@@ -1,0 +1,15 @@
+[package]
+name = "lily-example-shared"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+lily = { workspace = true, features = ["injection", "config", "trace", "error", "background-service", "postgresql", "mongodb", "redis", "queue-client"] }
+lily-example-models.workspace = true
+serde.workspace = true
+tokio.workspace = true
+uuid.workspace = true
+thiserror.workspace = true
+diesel = { version = "=2.3.11", default-features = false, features = ["postgres_backend"] }

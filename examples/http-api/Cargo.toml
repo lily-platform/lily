@@ -1,0 +1,14 @@
+[package]
+name = "lily-example-http"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+lily = { workspace = true, features = ["http-api"] }
+lily-example-models.workspace = true
+lily-example-shared.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
