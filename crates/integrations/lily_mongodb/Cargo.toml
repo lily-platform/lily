@@ -45,6 +45,7 @@ tokio-util = { workspace = true }
 once_cell = { workspace = true }                                  # statics, cert cache
 linkme = { workspace = true }                                     # logging
 lily_mongodb_derive = { version = "0.1.0", path = "../lily_mongodb_derive" }
+lily_mongo_service = { version = "0.1.0", path = "../lily_mongo_service" }
 lily_mongo_repository = { version = "0.1.0", path = "../lily_mongo_repository" }
 
 [dev-dependencies]

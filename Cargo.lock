@@ -2202,6 +2202,24 @@ dependencies = [
 [[package]]
 name = "lily"
 version = "0.1.0"
+dependencies = [
+ "lily_background_service",
+ "lily_clickhouse",
+ "lily_config",
+ "lily_consumer",
+ "lily_error",
+ "lily_http_api",
+ "lily_http_client",
+ "lily_injection",
+ "lily_mongodb",
+ "lily_postgresql",
+ "lily_queue",
+ "lily_queue_client",
+ "lily_redis",
+ "lily_trace",
+ "lily_websocket",
+ "lily_websocket_client",
+]
 
 [[package]]
 name = "lily_asyncapi"
@@ -2278,6 +2296,7 @@ dependencies = [
 name = "lily_clickhouse_derive"
 version = "0.1.0"
 dependencies = [
+ "proc-macro-crate",
  "proc-macro2",
  "quote",
  "syn 2.0.118",
@@ -2450,20 +2469,13 @@ dependencies = [
 name = "lily_injectable_derive"
 version = "0.1.0"
 dependencies = [
- "async-trait",
- "futures",
  "lily_error",
  "lily_injection",
  "lily_injection_registry",
- "lily_mongo_repository",
- "lily_mongo_service",
- "lily_trace",
  "linkme",
- "mongodb",
  "proc-macro-crate",
  "proc-macro2",
  "quote",
- "serde",
  "syn 2.0.118",
  "tokio",
  "trybuild",
@@ -2589,6 +2601,7 @@ dependencies = [
  "lily_injection",
  "lily_injection_registry",
  "lily_mongo_repository",
+ "lily_mongo_service",
  "lily_mongodb_derive",
  "lily_shutdown",
  "lily_trace",
@@ -2613,17 +2626,14 @@ name = "lily_mongodb_derive"
 version = "0.1.0"
 dependencies = [
  "async-trait",
- "futures",
- "lily_error",
- "lily_injectable_derive",
  "lily_injection",
- "lily_injection_registry",
- "lily_mongo_repository",
- "mongodb",
+ "lily_mongodb",
+ "proc-macro-crate",
  "proc-macro2",
  "quote",
  "serde",
  "syn 2.0.118",
+ "tokio",
  "trybuild",
 ]
 
@@ -2671,6 +2681,7 @@ dependencies = [
 name = "lily_postgresql_derive"
 version = "0.1.0"
 dependencies = [
+ "proc-macro-crate",
  "proc-macro2",
  "quote",
  "syn 2.0.118",
@@ -2763,6 +2774,7 @@ name = "lily_queue_derive"
 version = "0.1.0"
 dependencies = [
  "lily_error",
+ "lily_injection",
  "lily_queue",
  "proc-macro-crate",
  "proc-macro2",
@@ -2854,6 +2866,7 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "lily_trace",
+ "proc-macro-crate",
  "proc-macro2",
  "quote",
  "syn 2.0.118",

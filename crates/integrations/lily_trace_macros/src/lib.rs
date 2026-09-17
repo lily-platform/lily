@@ -3,10 +3,12 @@
 
 //! Attribute macros for instrumenting Lily application functions.
 
+mod runtime_path;
+
 use proc_macro::TokenStream;
 use syn::punctuated::Punctuated;
 use syn::token::Comma;
-use syn::{parse_macro_input, ItemFn, Meta};
+use syn::{ItemFn, Meta, parse_macro_input};
 
 mod trace;
 mod utils;
@@ -36,6 +38,10 @@ mod utils;
 /// `env = "development"` or `env = ["development", "test"]` conditionally
 /// creates the span using Lily's process-level `LILY_ENV` classification. It
 /// does not inspect `TraceConfig::environment`.
+///
+/// Applications import this attribute from `lily_trace`. The runtime dependency
+/// is discovered by package name, so a Cargo-renamed dependency needs no
+/// `crate_path` setting. An explicit `crate_path` always overrides discovery.
 ///
 /// # Options
 ///

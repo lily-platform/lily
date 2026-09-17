@@ -1,0 +1,71 @@
+# Development-only endpoints; Compose overrides hosts/ports with LILY__ variables.
+[lifecycle]
+shutdown_timeout_secs = 15
+
+[custom]
+worker_interval_ms = "2000"
+
+[postgresql]
+mode = "single"
+connection_string = "postgres://lily:lily_example@127.0.0.1:55432/lily_examples"
+[postgresql.pool]
+max_size = 4
+acquire_timeout_secs = 3
+transaction_cleanup_timeout_secs = 3
+[postgresql.tls]
+mode = "disable"
+
+[database]
+mode = "single"
+database_type = "mongodb"
+connection_string = "mongodb://127.0.0.1:57017/"
+database_name = "lily_examples"
+pool_size = 4
+connection_timeout_secs = 5
+query_timeout_secs = 5
+use_tls = false
+
+[cache]
+mode = "single"
+provider = "redis"
+redis_url = "redis://127.0.0.1:56379/"
+use_tls = false
+key_namespace = "lily_examples"
+default_ttl_secs = 60
+pool_size = 4
+operation_timeout_secs = 2
+
+[queue_client]
+mode = "single"
+username = "lily"
+password = "lily_example"
+hostname = "127.0.0.1"
+port = 55672
+vhost = "/"
+use_tls = false
+pool_size = 2
+connection_timeout_secs = 5
+confirm_timeout_secs = 5
+
+[rabbitmq.consumer]
+username = "lily"
+password = "lily_example"
+hostname = "127.0.0.1"
+port = 55672
+vhost = "/"
+use_tls = false
+pool_size = 2
+connection_timeout_secs = 5
+confirm_timeout_secs = 5
+
+[[rabbitmq.topology.queues]]
+name = "lily.examples.jobs"
+exchange_name = "lily.examples"
+routing_key = "jobs"
+concurrency = 2
+prefetch_count = 4
+retry_attempts = 3
+retry_backoff_millis = 100
+max_retry_backoff_millis = 1000
+max_message_size_bytes = 8192
+retention = { main_max_messages = 1000, main_max_bytes = 8388608, retry_bucket_max_messages = 1000, retry_bucket_max_bytes = 8388608, dead_letter_max_messages = 1000, dead_letter_max_bytes = 8388608 }

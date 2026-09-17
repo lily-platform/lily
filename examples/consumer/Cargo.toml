@@ -1,0 +1,12 @@
+[package]
+name = "lily-example-consumer"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+lily = { workspace = true, features = ["consumer-asyncapi", "error"] }
+lily-example-models.workspace = true
+lily-example-shared.workspace = true
+tokio.workspace = true

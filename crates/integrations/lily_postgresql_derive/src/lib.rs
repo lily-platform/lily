@@ -91,6 +91,8 @@
 //! transaction. The `*_in` methods use the supplied executor's database,
 //! independently of the repository's configured factory cell.
 
+mod runtime_path;
+
 use proc_macro::TokenStream;
 use quote::{format_ident, quote};
 use syn::{
@@ -113,6 +115,8 @@ pub fn derive_pg_repository(input: TokenStream) -> TokenStream {
 }
 
 fn expand(input: DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
+    let runtime = crate::runtime_path::lily_postgresql();
+    let trace_path = quote!(#runtime::lily_trace).to_string();
     if !input.generics.params.is_empty() {
         return Err(syn::Error::new_spanned(
             &input.generics,
@@ -168,7 +172,7 @@ fn expand(input: DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             self.#database
                 .get()
                 .cloned()
-                .ok_or(::lily_postgresql::PgError::RepositoryDatabaseNotSet)
+                .ok_or(#runtime::PgError::RepositoryDatabaseNotSet)
         },
         _ => {
             return Err(syn::Error::new_spanned(
@@ -179,16 +183,16 @@ fn expand(input: DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
     };
 
     let repository = &input.ident;
-    let find_bounds = find_id_bounds(&entity);
-    let pooled_methods = pooled_methods(&entity);
+    let find_bounds = find_id_bounds(&runtime);
+    let pooled_methods = pooled_methods(&entity, &runtime);
 
     Ok(quote! {
-        impl ::lily_postgresql::PgRepository for #repository {
+        impl #runtime::PgRepository for #repository {
             type Entity = #entity;
 
             fn database_service(
                 &self,
-            ) -> ::lily_postgresql::PgResult<::std::sync::Arc<::lily_postgresql::PgDatabaseService>> {
+            ) -> #runtime::PgResult<::std::sync::Arc<#runtime::PgDatabaseService>> {
                 #database_expression
             }
         }
@@ -203,30 +207,30 @@ fn expand(input: DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             /// configured database. An existing connection or transaction handle
             /// reuses its connection without acquiring from the pool or finalizing
             /// the transaction. A plain connection does not start a transaction.
-            #[::lily_postgresql::lily_trace::lily_trace(
+            #[#runtime::lily_trace::lily_trace(
                 name = "postgresql.repository.create",
-                crate_path = "::lily_postgresql::lily_trace"
+                crate_path = #trace_path
             )]
             pub async fn create_in(
                 &self,
-                executor: impl ::lily_postgresql::PgExecutor,
+                executor: impl #runtime::PgExecutor,
                 entity: #entity,
-            ) -> ::lily_postgresql::PgResult<#entity> {
-                ::lily_postgresql::PgExecutor::with_connection(
+            ) -> #runtime::PgResult<#entity> {
+                #runtime::PgExecutor::with_connection(
                     executor,
                     move |connection| {
                         ::std::boxed::Box::pin(async move {
-                            use ::lily_postgresql::diesel::associations::HasTable as _;
-                            use ::lily_postgresql::diesel::prelude::SelectableHelper as _;
-                            let query = ::lily_postgresql::diesel::insert_into(<#entity as ::lily_postgresql::diesel::associations::HasTable>::table())
+                            use #runtime::diesel::associations::HasTable as _;
+                            use #runtime::diesel::prelude::SelectableHelper as _;
+                            let query = #runtime::diesel::insert_into(<#entity as #runtime::diesel::associations::HasTable>::table())
                                 .values(&entity)
                                 .returning(<#entity>::as_returning());
-                            ::lily_postgresql::diesel_async::RunQueryDsl::get_result(
+                            #runtime::diesel_async::RunQueryDsl::get_result(
                                 query,
                                 connection,
                             )
                                 .await
-                                .map_err(::lily_postgresql::PgError::from)
+                                .map_err(#runtime::PgError::from)
                         })
                     },
                 )
@@ -244,32 +248,32 @@ fn expand(input: DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             /// configured database. An existing connection or transaction handle
             /// reuses its connection without acquiring from the pool or finalizing
             /// the transaction. A plain connection does not start a transaction.
-            #[::lily_postgresql::lily_trace::lily_trace(
+            #[#runtime::lily_trace::lily_trace(
                 name = "postgresql.repository.create_many",
-                crate_path = "::lily_postgresql::lily_trace"
+                crate_path = #trace_path
             )]
             pub async fn create_many_in(
                 &self,
-                executor: impl ::lily_postgresql::PgExecutor,
+                executor: impl #runtime::PgExecutor,
                 entities: ::std::vec::Vec<#entity>,
-            ) -> ::lily_postgresql::PgResult<::std::vec::Vec<#entity>> {
+            ) -> #runtime::PgResult<::std::vec::Vec<#entity>> {
                 if entities.is_empty() {
                     return Ok(::std::vec::Vec::new());
                 }
-                ::lily_postgresql::PgExecutor::with_connection(
+                #runtime::PgExecutor::with_connection(
                     executor,
                     move |connection| {
                         ::std::boxed::Box::pin(async move {
-                            use ::lily_postgresql::diesel::prelude::SelectableHelper as _;
-                            let query = ::lily_postgresql::diesel::insert_into(<#entity as ::lily_postgresql::diesel::associations::HasTable>::table())
+                            use #runtime::diesel::prelude::SelectableHelper as _;
+                            let query = #runtime::diesel::insert_into(<#entity as #runtime::diesel::associations::HasTable>::table())
                                 .values(&entities)
                                 .returning(<#entity>::as_returning());
-                            ::lily_postgresql::diesel_async::RunQueryDsl::get_results(
+                            #runtime::diesel_async::RunQueryDsl::get_results(
                                 query,
                                 connection,
                             )
                                 .await
-                                .map_err(::lily_postgresql::PgError::from)
+                                .map_err(#runtime::PgError::from)
                         })
                     },
                 )
@@ -285,23 +289,23 @@ fn expand(input: DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             /// configured database. An existing connection or transaction handle
             /// reuses its connection without acquiring from the pool or finalizing
             /// the transaction. A plain connection does not start a transaction.
-            #[::lily_postgresql::lily_trace::lily_trace(
+            #[#runtime::lily_trace::lily_trace(
                 name = "postgresql.repository.find_by_id",
-                crate_path = "::lily_postgresql::lily_trace"
+                crate_path = #trace_path
             )]
             pub async fn find_by_id_in<Id>(
                 &self,
-                executor: impl ::lily_postgresql::PgExecutor,
+                executor: impl #runtime::PgExecutor,
                 id: Id,
-            ) -> ::lily_postgresql::PgResult<::std::option::Option<#entity>>
+            ) -> #runtime::PgResult<::std::option::Option<#entity>>
             where
                 #find_bounds
             {
-                ::lily_postgresql::PgExecutor::with_connection(
+                #runtime::PgExecutor::with_connection(
                     executor,
                     move |connection| {
                         ::std::boxed::Box::pin(async move {
-                            <Self as ::lily_postgresql::PgRepositoryId<Id>>::find_on_connection(
+                            <Self as #runtime::PgRepositoryId<Id>>::find_on_connection(
                                 connection,
                                 id,
                             )
@@ -322,29 +326,29 @@ fn expand(input: DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             /// configured database. An existing connection or transaction handle
             /// reuses its connection without acquiring from the pool or finalizing
             /// the transaction. A plain connection does not start a transaction.
-            #[::lily_postgresql::lily_trace::lily_trace(
+            #[#runtime::lily_trace::lily_trace(
                 name = "postgresql.repository.update",
-                crate_path = "::lily_postgresql::lily_trace"
+                crate_path = #trace_path
             )]
             pub async fn update_in(
                 &self,
-                executor: impl ::lily_postgresql::PgExecutor,
+                executor: impl #runtime::PgExecutor,
                 entity: #entity,
-            ) -> ::lily_postgresql::PgResult<#entity> {
-                ::lily_postgresql::PgExecutor::with_connection(
+            ) -> #runtime::PgResult<#entity> {
+                #runtime::PgExecutor::with_connection(
                     executor,
                     move |connection| {
                         ::std::boxed::Box::pin(async move {
-                            use ::lily_postgresql::diesel::prelude::SelectableHelper as _;
-                            let query = ::lily_postgresql::diesel::update(&entity)
+                            use #runtime::diesel::prelude::SelectableHelper as _;
+                            let query = #runtime::diesel::update(&entity)
                                 .set(&entity)
                                 .returning(<#entity>::as_returning());
-                            ::lily_postgresql::diesel_async::RunQueryDsl::get_result(
+                            #runtime::diesel_async::RunQueryDsl::get_result(
                                 query,
                                 connection,
                             )
                                 .await
-                                .map_err(::lily_postgresql::PgError::from)
+                                .map_err(#runtime::PgError::from)
                         })
                     },
                 )
@@ -360,24 +364,24 @@ fn expand(input: DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             /// configured database. An existing connection or transaction handle
             /// reuses its connection without acquiring from the pool or finalizing
             /// the transaction. A plain connection does not start a transaction.
-            #[::lily_postgresql::lily_trace::lily_trace(
+            #[#runtime::lily_trace::lily_trace(
                 name = "postgresql.repository.delete_by_id",
-                crate_path = "::lily_postgresql::lily_trace"
+                crate_path = #trace_path
             )]
             pub async fn delete_by_id_in<Id>(
                 &self,
-                executor: impl ::lily_postgresql::PgExecutor,
+                executor: impl #runtime::PgExecutor,
                 id: Id,
-            ) -> ::lily_postgresql::PgResult<bool>
+            ) -> #runtime::PgResult<bool>
             where
                 #find_bounds
             {
-                ::lily_postgresql::PgExecutor::with_connection(
+                #runtime::PgExecutor::with_connection(
                     executor,
                     move |connection| {
                         ::std::boxed::Box::pin(async move {
                             let entity =
-                                <Self as ::lily_postgresql::PgRepositoryId<Id>>::find_on_connection(
+                                <Self as #runtime::PgRepositoryId<Id>>::find_on_connection(
                                     connection,
                                     id,
                                 )
@@ -385,14 +389,14 @@ fn expand(input: DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
                             let Some(entity) = entity else {
                                 return Ok(false);
                             };
-                            let query = ::lily_postgresql::diesel::delete(&entity);
-                            ::lily_postgresql::diesel_async::RunQueryDsl::execute(
+                            let query = #runtime::diesel::delete(&entity);
+                            #runtime::diesel_async::RunQueryDsl::execute(
                                 query,
                                 connection,
                             )
                                 .await
                                 .map(|affected| affected > 0)
-                                .map_err(::lily_postgresql::PgError::from)
+                                .map_err(#runtime::PgError::from)
                         })
                     },
                 )
@@ -411,29 +415,29 @@ fn expand(input: DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             /// configured database. An existing connection or transaction handle
             /// reuses its connection without acquiring from the pool or finalizing
             /// the transaction. A plain connection does not start a transaction.
-            #[::lily_postgresql::lily_trace::lily_trace(
+            #[#runtime::lily_trace::lily_trace(
                 name = "postgresql.repository.find_by_ids",
-                crate_path = "::lily_postgresql::lily_trace"
+                crate_path = #trace_path
             )]
             pub async fn find_by_ids_in<Id>(
                 &self,
-                executor: impl ::lily_postgresql::PgExecutor,
+                executor: impl #runtime::PgExecutor,
                 ids: ::std::vec::Vec<Id>,
-            ) -> ::lily_postgresql::PgResult<::std::vec::Vec<#entity>>
+            ) -> #runtime::PgResult<::std::vec::Vec<#entity>>
             where
                 #find_bounds
             {
                 if ids.is_empty() {
                     return Ok(::std::vec::Vec::new());
                 }
-                ::lily_postgresql::PgExecutor::with_connection(
+                #runtime::PgExecutor::with_connection(
                     executor,
                     move |connection| {
                         ::std::boxed::Box::pin(async move {
                             let mut entities = ::std::vec::Vec::with_capacity(ids.len());
                             for id in ids {
                                 let entity =
-                                    <Self as ::lily_postgresql::PgRepositoryId<Id>>::find_on_connection(
+                                    <Self as #runtime::PgRepositoryId<Id>>::find_on_connection(
                                         connection,
                                         id,
                                     )
@@ -455,27 +459,27 @@ fn expand(input: DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             /// configured database. An existing connection or transaction handle
             /// reuses its connection without acquiring from the pool or finalizing
             /// the transaction. A plain connection does not start a transaction.
-            #[::lily_postgresql::lily_trace::lily_trace(
+            #[#runtime::lily_trace::lily_trace(
                 name = "postgresql.repository.count",
-                crate_path = "::lily_postgresql::lily_trace"
+                crate_path = #trace_path
             )]
             pub async fn count_in(
                 &self,
-                executor: impl ::lily_postgresql::PgExecutor,
-            ) -> ::lily_postgresql::PgResult<i64> {
-                ::lily_postgresql::PgExecutor::with_connection(
+                executor: impl #runtime::PgExecutor,
+            ) -> #runtime::PgResult<i64> {
+                #runtime::PgExecutor::with_connection(
                     executor,
                     move |connection| {
                         ::std::boxed::Box::pin(async move {
-                            let query = ::lily_postgresql::diesel::QueryDsl::count(
-                                <#entity as ::lily_postgresql::diesel::associations::HasTable>::table(),
+                            let query = #runtime::diesel::QueryDsl::count(
+                                <#entity as #runtime::diesel::associations::HasTable>::table(),
                             );
-                            ::lily_postgresql::diesel_async::RunQueryDsl::get_result::<i64>(
+                            #runtime::diesel_async::RunQueryDsl::get_result::<i64>(
                                 query,
                                 connection,
                             )
                             .await
-                            .map_err(::lily_postgresql::PgError::from)
+                            .map_err(#runtime::PgError::from)
                         })
                     },
                 )
@@ -491,23 +495,23 @@ fn expand(input: DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             /// configured database. An existing connection or transaction handle
             /// reuses its connection without acquiring from the pool or finalizing
             /// the transaction. A plain connection does not start a transaction.
-            #[::lily_postgresql::lily_trace::lily_trace(
+            #[#runtime::lily_trace::lily_trace(
                 name = "postgresql.repository.exists",
-                crate_path = "::lily_postgresql::lily_trace"
+                crate_path = #trace_path
             )]
             pub async fn exists_in<Id>(
                 &self,
-                executor: impl ::lily_postgresql::PgExecutor,
+                executor: impl #runtime::PgExecutor,
                 id: Id,
-            ) -> ::lily_postgresql::PgResult<bool>
+            ) -> #runtime::PgResult<bool>
             where
                 #find_bounds
             {
-                ::lily_postgresql::PgExecutor::with_connection(
+                #runtime::PgExecutor::with_connection(
                     executor,
                     move |connection| {
                         ::std::boxed::Box::pin(async move {
-                            <Self as ::lily_postgresql::PgRepositoryId<Id>>::find_on_connection(
+                            <Self as #runtime::PgRepositoryId<Id>>::find_on_connection(
                                 connection,
                                 id,
                             )
@@ -524,7 +528,7 @@ fn expand(input: DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
 
 /// Keep pooled entry points as thin wrappers around the same SQL operations
 /// used by explicit executors. Empty batches retain their no-acquisition path.
-fn pooled_methods(entity: &Type) -> proc_macro2::TokenStream {
+fn pooled_methods(entity: &Type, runtime: &syn::Path) -> proc_macro2::TokenStream {
     let methods = [
         (
             "create",
@@ -593,7 +597,7 @@ fn pooled_methods(entity: &Type) -> proc_macro2::TokenStream {
         );
         let generics = by_id.then(|| quote!(<Id>));
         let bounds = by_id.then(|| {
-            let bounds = find_id_bounds(entity);
+            let bounds = find_id_bounds(runtime);
             quote!(where #bounds)
         });
         let empty_batch = batch.then(|| quote! {
@@ -606,11 +610,11 @@ fn pooled_methods(entity: &Type) -> proc_macro2::TokenStream {
             pub async fn #method #generics (
                 &self,
                 #parameter
-            ) -> ::lily_postgresql::PgResult<#output>
+            ) -> #runtime::PgResult<#output>
             #bounds
             {
                 #empty_batch
-                let database = <Self as ::lily_postgresql::PgRepository>::database_service(self)?;
+                let database = <Self as #runtime::PgRepository>::database_service(self)?;
                 self.#explicit_method(database.as_ref(), #argument).await
             }
         }
@@ -692,10 +696,10 @@ fn type_last_ident(ty: &Type, expected: &str) -> bool {
         .is_some_and(|segment| segment.ident == expected)
 }
 
-fn find_id_bounds(_entity: &Type) -> proc_macro2::TokenStream {
+fn find_id_bounds(runtime: &syn::Path) -> proc_macro2::TokenStream {
     quote! {
         Id: ::std::marker::Send + 'static,
-        Self: ::lily_postgresql::PgRepositoryId<Id>
+        Self: #runtime::PgRepositoryId<Id>
     }
 }
 

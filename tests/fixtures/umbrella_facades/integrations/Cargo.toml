@@ -1,0 +1,20 @@
+[package]
+name = "umbrella-integrations"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# The only direct Lily dependency, deliberately excluding implementation crates.
+lily = { package = "lily", path = "../../../../crates/lily", default-features = false, features = ["config", "http-client", "error", "background-service", "trace", "queue"] }
+serde = { version = "1", features = ["derive"] }
+
+tokio = { version = "1", features = ["macros", "rt", "time"] }
+diesel = { version = "=2.3.11", default-features = false, features = ["postgres_backend", "uuid"] }
+clickhouse = "0.13.3"
+
+[features]
+default = ["single"]
+single = ["lily/mongodb", "lily/postgresql", "lily/clickhouse", "lily/redis", "lily/queue-client", "lily/websocket-client"]
+factory = ["lily/mongodb-factory", "lily/postgresql-factory", "lily/clickhouse-factory", "lily/redis-factory", "lily/queue-client-factory", "lily/websocket-client-factory"]
+asyncapi = ["lily/queue-asyncapi"]

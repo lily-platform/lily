@@ -1,0 +1,18 @@
+[package]
+name = "umbrella-macro-mongodb-renamed"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# Only this component is enabled; no other facade feature may mask macro paths.
+platform = { package = "lily", path = "../../../../crates/lily", default-features = false }
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt"] }
+
+[features]
+default = ["single"]
+single = ["platform/mongodb"]
+factory = ["platform/mongodb-factory"]

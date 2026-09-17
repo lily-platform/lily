@@ -6,11 +6,11 @@
 //! repository-backed DI shape documented by the crate.
 
 #[cfg(feature = "factory")]
-use lily_injectable_derive::Injectable;
+use lily_injection::Injectable;
 #[cfg(feature = "factory")]
 use lily_mongodb::MongoFactory;
 use lily_mongodb::{Collection, DatabaseService};
-use lily_mongodb_derive::{MongoCollection, Repository};
+use lily_mongodb::{MongoCollection, Repository};
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;

@@ -8,6 +8,7 @@ use crate::type_mapper::TypeMapper;
 
 pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
     let ast = syn::parse_macro_input!(input as DeriveInput);
+    let runtime = crate::runtime_path::lily_clickhouse();
     let struct_name = &ast.ident;
     let mut table_name = struct_name.to_string().to_lowercase();
     let mut order_by = String::new();
@@ -130,7 +131,7 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
     let schema = schema_parts.join(", ");
 
     quote! {
-        impl lily_clickhouse::ClickhouseSchemaProvider for #struct_name {
+        impl #runtime::ClickhouseSchemaProvider for #struct_name {
             fn schema() -> &'static str { #schema }
             fn columns() -> &'static [&'static str] { &[#(#column_names),*] }
             fn table_name() -> &'static str { #table_name }

@@ -300,6 +300,7 @@ pub async fn exercise_settlement_state(input: SettlementStateInput) -> Settlemen
         cancellation.cancel();
     }
     let authority = SettlementAuthority::new();
+    let shutdown_budget = crate::shutdown_budget::QueueShutdownBudget::default();
     let mut observer = FuzzSettlementObserver::default();
     let mut port = FuzzSettlementPort {
         handoff: input.handoff,
@@ -319,6 +320,7 @@ pub async fn exercise_settlement_state(input: SettlementStateInput) -> Settlemen
         &cancellation,
         timeout,
         timeout,
+        &shutdown_budget,
     )
     .await;
     let terminal = fuzz_terminal(report.terminal());
@@ -335,6 +337,7 @@ pub async fn exercise_settlement_state(input: SettlementStateInput) -> Settlemen
             &cancellation,
             timeout,
             timeout,
+            &shutdown_budget,
         )
         .await;
         replay.failure().map(|failure| failure.stable_code())

@@ -49,39 +49,47 @@ pub(crate) struct QueueMethodInfo {
     pub(crate) asyncapi: EffectiveAsyncApi,
 }
 
-fn is_runtime_attribute(
+pub(crate) fn is_runtime_attribute(
     attribute: &syn::Attribute,
-    runtime_attribute_prefix: &str,
+    runtime_attribute_prefix: &[&str],
     name: &str,
 ) -> bool {
     let segments = &attribute.path().segments;
-    match segments.len() {
-        1 => segments[0].ident == name,
-        2 => segments[0].ident == runtime_attribute_prefix && segments[1].ident == name,
-        _ => false,
+    if segments.len() == 1 {
+        return attribute.path().is_ident(name);
     }
+    if !segments.last().is_some_and(|segment| segment.ident == name) {
+        return false;
+    }
+    runtime_attribute_prefix.iter().any(|prefix| {
+        let prefix: Vec<_> = prefix.split("::").collect();
+        segments.len() == prefix.len() + 1
+            && segments.iter().zip(prefix).all(|(segment, name)| {
+                segment.ident == name && matches!(segment.arguments, PathArguments::None)
+            })
+    })
 }
 
-fn is_queue_attribute(attribute: &syn::Attribute, runtime_attribute_prefix: &str) -> bool {
+fn is_queue_attribute(attribute: &syn::Attribute, runtime_attribute_prefix: &[&str]) -> bool {
     is_runtime_attribute(attribute, runtime_attribute_prefix, "queue")
 }
 
-fn is_middleware_attribute(attribute: &syn::Attribute, runtime_attribute_prefix: &str) -> bool {
+fn is_middleware_attribute(attribute: &syn::Attribute, runtime_attribute_prefix: &[&str]) -> bool {
     is_runtime_attribute(attribute, runtime_attribute_prefix, "middleware")
 }
 
-fn is_guard_attribute(attribute: &syn::Attribute, runtime_attribute_prefix: &str) -> bool {
+fn is_guard_attribute(attribute: &syn::Attribute, runtime_attribute_prefix: &[&str]) -> bool {
     is_runtime_attribute(attribute, runtime_attribute_prefix, "guard")
 }
 
-fn is_asyncapi_attribute(attribute: &syn::Attribute, runtime_attribute_prefix: &str) -> bool {
+fn is_asyncapi_attribute(attribute: &syn::Attribute, runtime_attribute_prefix: &[&str]) -> bool {
     is_runtime_attribute(attribute, runtime_attribute_prefix, "asyncapi")
 }
 
 /// Whether an impl contains facade-owned AsyncAPI metadata at either level.
 pub(crate) fn contains_asyncapi_attributes(
     impl_block: &ItemImpl,
-    runtime_attribute_prefix: &str,
+    runtime_attribute_prefix: &[&str],
 ) -> bool {
     impl_block
         .attrs
@@ -101,7 +109,7 @@ pub(crate) fn contains_asyncapi_attributes(
 /// Parse repeatable, single-type sibling pipeline markers in source order.
 pub(crate) fn extract_pipeline_types(
     attributes: &[syn::Attribute],
-    runtime_attribute_prefix: &str,
+    runtime_attribute_prefix: &[&str],
     owner: &str,
 ) -> syn::Result<QueuePipelineTypes> {
     let mut pipeline = QueuePipelineTypes::default();
@@ -127,7 +135,7 @@ pub(crate) fn extract_pipeline_types(
 /// Extract all methods with #[queue(...)] attribute from impl block
 pub(crate) fn extract_queue_methods(
     impl_block: &ItemImpl,
-    runtime_attribute_prefix: &str,
+    runtime_attribute_prefix: &[&str],
     #[cfg(feature = "asyncapi")] service_asyncapi: Option<&AsyncApiArgs>,
 ) -> syn::Result<Vec<QueueMethodInfo>> {
     let mut queue_methods = Vec::new();
@@ -328,7 +336,7 @@ fn path_arguments_contain(arguments: &PathArguments, predicate: fn(&Type) -> boo
 }
 
 /// Remove marker attributes after the outer macro has consumed them.
-pub(crate) fn strip_queue_attributes(impl_block: &mut ItemImpl, runtime_attribute_prefix: &str) {
+pub(crate) fn strip_queue_attributes(impl_block: &mut ItemImpl, runtime_attribute_prefix: &[&str]) {
     impl_block.attrs.retain(|attribute| {
         !is_middleware_attribute(attribute, runtime_attribute_prefix)
             && !is_guard_attribute(attribute, runtime_attribute_prefix)
@@ -652,9 +660,43 @@ mod tests {
         let unrelated: syn::Attribute =
             parse_quote!(#[another_framework::queue("orders", version = 1, content = "json")]);
 
-        assert!(is_queue_attribute(&unqualified, "queue_runtime"));
-        assert!(is_queue_attribute(&qualified, "queue_runtime"));
-        assert!(!is_queue_attribute(&unrelated, "queue_runtime"));
+        assert!(is_queue_attribute(&unqualified, &["queue_runtime"]));
+        assert!(is_queue_attribute(&qualified, &["queue_runtime"]));
+        assert!(!is_queue_attribute(&unrelated, &["queue_runtime"]));
+    }
+
+    #[test]
+    fn nested_and_direct_facade_markers_can_be_mixed_without_consuming_foreign_paths() {
+        let prefixes = &["queue_runtime", "platform::queue"];
+        for attribute in [
+            parse_quote!(#[queue("events", version = 1, content = "json")]),
+            parse_quote!(#[queue_runtime::queue("events", version = 1, content = "json")]),
+            parse_quote!(#[::platform::queue::queue("events", version = 1, content = "json")]),
+        ] {
+            assert!(is_queue_attribute(&attribute, prefixes));
+        }
+        for attribute in [
+            parse_quote!(#[other::queue::queue("events", version = 1, content = "json")]),
+            parse_quote!(#[platform::other::queue("events", version = 1, content = "json")]),
+            parse_quote!(#[platform::queue::nested::queue("events", version = 1, content = "json")]),
+        ] {
+            assert!(!is_queue_attribute(&attribute, prefixes));
+        }
+        let block: ItemImpl = parse_quote! {
+            impl Handler {
+                #[queue_runtime::queue("events", version = 1, content = "json")]
+                #[platform::queue::queue("events", version = 1, content = "json")]
+                async fn handle(&self) -> Result<(), Error> { Ok(()) }
+            }
+        };
+        let error = extract_queue_methods(
+            &block,
+            prefixes,
+            #[cfg(feature = "asyncapi")]
+            None,
+        )
+        .unwrap_err();
+        assert!(error.to_string().contains("exactly one #[queue"));
     }
 
     #[test]
@@ -667,7 +709,7 @@ mod tests {
         ];
 
         let pipeline =
-            extract_pipeline_types(&attributes, "queue_runtime", "queue service").unwrap();
+            extract_pipeline_types(&attributes, &["queue_runtime"], "queue service").unwrap();
         assert_eq!(
             pipeline
                 .middlewares
@@ -696,7 +738,7 @@ mod tests {
             parse_quote!(#[guard("not a type")]),
         ] {
             assert!(
-                extract_pipeline_types(&[attribute], "queue_runtime", "queue handler").is_err()
+                extract_pipeline_types(&[attribute], &["queue_runtime"], "queue handler").is_err()
             );
         }
     }
@@ -709,7 +751,7 @@ mod tests {
         ];
 
         assert!(
-            extract_pipeline_types(&attributes, "queue_runtime", "queue handler")
+            extract_pipeline_types(&attributes, &["queue_runtime"], "queue handler")
                 .unwrap()
                 .is_empty()
         );
@@ -730,7 +772,7 @@ mod tests {
             }
         };
 
-        strip_queue_attributes(&mut block, "queue_runtime");
+        strip_queue_attributes(&mut block, &["queue_runtime"]);
         assert_eq!(block.attrs.len(), 1);
         assert_eq!(block.attrs[0].path().segments[0].ident, "another_framework");
         let ImplItem::Fn(method) = &block.items[0] else {
@@ -756,7 +798,7 @@ mod tests {
 
         let error = extract_queue_methods(
             &block,
-            "queue_runtime",
+            &["queue_runtime"],
             #[cfg(feature = "asyncapi")]
             None,
         )

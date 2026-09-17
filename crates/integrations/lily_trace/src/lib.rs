@@ -62,6 +62,8 @@ pub mod api;
 pub mod component;
 /// W3C Trace Context propagation primitives.
 pub mod core;
+extern crate self as lily_trace;
+
 mod instrumentation;
 /// Shutdown-coordinator adapter for application composition roots.
 pub mod lifecycle;
@@ -76,22 +78,22 @@ pub mod runtime;
 
 pub use api::{spawn, spawn_blocking, spawn_local};
 pub use component::{
-    current_component, record_component, record_component_identity, record_current_component,
-    scope_component, ComponentIdentity,
+    ComponentIdentity, current_component, record_component, record_component_identity,
+    record_current_component, scope_component,
 };
 pub use core::{
-    context_for_span, current_context, extract_context, inject_context, inject_current_context,
-    install_w3c_propagator, set_parent, TraceError, W3CTraceContext,
+    TraceError, W3CTraceContext, context_for_span, current_context, extract_context,
+    inject_context, inject_current_context, install_w3c_propagator, set_parent,
 };
 pub use lifecycle::{TracingShutdownEvidence, TracingShutdownHandle};
-pub use result::{record_result, TraceFailure, TraceResultError};
+pub use result::{TraceFailure, TraceResultError, record_result};
 pub use runtime::{
-    tracing_runtime_status, ExportConfig, ExportTaskShutdownStatus, FileExportConfig,
-    FileExportInitError, FileExportMetricSnapshot, FileExportShutdownStatus, FileRotation,
-    FilterRule, LogExportMetricSnapshot, LogExportReport, OtlpExportConfig, SamplingConfig,
-    SamplingStrategy, SpanExportMetricSnapshot, SpanExportReport, SpanExportTaskShutdownStatus,
-    TraceCellConfig, TraceConfig, TraceConfigLoadError, TraceInstallError, TraceInstallOutcome,
-    TraceShutdownReport, TracingMode, TracingRuntimeOwner, TracingRuntimeStatus,
+    ExportConfig, ExportTaskShutdownStatus, FileExportConfig, FileExportInitError,
+    FileExportMetricSnapshot, FileExportShutdownStatus, FileRotation, FilterRule,
+    LogExportMetricSnapshot, LogExportReport, OtlpExportConfig, SamplingConfig, SamplingStrategy,
+    SpanExportMetricSnapshot, SpanExportReport, SpanExportTaskShutdownStatus, TraceCellConfig,
+    TraceConfig, TraceConfigLoadError, TraceInstallError, TraceInstallOutcome, TraceShutdownReport,
+    TracingMode, TracingRuntimeOwner, TracingRuntimeStatus, tracing_runtime_status,
 };
 
 pub use lily_trace_macros::lily_trace;

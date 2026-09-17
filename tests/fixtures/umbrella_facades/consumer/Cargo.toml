@@ -1,0 +1,16 @@
+[package]
+name = "umbrella-consumer"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# The only direct Lily dependency, deliberately excluding implementation crates.
+lily = { package = "lily", path = "../../../../crates/lily", default-features = false, features = ["consumer"] }
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt", "time"] }
+
+[features]
+asyncapi = ["lily/consumer-asyncapi"]

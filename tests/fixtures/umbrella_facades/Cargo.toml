@@ -1,0 +1,3 @@
+[workspace]
+resolver = "3"
+members = ["http_api", "http_api_renamed", "websocket", "websocket_renamed", "consumer", "consumer_renamed", "injection", "injection_renamed", "integrations", "integrations_renamed", "macro_mongodb", "macro_mongodb_renamed", "macro_postgresql", "macro_postgresql_renamed", "macro_clickhouse", "macro_clickhouse_renamed", "macro_trace", "macro_trace_renamed"]

@@ -58,8 +58,8 @@
 //! ```ignore
 //! use std::sync::Arc;
 //!
-//! use lily_injectable_derive::{CrudService, Injectable};
-//! use lily_injection::ServiceTrait;
+//! use lily_injection::{Injectable, ServiceTrait};
+//! use lily_mongodb::CrudService;
 //!
 //! #[derive(Injectable, CrudService, Default)]
 //! #[dto_type(DomainDto)]
@@ -118,13 +118,12 @@
 //! `#[service(lifetime = "...")]` selects `Transient`, so singleton data-layer
 //! components should state their lifetime explicitly.
 //!
-//! Procedural-macro output is compiled in the application crate. It therefore
-//! needs direct dependencies for generated paths, normally including
-//! `async-trait`, `lily_mongo_repository`, `lily_mongo_service`, `lily_error`,
-//! `lily_injectable_derive`, `lily_injection`, `lily_injection_registry` and
-//! `linkme`; a service using `#[gateway(...)]` also needs `lily_trace` and the
-//! relevant gateway crate. Rust transitive dependencies do not provide these
-//! names to downstream source code.
+//! Applications normally import `BaseService`, its error types and `CrudService`
+//! from `lily_mongodb`. The derive lives in `lily_mongodb_derive`; its generated
+//! calls, including optional gateway tracing, use that facade. Extra direct
+//! dependencies on this contract crate, `lily_mongo_repository`, trace, registry
+//! or macro helper packages are unnecessary. DI registration uses `lily_injection`
+//! or an HTTP/WebSocket/Consumer facade; gateway types remain application-owned.
 //!
 //! # Domain-specific repository calls
 //!
@@ -135,7 +134,7 @@
 //! framework `find_one_dto(Document)` method in the current public API.
 //!
 //! ```ignore
-//! use lily_mongo_repository::{
+//! use lily_mongodb::{
 //!     MongoFilter, MongoOperationContext, MongoRepository, MongoRepositoryError,
 //! };
 //! use mongodb::bson::doc;

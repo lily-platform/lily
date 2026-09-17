@@ -4,7 +4,9 @@
 //! Procedural derives for Lily's typed ClickHouse adapters.
 //!
 //! Applications normally import these derives from `lily_clickhouse`; a direct
-//! dependency on this proc-macro crate is unnecessary.
+//! dependency on this proc-macro crate is unnecessary. Cargo-renamed runtime
+//! dependencies work for all three derives; generated lifecycle code uses the
+//! runtime's hidden support paths. DI registration still belongs to `lily_injection`.
 //!
 //! [`ClickhouseSchema`] is the entity metadata layer. [`ClickhouseTable`]
 //! generates a typed table API and its DI lifecycle. [`ClickhouseRepository`]
@@ -32,6 +34,8 @@
 //!
 //! Both table and repository derives implement `lily_injection::ServiceTrait`.
 //! Do not supply a competing manual implementation.
+
+mod runtime_path;
 
 use proc_macro::TokenStream;
 

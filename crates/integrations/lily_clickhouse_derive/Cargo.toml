@@ -20,6 +20,7 @@ single = []
 factory = []
 
 [dependencies]
+proc-macro-crate = "3"
 syn = { workspace = true }
 quote = { workspace = true }
 proc-macro2 = { workspace = true }

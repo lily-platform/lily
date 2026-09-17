@@ -1,7 +1,12 @@
 #![deny(missing_docs)]
 #![deny(rustdoc::broken_intra_doc_links)]
 
-//! Derives for Lily's MongoDB collection and repository adapters.
+//! Derives for Lily's MongoDB collection, repository and CRUD service adapters.
+//!
+//! Applications import these macros from `lily_mongodb`; a direct dependency
+//! on this implementation crate is unnecessary. All expansion paths use that
+//! runtime facade and support Cargo dependency renaming. [`CrudService`] owns
+//! the DTO-facing service adapter previously provided by `lily_injectable_derive`.
 //!
 //! Application data layers may use the collection derive by itself or compose
 //! it with the optional repository derive:
@@ -88,6 +93,8 @@
 extern crate proc_macro;
 mod base_repository;
 mod collection;
+mod crud_service;
+mod runtime_path;
 use proc_macro::TokenStream;
 
 /// Generates a lifecycle-aware typed MongoDB collection adapter.
@@ -141,8 +148,7 @@ pub fn derive_collection(input: TokenStream) -> TokenStream {
 ///
 /// ```ignore
 /// use std::sync::Arc;
-/// use lily_injectable_derive::Injectable;
-/// use lily_injection::ServiceTrait;
+/// use lily_injection::{Injectable, ServiceTrait};
 /// use lily_mongodb::Repository;
 ///
 /// #[derive(Injectable, Repository, Default)]
@@ -164,4 +170,53 @@ pub fn derive_collection(input: TokenStream) -> TokenStream {
 #[proc_macro_derive(Repository, attributes(entity_type, collection_type))]
 pub fn derive_base_repository(input: TokenStream) -> TokenStream {
     base_repository::derive_impl(input)
+}
+
+/// Generates a DTO-facing `lily_mongodb::BaseService` implementation
+/// backed by `lily_mongodb::MongoRepository`.
+///
+/// This derive only implements the CRUD trait. The normal container-managed
+/// shape also derives `Injectable`, marks its repository and optional gateway
+/// fields with `#[inject]`, declares an explicit service lifetime and
+/// implements `ServiceTrait`. `Injectable` publishes the service to the
+/// link-time registry; no manual registration call is required.
+///
+/// Required contract:
+///
+/// - the struct has a named `Arc<Repository>` field whose name contains
+///   `repository`;
+/// - `Repository: MongoRepository<Entity>`;
+/// - `Entity: From<Dto>` and `Dto: From<Entity>`;
+/// - the converted entity contains a BSON ObjectId `_id` for delete/update
+///   operations.
+///
+/// ```ignore
+/// use std::sync::Arc;
+/// use lily_injection::{Injectable, ServiceTrait};
+/// use lily_mongodb::CrudService;
+///
+/// #[derive(Injectable, CrudService, Default)]
+/// #[entity_type(AppManager)]
+/// #[dto_type(AppManagerDto)]
+/// #[repository_type(AppManagerRepository)]
+/// #[service(lifetime = "Singleton")]
+/// pub struct AppManagerService {
+///     #[inject]
+///     repository: Arc<AppManagerRepository>,
+/// }
+///
+/// impl ServiceTrait for AppManagerService {}
+/// ```
+///
+/// Every generated call creates a detached Mongo operation context. Write a
+/// domain-specific method when a deadline, cancellation token, transaction or
+/// different not-found policy is required. `#[gateway(GatewayType)]` is
+/// optional; when present, an injected `Arc<GatewayType>` field whose name
+/// contains `gateway` receives best-effort post-write notifications.
+#[proc_macro_derive(
+    CrudService,
+    attributes(entity_type, repository_type, dto_type, gateway)
+)]
+pub fn derive_base_service(input: TokenStream) -> TokenStream {
+    crud_service::derive_impl(input)
 }

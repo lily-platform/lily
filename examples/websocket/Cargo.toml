@@ -1,0 +1,12 @@
+[package]
+name = "lily-example-websocket"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+lily = { workspace = true, features = ["websocket"] }
+lily-example-models.workspace = true
+lily-example-shared.workspace = true
+tokio.workspace = true

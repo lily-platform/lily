@@ -1,0 +1,16 @@
+[package]
+name = "umbrella-http-api"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# The only direct Lily dependency, deliberately excluding implementation crates.
+lily = { package = "lily", path = "../../../../crates/lily", default-features = false, features = ["http-api"] }
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt", "time"] }
+
+[features]
+asyncapi = []
