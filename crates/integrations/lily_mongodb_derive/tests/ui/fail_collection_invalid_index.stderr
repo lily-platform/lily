@@ -1,0 +1,5 @@
+error: MongoDB index field path is invalid
+ --> tests/ui/fail_collection_invalid_index.rs:6:1
+  |
+6 | #[index(field = "$unsafe")]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
