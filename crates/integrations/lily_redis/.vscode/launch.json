@@ -1,0 +1,141 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug Example: simple_test",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=simple_test",
+                    "--manifest-path=${workspaceFolder}/Cargo.toml"
+                ],
+                "filter": {
+                    "name": "simple_test",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "sourceLanguages": [
+                "rust"
+            ]
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug Example: basic_usage",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=basic_usage",
+                    "--manifest-path=${workspaceFolder}/Cargo.toml"
+                ],
+                "filter": {
+                    "name": "basic_usage",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "sourceLanguages": [
+                "rust"
+            ]
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug Example: advanced_operations",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=advanced_operations",
+                    "--manifest-path=${workspaceFolder}/Cargo.toml"
+                ],
+                "filter": {
+                    "name": "advanced_operations",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "sourceLanguages": [
+                "rust"
+            ]
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug Example: error_handling",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=error_handling",
+                    "--manifest-path=${workspaceFolder}/Cargo.toml"
+                ],
+                "filter": {
+                    "name": "error_handling",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "sourceLanguages": [
+                "rust"
+            ]
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug Example: factory_pattern",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=factory_pattern",
+                    "--manifest-path=${workspaceFolder}/Cargo.toml"
+                ],
+                "filter": {
+                    "name": "factory_pattern",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "sourceLanguages": [
+                "rust"
+            ]
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug All Examples (Compound)",
+            "configurations": [
+                "Debug Example: simple_test",
+                "Debug Example: basic_usage",
+                "Debug Example: advanced_operations",
+                "Debug Example: error_handling",
+                "Debug Example: factory_pattern"
+            ]
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Debug All Examples",
+            "configurations": [
+                "Debug Example: simple_test",
+                "Debug Example: basic_usage",
+                "Debug Example: advanced_operations",
+                "Debug Example: error_handling",
+                "Debug Example: factory_pattern"
+            ],
+            "stopAll": true,
+            "preLaunchTask": "cargo build --examples"
+        }
+    ]
+}

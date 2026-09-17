@@ -2,5 +2,46 @@
 name = "lily_redis"
 version = "0.1.0"
 edition = "2024"
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[features]
+default = ["single"]
+single = []
+factory = []
 
 [dependencies]
+# Redis is the only V1 provider. Rustls uses system roots and keeps `rediss://`
+# transport inside the supported graph without an insecure fallback.
+redis = { version = "0.32.7", default-features = false, features = ["tokio-rustls-comp", "tls-rustls-webpki-roots"] }
+deadpool = { version = "0.12", features = ["rt_tokio_1"] }
+rustls-pki-types = { workspace = true }
+async-trait = { workspace = true }
+# Error handling
+thiserror = "1.0"
+# Serde / JSON
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+# Async runtime
+tokio = { version = "1.40", features = ["full"] }
+tokio-util = { version = "0.7", features = ["rt"] }
+lily_trace = { version = "0.1.0", path = "../lily_trace" }
+lily_shutdown = { version = "0.1.0", path = "../../foundation/lily_shutdown" }
+lily_config = { version = "0.1.0", path = "../../foundation/lily_config" }
+# Dependency Injection (optional)
+lily_injection = { version = "0.1.0", path = "../../foundation/lily_injection" }
+lily_injectable_derive = { version = "0.1.0", path = "../../foundation/lily_injectable_derive" }
+lily_injection_registry = { version = "0.1.0", path = "../../foundation/lily_injection_registry" }
+lily_error = { version = "0.1.0", path = "../../foundation/lily_error" }
+linkme = { workspace = true }
+# Examples için ek dependencies
+[dev-dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.40", features = ["full", "macros"] }
