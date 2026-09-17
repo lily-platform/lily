@@ -1,0 +1,24 @@
+error[E0432]: unresolved imports `lily_config::async_trait`, `lily_config::ApplicationContainer`, `lily_config::ApplicationContainerBuilder`, `lily_config::ApplicationScope`, `lily_config::ApplicationScopeFactory`, `lily_config::ContainerShutdownReport`, `lily_config::Extensions`, `lily_config::Injectable`, `lily_config::InjectionError`, `lily_config::ProcessContext`, `lily_config::ServiceLifetime`, `lily_config::ServiceScope`, `lily_config::ServiceTrait`, `lily_config::ShutdownOutcome`, `lily_config::ShutdownOutcomeStatus`, `lily_config::ShutdownRemainingWork`, `lily_config::BUILD_ROLLBACK_TIMEOUT_ENV`, `lily_config::DEFAULT_SHUTDOWN_TIMEOUT`, `lily_config::MAX_BUILD_ROLLBACK_TIMEOUT_SECS`
+ --> tests/ui/config_exports.rs:2:5
+  |
+2 |     async_trait, ApplicationContainer, ApplicationContainerBuilder, ApplicationScope,
+  |     ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^ no `ApplicationScope` in the root
+  |     |            |                     |
+  |     |            |                     no `ApplicationContainerBuilder` in the root
+  |     |            no `ApplicationContainer` in the root
+  |     no `async_trait` in the root
+3 |     ApplicationScopeFactory, ContainerShutdownReport, Extensions, Injectable, InjectionError,
+  |     ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^ no `InjectionError` in the root
+  |     |                        |                        |           |
+  |     |                        |                        |           no `Injectable` in the root
+  |     |                        |                        no `Extensions` in the root
+  |     |                        no `ContainerShutdownReport` in the root
+  |     no `ApplicationScopeFactory` in the root
+4 |     ProcessContext, ServiceLifetime, ServiceScope, ServiceTrait, ShutdownOutcome,
+  |     ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^  ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+  |     |
+  |     no `ProcessContext` in the root
+5 |     ShutdownOutcomeStatus, ShutdownRemainingWork, BUILD_ROLLBACK_TIMEOUT_ENV,
+  |     ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 |     DEFAULT_SHUTDOWN_TIMEOUT, MAX_BUILD_ROLLBACK_TIMEOUT_SECS,
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

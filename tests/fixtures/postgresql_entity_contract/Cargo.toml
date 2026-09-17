@@ -1,0 +1,28 @@
+[package]
+name = "postgresql-entity-contract"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[features]
+default = ["single"]
+single = ["lily_postgresql/single"]
+factory = ["lily_postgresql/factory"]
+wrong-id = []
+missing-insertable = []
+missing-changeset = []
+missing-identifiable = []
+missing-selectable = []
+
+[dependencies]
+diesel = { version = "=2.3.11", default-features = false, features = ["postgres_backend", "uuid"] }
+diesel-async = { version = "=0.9.2", features = ["postgres"] }
+lily_error = { path = "../../../crates/lily_error" }
+lily_injectable_derive = { path = "../../../crates/lily_injectable_derive" }
+lily_injection = { path = "../../../crates/lily_injection" }
+lily_injection_registry = { path = "../../../crates/lily_injection_registry" }
+lily_postgresql = { path = "../../../crates/lily_postgresql", default-features = false }
+linkme = "0.3"
+uuid = "1"
+
+[workspace]

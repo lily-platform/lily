@@ -1,0 +1,15 @@
+[package]
+name = "lily-downstream-injectable-fixture"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+
+# One DI dependency must supply both the derive and its expansion support.
+lily_injection = { path = "../../../crates/lily_injection" }
+
+# This fixture is deliberately independent from the repository workspace. It
+# therefore cannot inherit workspace dependencies or hide missing direct deps.
+[workspace]

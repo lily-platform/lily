@@ -1,0 +1,17 @@
+[package]
+name = "lily-golden-consumer"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+lily_consumer = { path = "../../../../crates/lily_consumer" }
+lily_error = { path = "../../../../crates/lily_error" }
+lily_injectable_derive = { path = "../../../../crates/lily_injectable_derive" }
+lily_injection = { path = "../../../../crates/lily_injection" }
+lily_injection_registry = { path = "../../../../crates/lily_injection_registry" }
+lily_queue = { path = "../../../../crates/lily_queue" }
+lily_trace = { path = "../../../../crates/lily_trace" }
+linkme = "0.3"
+serde = { version = "1", features = ["derive"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }

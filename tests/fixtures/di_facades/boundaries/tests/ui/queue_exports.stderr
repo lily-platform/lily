@@ -1,0 +1,5 @@
+error[E0432]: unresolved import `lily_queue::Extensions`
+ --> tests/ui/queue_exports.rs:1:5
+  |
+1 | use lily_queue::Extensions;
+  |     ^^^^^^^^^^^^^^^^^^^^^^ no `Extensions` in the root

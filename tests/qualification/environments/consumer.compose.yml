@@ -1,0 +1,41 @@
+# Dedicated, disposable Consumer qualification services. Supply immutable local
+# image digests and generated test credentials in an external --env-file.
+# Published ports are dynamically allocated on loopback only.
+services:
+  rabbitmq:
+    image: "${LILY_CONSUMER_RABBITMQ_IMAGE:?set an immutable RabbitMQ management image}"
+    environment:
+      RABBITMQ_DEFAULT_USER: lily_qualification
+      RABBITMQ_DEFAULT_PASS: "${LILY_CONSUMER_TEST_PASSWORD:?set a generated test password}"
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: "+S 2:2"
+    ports: ["127.0.0.1::5672", "127.0.0.1::15672"]
+    tmpfs: [/var/lib/rabbitmq]
+    healthcheck:
+      test: [CMD, rabbitmq-diagnostics, -q, ping]
+      interval: 3s
+      timeout: 5s
+      retries: 30
+  postgresql:
+    image: "${LILY_CONSUMER_POSTGRESQL_IMAGE:?set an immutable PostgreSQL 17 image}"
+    environment:
+      POSTGRES_USER: lily_qualification
+      POSTGRES_PASSWORD: "${LILY_CONSUMER_TEST_PASSWORD:?set a generated test password}"
+      POSTGRES_DB: lily_consumer_qualification
+    ports: ["127.0.0.1::5432"]
+    tmpfs: [/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD, pg_isready, -U, lily_qualification, -d, lily_consumer_qualification]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+  mongodb:
+    image: "${LILY_CONSUMER_MONGODB_IMAGE:?set an immutable MongoDB image}"
+    # Intentionally unauthenticated, loopback-only disposable fault fixture.
+    command: [mongod, --bind_ip_all, --replSet, lily-qualification, --setParameter, enableTestCommands=1]
+    ports: ["127.0.0.1::27017"]
+    tmpfs: [/data/db, /data/configdb]
+    healthcheck:
+      test: [CMD, mongosh, --quiet, --eval, "quit(db.adminCommand({ping:1}).ok ? 0 : 1)"]
+      interval: 3s
+      timeout: 5s
+      retries: 30

@@ -1,0 +1,15 @@
+[package]
+name = "di-public-api-boundaries"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+lily_config = { path = "../../../../crates/lily_config" }
+lily_background_service = { path = "../../../../crates/lily_background_service" }
+lily_queue = { path = "../../../../crates/lily_queue" }
+
+[dev-dependencies]
+# A direct macro import must still require a supported DI runtime dependency.
+lily_injectable_derive = { path = "../../../../crates/lily_injectable_derive" }
+trybuild = "1.0"

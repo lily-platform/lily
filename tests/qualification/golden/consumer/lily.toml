@@ -1,0 +1,35 @@
+[server]
+host = "127.0.0.1"
+port = 18082
+
+[lifecycle]
+shutdown_timeout_secs = 30
+
+[rabbitmq.consumer]
+username = ""
+password = ""
+hostname = ""
+port = 5671
+vhost = "/"
+use_tls = true
+pool_size = 4
+connection_timeout_secs = 10
+confirm_timeout_secs = 10
+heartbeat_secs = 30
+max_reconnect_attempts = 5
+reconnect_backoff_millis = 250
+persistence_enabled = true
+
+[[rabbitmq.topology.queues]]
+name = "qualification.events"
+exchange_name = "QualificationConsumer"
+routing_key = "qualification.events"
+retention = { main_max_messages = 100000, main_max_bytes = 1073741824, retry_bucket_max_messages = 10000, retry_bucket_max_bytes = 268435456, dead_letter_max_messages = 10000, dead_letter_max_bytes = 268435456 }
+concurrency = 4
+prefetch_count = 32
+retry_attempts = 3
+retry_backoff_millis = 250
+max_retry_backoff_millis = 5000
+durable = true
+exclusive = false
+auto_delete = false

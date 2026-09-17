@@ -1,0 +1,7 @@
+error: Injectable requires a direct dependency on `lily_injection` or a Lily DI facade (`lily_http_api`, `lily_websocket`, `lily_consumer`)
+ --> tests/ui/macro_without_di.rs:1:10
+  |
+1 | #[derive(lily_injectable_derive::Injectable)]
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: this error originates in the derive macro `lily_injectable_derive::Injectable` (in Nightly builds, run with -Z macro-backtrace for more info)

@@ -1,0 +1,23 @@
+error[E0432]: unresolved imports `lily_background_service::ProcessContext`, `lily_background_service::ServiceScope`
+ --> tests/ui/background_exports.rs:1:56
+  |
+1 | use lily_background_service::{ApplicationScopeFactory, ProcessContext, ServiceScope};
+  |                                                        ^^^^^^^^^^^^^^  ^^^^^^^^^^^^ no `ServiceScope` in the root
+  |                                                        |
+  |                                                        no `ProcessContext` in the root
+
+error[E0603]: struct `ApplicationScopeFactory` is private
+ --> tests/ui/background_exports.rs:1:31
+  |
+1 | use lily_background_service::{ApplicationScopeFactory, ProcessContext, ServiceScope};
+  |                               ^^^^^^^^^^^^^^^^^^^^^^^ private struct
+  |
+note: the struct `ApplicationScopeFactory` is defined here
+ --> $LILY_BACKGROUND_SERVICE/src/lib.rs
+  |
+  | use lily_injection::ApplicationScopeFactory;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: import `ApplicationScopeFactory` directly
+  |
+1 | use lily_background_service::{lily_injection::application_scope_factory::ApplicationScopeFactory, ProcessContext, ServiceScope};
+  |                               +++++++++++++++++++++++++++++++++++++++++++

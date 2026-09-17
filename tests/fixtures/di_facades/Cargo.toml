@@ -1,0 +1,15 @@
+[workspace]
+resolver = "2"
+members = [
+    "injection",
+    "injection_renamed",
+    "http_api",
+    "http_api_renamed",
+    "websocket",
+    "websocket_renamed",
+    "consumer",
+    "consumer_renamed",
+    "config",
+    "config_renamed",
+    "boundaries",
+]
