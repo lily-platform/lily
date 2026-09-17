@@ -13,6 +13,7 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
 }
 
 fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
+    let runtime = crate::runtime_path::lily_mongodb();
     let struct_name = &ast.ident;
     let entity_type = required_type_attribute(ast, "entity_type", "YourEntityType")?;
     let dto_type = required_type_attribute(ast, "dto_type", "YourDtoType")?;
@@ -49,7 +50,7 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
         |field| {
             quote! {
                 if let Err(error) = self.#field.notify_created(&result_dto).await {
-                    lily_trace::prelude::warn!(
+                    #runtime::lily_trace::prelude::warn!(
                         "failed to send CrudService create notification: {}",
                         error
                     );
@@ -62,7 +63,7 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
         |field| {
             quote! {
                 if let Err(error) = self.#field.notify_created_many(&result_dtos).await {
-                    lily_trace::prelude::warn!(
+                    #runtime::lily_trace::prelude::warn!(
                         "failed to send CrudService create_many notification: {}",
                         error
                     );
@@ -75,7 +76,7 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
         |field| {
             quote! {
                 if let Err(error) = self.#field.notify_updated(&result_dto).await {
-                    lily_trace::prelude::warn!(
+                    #runtime::lily_trace::prelude::warn!(
                         "failed to send CrudService update notification: {}",
                         error
                     );
@@ -89,7 +90,7 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             quote! {
                 if deleted {
                     if let Err(error) = self.#field.notify_deleted_id(&deleted_id).await {
-                        lily_trace::prelude::warn!(
+                        #runtime::lily_trace::prelude::warn!(
                             "failed to send CrudService delete notification: {}",
                             error
                         );
@@ -116,23 +117,24 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
     );
 
     Ok(quote! {
-        use lily_mongo_service::BaseService;
-        #[async_trait::async_trait]
-        impl BaseService<#dto_type, #entity_type> for #struct_name {
+        // Preserve trait-method lookup without colliding across multiple derives.
+        use #runtime::BaseService as _;
+        #[#runtime::__private::async_trait]
+        impl #runtime::BaseService<#dto_type, #entity_type> for #struct_name {
             async fn create(
                 &self,
                 dto: #dto_type,
-            ) -> Result<#dto_type, lily_mongo_service::BaseServiceError> {
+            ) -> Result<#dto_type, #runtime::BaseServiceError> {
                 let repository: &std::sync::Arc<#repository_type> = &self.#repository_field;
-                let operation = lily_mongo_repository::MongoOperationContext::detached();
+                let operation = #runtime::MongoOperationContext::detached();
                 let entity: #entity_type = dto.into();
-                let result = lily_mongo_repository::MongoRepository::<#entity_type>::create(
+                let result = #runtime::MongoRepository::<#entity_type>::create(
                     repository.as_ref(),
                     entity,
                     &operation,
-                ).await.map_err(|source| lily_mongo_service::BaseServiceError::operation_failed(
+                ).await.map_err(|source| #runtime::BaseServiceError::operation_failed(
                     stringify!(#entity_type),
-                    lily_mongo_service::BaseServiceOperation::Create,
+                    #runtime::BaseServiceOperation::Create,
                     source,
                 ))?;
                 let result_dto: #dto_type = result.into();
@@ -143,27 +145,27 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             async fn create_many(
                 &self,
                 dtos: Vec<#dto_type>,
-            ) -> Result<Vec<#dto_type>, lily_mongo_service::BaseServiceError> {
+            ) -> Result<Vec<#dto_type>, #runtime::BaseServiceError> {
                 let repository: &std::sync::Arc<#repository_type> = &self.#repository_field;
                 let entities = dtos
                     .into_iter()
                     .map(<#entity_type as From<#dto_type>>::from)
                     .collect::<Vec<_>>();
-                let batch = lily_mongo_repository::MongoWriteBatch::new(entities).map_err(|source| {
-                    lily_mongo_service::BaseServiceError::operation_failed(
+                let batch = #runtime::MongoWriteBatch::new(entities).map_err(|source| {
+                    #runtime::BaseServiceError::operation_failed(
                         stringify!(#entity_type),
-                        lily_mongo_service::BaseServiceOperation::CreateMany,
+                        #runtime::BaseServiceOperation::CreateMany,
                         source,
                     )
                 })?;
-                let operation = lily_mongo_repository::MongoOperationContext::detached();
-                let results = lily_mongo_repository::MongoRepository::<#entity_type>::create_many(
+                let operation = #runtime::MongoOperationContext::detached();
+                let results = #runtime::MongoRepository::<#entity_type>::create_many(
                     repository.as_ref(),
                     batch,
                     &operation,
-                ).await.map_err(|source| lily_mongo_service::BaseServiceError::operation_failed(
+                ).await.map_err(|source| #runtime::BaseServiceError::operation_failed(
                     stringify!(#entity_type),
-                    lily_mongo_service::BaseServiceOperation::CreateMany,
+                    #runtime::BaseServiceOperation::CreateMany,
                     source,
                 ))?;
                 let result_dtos = results
@@ -177,17 +179,17 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             async fn update(
                 &self,
                 dto: #dto_type,
-            ) -> Result<#dto_type, lily_mongo_service::BaseServiceError> {
+            ) -> Result<#dto_type, #runtime::BaseServiceError> {
                 let repository: &std::sync::Arc<#repository_type> = &self.#repository_field;
-                let operation = lily_mongo_repository::MongoOperationContext::detached();
+                let operation = #runtime::MongoOperationContext::detached();
                 let entity: #entity_type = dto.into();
-                let result = lily_mongo_repository::MongoRepository::<#entity_type>::update(
+                let result = #runtime::MongoRepository::<#entity_type>::update(
                     repository.as_ref(),
                     entity,
                     &operation,
-                ).await.map_err(|source| lily_mongo_service::BaseServiceError::operation_failed(
+                ).await.map_err(|source| #runtime::BaseServiceError::operation_failed(
                     stringify!(#entity_type),
-                    lily_mongo_service::BaseServiceOperation::Update,
+                    #runtime::BaseServiceOperation::Update,
                     source,
                 ))?;
                 let result_dto: #dto_type = result.into();
@@ -198,25 +200,25 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             async fn delete(
                 &self,
                 dto: #dto_type,
-            ) -> Result<bool, lily_mongo_service::BaseServiceError> {
+            ) -> Result<bool, #runtime::BaseServiceError> {
                 let repository: &std::sync::Arc<#repository_type> = &self.#repository_field;
                 let entity: #entity_type = dto.into();
-                let id = lily_mongo_repository::MongoDocumentId::from_entity(&entity).map_err(|source| {
-                    lily_mongo_service::BaseServiceError::operation_failed(
+                let id = #runtime::MongoDocumentId::from_entity(&entity).map_err(|source| {
+                    #runtime::BaseServiceError::operation_failed(
                         stringify!(#entity_type),
-                        lily_mongo_service::BaseServiceOperation::Delete,
+                        #runtime::BaseServiceOperation::Delete,
                         source,
                     )
                 })?;
                 #prepare_deleted_id
-                let operation = lily_mongo_repository::MongoOperationContext::detached();
-                let deleted = lily_mongo_repository::MongoRepository::<#entity_type>::delete_by_id(
+                let operation = #runtime::MongoOperationContext::detached();
+                let deleted = #runtime::MongoRepository::<#entity_type>::delete_by_id(
                     repository.as_ref(),
                     id,
                     &operation,
-                ).await.map_err(|source| lily_mongo_service::BaseServiceError::operation_failed(
+                ).await.map_err(|source| #runtime::BaseServiceError::operation_failed(
                     stringify!(#entity_type),
-                    lily_mongo_service::BaseServiceOperation::Delete,
+                    #runtime::BaseServiceOperation::Delete,
                     source,
                 ))?;
                 #notify_deleted
@@ -226,40 +228,40 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             async fn delete_many(
                 &self,
                 dtos: Vec<#dto_type>,
-            ) -> Result<u64, lily_mongo_service::BaseServiceError> {
+            ) -> Result<u64, #runtime::BaseServiceError> {
                 let repository: &std::sync::Arc<#repository_type> = &self.#repository_field;
                 let ids = dtos
                     .into_iter()
                     .map(<#entity_type as From<#dto_type>>::from)
-                    .map(|entity| lily_mongo_repository::MongoDocumentId::from_entity(&entity))
+                    .map(|entity| #runtime::MongoDocumentId::from_entity(&entity))
                     .collect::<Result<Vec<_>, _>>()
-                    .map_err(|source| lily_mongo_service::BaseServiceError::operation_failed(
+                    .map_err(|source| #runtime::BaseServiceError::operation_failed(
                         stringify!(#entity_type),
-                        lily_mongo_service::BaseServiceOperation::DeleteMany,
+                        #runtime::BaseServiceOperation::DeleteMany,
                         source,
                     ))?;
-                let ids = lily_mongo_repository::MongoIdBatch::new(ids).map_err(|source| {
-                    lily_mongo_service::BaseServiceError::operation_failed(
+                let ids = #runtime::MongoIdBatch::new(ids).map_err(|source| {
+                    #runtime::BaseServiceError::operation_failed(
                         stringify!(#entity_type),
-                        lily_mongo_service::BaseServiceOperation::DeleteMany,
+                        #runtime::BaseServiceOperation::DeleteMany,
                         source,
                     )
                 })?;
-                let filter = lily_mongo_repository::MongoFilter::by_ids(&ids).map_err(|source| {
-                    lily_mongo_service::BaseServiceError::operation_failed(
+                let filter = #runtime::MongoFilter::by_ids(&ids).map_err(|source| {
+                    #runtime::BaseServiceError::operation_failed(
                         stringify!(#entity_type),
-                        lily_mongo_service::BaseServiceOperation::DeleteMany,
+                        #runtime::BaseServiceOperation::DeleteMany,
                         source,
                     )
                 })?;
-                let operation = lily_mongo_repository::MongoOperationContext::detached();
-                lily_mongo_repository::MongoRepository::<#entity_type>::delete_many(
+                let operation = #runtime::MongoOperationContext::detached();
+                #runtime::MongoRepository::<#entity_type>::delete_many(
                     repository.as_ref(),
                     filter,
                     &operation,
-                ).await.map_err(|source| lily_mongo_service::BaseServiceError::operation_failed(
+                ).await.map_err(|source| #runtime::BaseServiceError::operation_failed(
                     stringify!(#entity_type),
-                    lily_mongo_service::BaseServiceOperation::DeleteMany,
+                    #runtime::BaseServiceOperation::DeleteMany,
                     source,
                 ))
             }
@@ -267,29 +269,29 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             async fn find_by_id(
                 &self,
                 id: &str,
-            ) -> Result<#dto_type, lily_mongo_service::BaseServiceError> {
+            ) -> Result<#dto_type, #runtime::BaseServiceError> {
                 let repository: &std::sync::Arc<#repository_type> = &self.#repository_field;
                 let requested_id = id.to_string();
-                let id = lily_mongo_repository::MongoDocumentId::parse(id).map_err(|source| {
-                    lily_mongo_service::BaseServiceError::operation_failed(
+                let id = #runtime::MongoDocumentId::parse(id).map_err(|source| {
+                    #runtime::BaseServiceError::operation_failed(
                         stringify!(#entity_type),
-                        lily_mongo_service::BaseServiceOperation::FindById,
+                        #runtime::BaseServiceOperation::FindById,
                         source,
                     )
                 })?;
-                let operation = lily_mongo_repository::MongoOperationContext::detached();
-                let result = lily_mongo_repository::MongoRepository::<#entity_type>::find_by_id(
+                let operation = #runtime::MongoOperationContext::detached();
+                let result = #runtime::MongoRepository::<#entity_type>::find_by_id(
                     repository.as_ref(),
                     id,
                     &operation,
-                ).await.map_err(|source| lily_mongo_service::BaseServiceError::operation_failed(
+                ).await.map_err(|source| #runtime::BaseServiceError::operation_failed(
                     stringify!(#entity_type),
-                    lily_mongo_service::BaseServiceOperation::FindById,
+                    #runtime::BaseServiceOperation::FindById,
                     source,
                 ))?;
                 result
                     .map(<#dto_type as From<#entity_type>>::from)
-                    .ok_or_else(|| lily_mongo_service::BaseServiceError::not_found(
+                    .ok_or_else(|| #runtime::BaseServiceError::not_found(
                         stringify!(#entity_type),
                         requested_id,
                     ))
@@ -298,23 +300,23 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             async fn delete_by_id(
                 &self,
                 id: &str,
-            ) -> Result<bool, lily_mongo_service::BaseServiceError> {
+            ) -> Result<bool, #runtime::BaseServiceError> {
                 let repository: &std::sync::Arc<#repository_type> = &self.#repository_field;
-                let parsed_id = lily_mongo_repository::MongoDocumentId::parse(id).map_err(|source| {
-                    lily_mongo_service::BaseServiceError::operation_failed(
+                let parsed_id = #runtime::MongoDocumentId::parse(id).map_err(|source| {
+                    #runtime::BaseServiceError::operation_failed(
                         stringify!(#entity_type),
-                        lily_mongo_service::BaseServiceOperation::DeleteById,
+                        #runtime::BaseServiceOperation::DeleteById,
                         source,
                     )
                 })?;
-                let operation = lily_mongo_repository::MongoOperationContext::detached();
-                let deleted = lily_mongo_repository::MongoRepository::<#entity_type>::delete_by_id(
+                let operation = #runtime::MongoOperationContext::detached();
+                let deleted = #runtime::MongoRepository::<#entity_type>::delete_by_id(
                     repository.as_ref(),
                     parsed_id,
                     &operation,
-                ).await.map_err(|source| lily_mongo_service::BaseServiceError::operation_failed(
+                ).await.map_err(|source| #runtime::BaseServiceError::operation_failed(
                     stringify!(#entity_type),
-                    lily_mongo_service::BaseServiceOperation::DeleteById,
+                    #runtime::BaseServiceOperation::DeleteById,
                     source,
                 ))?;
                 #prepare_deleted_id_from_str
@@ -325,32 +327,32 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             async fn find_by_ids(
                 &self,
                 ids: Vec<String>,
-            ) -> Result<Vec<#dto_type>, lily_mongo_service::BaseServiceError> {
+            ) -> Result<Vec<#dto_type>, #runtime::BaseServiceError> {
                 let repository: &std::sync::Arc<#repository_type> = &self.#repository_field;
                 let ids = ids
                     .iter()
-                    .map(|id| lily_mongo_repository::MongoDocumentId::parse(id))
+                    .map(|id| #runtime::MongoDocumentId::parse(id))
                     .collect::<Result<Vec<_>, _>>()
-                    .map_err(|source| lily_mongo_service::BaseServiceError::operation_failed(
+                    .map_err(|source| #runtime::BaseServiceError::operation_failed(
                         stringify!(#entity_type),
-                        lily_mongo_service::BaseServiceOperation::FindByIds,
+                        #runtime::BaseServiceOperation::FindByIds,
                         source,
                     ))?;
-                let ids = lily_mongo_repository::MongoIdBatch::new(ids).map_err(|source| {
-                    lily_mongo_service::BaseServiceError::operation_failed(
+                let ids = #runtime::MongoIdBatch::new(ids).map_err(|source| {
+                    #runtime::BaseServiceError::operation_failed(
                         stringify!(#entity_type),
-                        lily_mongo_service::BaseServiceOperation::FindByIds,
+                        #runtime::BaseServiceOperation::FindByIds,
                         source,
                     )
                 })?;
-                let operation = lily_mongo_repository::MongoOperationContext::detached();
-                let results = lily_mongo_repository::MongoRepository::<#entity_type>::find_by_ids(
+                let operation = #runtime::MongoOperationContext::detached();
+                let results = #runtime::MongoRepository::<#entity_type>::find_by_ids(
                     repository.as_ref(),
                     ids,
                     &operation,
-                ).await.map_err(|source| lily_mongo_service::BaseServiceError::operation_failed(
+                ).await.map_err(|source| #runtime::BaseServiceError::operation_failed(
                     stringify!(#entity_type),
-                    lily_mongo_service::BaseServiceOperation::FindByIds,
+                    #runtime::BaseServiceOperation::FindByIds,
                     source,
                 ))?;
                 Ok(results

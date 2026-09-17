@@ -1,7 +1,7 @@
 mod crud_support;
 
 use crud_support::{Entity, GoodDto, Repository};
-use lily_injectable_derive::CrudService;
+use lily_mongodb::CrudService;
 
 #[derive(CrudService)]
 #[entity_type(Entity)]

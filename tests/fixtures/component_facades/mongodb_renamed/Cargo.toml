@@ -1,0 +1,18 @@
+[package]
+name = "component-facade-mongodb-renamed"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# The only direct Lily dependency. No derive, registry, DI or helper crates.
+component_runtime = { package = "lily_mongodb", path = "../../../../crates/integrations/lily_mongodb", default-features = false }
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt"] }
+
+[features]
+default = ["single"]
+single = ["component_runtime/single"]
+factory = ["component_runtime/factory"]

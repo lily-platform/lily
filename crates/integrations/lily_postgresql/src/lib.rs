@@ -7,6 +7,10 @@
 //! bounded acquisition and scoped connection access. Schemas, entities,
 //! relationships, joins and custom queries remain ordinary Diesel.
 //!
+//! The [`PgRepository`] derive is included in this crate. A direct dependency on
+//! `lily_postgresql_derive` is unnecessary. Cargo-renamed dependencies also work,
+//! including the tracing attributes generated on repository methods.
+//!
 //! # Choose the access layer
 //!
 //! A repository is not required. These application designs are
@@ -34,8 +38,7 @@
 //!
 //! ```ignore
 //! use std::sync::Arc;
-//! use lily_injectable_derive::Injectable;
-//! use lily_injection::ServiceTrait;
+//! use lily_injection::{Injectable, ServiceTrait};
 //! use lily_postgresql::{PgDatabaseService, PgResult};
 //!
 //! #[derive(Injectable, Default)]
@@ -159,8 +162,7 @@
 //!
 //! ```ignore
 //! use std::sync::Arc;
-//! use lily_injectable_derive::Injectable;
-//! use lily_injection::ServiceTrait;
+//! use lily_injection::{Injectable, ServiceTrait};
 //! use lily_postgresql::{PgDatabaseService, PgRepository};
 //!
 //! #[derive(Default, Injectable, PgRepository)]

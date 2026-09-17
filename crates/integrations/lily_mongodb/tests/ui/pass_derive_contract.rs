@@ -1,9 +1,9 @@
 use std::sync::Arc;
 
-use lily_injectable_derive::Injectable;
+use lily_injection::Injectable;
 use lily_injection::ServiceTrait;
+use lily_mongodb::bson::oid::ObjectId;
 use lily_mongodb::{Collection, DatabaseService, MongoCollection, Repository};
-use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "factory")]
@@ -94,12 +94,9 @@ struct StringIdRepository {
 impl ServiceTrait for StringIdRepository {}
 
 fn assert_generated_contract(repository: &EntityRepository) {
-    fn implements_repository<T: lily_mongo_repository::MongoRepository<Entity>>() {}
+    fn implements_repository<T: lily_mongodb::MongoRepository<Entity>>() {}
     implements_repository::<EntityRepository>();
-    fn implements_string_id_repository<
-        T: lily_mongo_repository::MongoRepository<StringIdEntity>,
-    >() {
-    }
+    fn implements_string_id_repository<T: lily_mongodb::MongoRepository<StringIdEntity>>() {}
     implements_string_id_repository::<StringIdRepository>();
     let _ = repository;
     let _ = EntityCollection::collection_name();

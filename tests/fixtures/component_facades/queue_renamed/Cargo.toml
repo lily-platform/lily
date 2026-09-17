@@ -1,0 +1,16 @@
+[package]
+name = "component-facade-queue-renamed"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# The only direct Lily dependency. No derive, registry, DI or helper crates.
+component_runtime = { package = "lily_queue", path = "../../../../crates/integrations/lily_queue", default-features = false }
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt"] }
+
+[features]
+asyncapi = ["component_runtime/asyncapi"]

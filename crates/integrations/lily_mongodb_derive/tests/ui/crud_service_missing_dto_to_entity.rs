@@ -3,19 +3,19 @@ mod crud_support;
 use std::sync::Arc;
 
 use crud_support::{Entity, Repository};
-use lily_injectable_derive::CrudService;
+use lily_mongodb::CrudService;
 
-struct WriteOnlyDto;
+struct ReadOnlyDto;
 
-impl From<WriteOnlyDto> for Entity {
-    fn from(_: WriteOnlyDto) -> Self {
-        Self { _id: None }
+impl From<Entity> for ReadOnlyDto {
+    fn from(_: Entity) -> Self {
+        Self
     }
 }
 
 #[derive(CrudService)]
 #[entity_type(Entity)]
-#[dto_type(WriteOnlyDto)]
+#[dto_type(ReadOnlyDto)]
 #[repository_type(Repository)]
 struct Service {
     repository: Arc<Repository>,

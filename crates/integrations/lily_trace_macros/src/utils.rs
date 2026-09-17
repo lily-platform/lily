@@ -130,7 +130,7 @@ pub(crate) fn parse_trace_arguments(args: &[Meta], input: &ItemFn) -> syn::Resul
         fields,
         skip_fields,
         environments,
-        crate_path: crate_path.unwrap_or_else(|| syn::parse_quote!(::lily_trace)),
+        crate_path: crate_path.unwrap_or_else(crate::runtime_path::lily_trace),
     })
 }
 

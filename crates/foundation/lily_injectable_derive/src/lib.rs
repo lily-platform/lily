@@ -108,7 +108,6 @@
 
 use proc_macro::TokenStream;
 
-mod base_service;
 mod injectable;
 mod runtime_path;
 mod service_args;
@@ -148,53 +147,4 @@ mod utils;
 #[proc_macro_derive(Injectable, attributes(service, inject))]
 pub fn derive_injectable(input: TokenStream) -> TokenStream {
     injectable::derive_impl(input)
-}
-
-/// Generates a DTO-facing [`lily_mongo_service::BaseService`] implementation
-/// backed by `lily_mongo_repository::MongoRepository`.
-///
-/// This derive only implements the CRUD trait. The normal container-managed
-/// shape also derives `Injectable`, marks its repository and optional gateway
-/// fields with `#[inject]`, declares an explicit service lifetime and
-/// implements `ServiceTrait`. `Injectable` publishes the service to the
-/// link-time registry; no manual registration call is required.
-///
-/// Required contract:
-///
-/// - the struct has a named `Arc<Repository>` field whose name contains
-///   `repository`;
-/// - `Repository: MongoRepository<Entity>`;
-/// - `Entity: From<Dto>` and `Dto: From<Entity>`;
-/// - the converted entity contains a BSON ObjectId `_id` for delete/update
-///   operations.
-///
-/// ```ignore
-/// use std::sync::Arc;
-/// use lily_injectable_derive::{CrudService, Injectable};
-/// use lily_injection::ServiceTrait;
-///
-/// #[derive(Injectable, CrudService, Default)]
-/// #[entity_type(AppManager)]
-/// #[dto_type(AppManagerDto)]
-/// #[repository_type(AppManagerRepository)]
-/// #[service(lifetime = "Singleton")]
-/// pub struct AppManagerService {
-///     #[inject]
-///     repository: Arc<AppManagerRepository>,
-/// }
-///
-/// impl ServiceTrait for AppManagerService {}
-/// ```
-///
-/// Every generated call creates a detached Mongo operation context. Write a
-/// domain-specific method when a deadline, cancellation token, transaction or
-/// different not-found policy is required. `#[gateway(GatewayType)]` is
-/// optional; when present, an injected `Arc<GatewayType>` field whose name
-/// contains `gateway` receives best-effort post-write notifications.
-#[proc_macro_derive(
-    CrudService,
-    attributes(entity_type, repository_type, dto_type, gateway)
-)]
-pub fn derive_base_service(input: TokenStream) -> TokenStream {
-    base_service::derive_impl(input)
 }

@@ -3,8 +3,9 @@ mod crud_support;
 use std::sync::Arc;
 
 use crud_support::{Entity, GoodDto, Repository};
-use lily_injectable_derive::{CrudService, Injectable};
+use lily_injection::Injectable;
 use lily_injection::ServiceTrait;
+use lily_mongodb::CrudService;
 
 #[derive(Default, Injectable)]
 #[service(lifetime = "Singleton")]

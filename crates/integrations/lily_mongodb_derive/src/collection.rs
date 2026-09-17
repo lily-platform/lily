@@ -8,6 +8,8 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
     let ast = syn::parse_macro_input!(input as DeriveInput);
 
     // Extract struct name
+    let runtime = crate::runtime_path::lily_mongodb();
+    let trace_path = quote!(#runtime::lily_trace).to_string();
     let struct_name = &ast.ident;
 
     let mut collection_name = struct_name.to_string().to_lowercase();
@@ -166,9 +168,9 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
         let name = migration_index_name(&collection_name, std::slice::from_ref(field), false);
         quote! {
             {
-                let mut keys = mongodb::bson::Document::new();
+                let mut keys = #runtime::__private::mongodb::bson::Document::new();
                 keys.insert(#field, 1);
-                steps.push(lily_mongodb::MongoMigrationStep::ensure_index(
+                steps.push(#runtime::MongoMigrationStep::ensure_index(
                     #collection_name, #name, keys, false,
                 )?);
             }
@@ -178,9 +180,9 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
         let name = migration_index_name(&collection_name, std::slice::from_ref(field), true);
         quote! {
             {
-                let mut keys = mongodb::bson::Document::new();
+                let mut keys = #runtime::__private::mongodb::bson::Document::new();
                 keys.insert(#field, 1);
-                steps.push(lily_mongodb::MongoMigrationStep::ensure_index(
+                steps.push(#runtime::MongoMigrationStep::ensure_index(
                     #collection_name, #name, keys, true,
                 )?);
             }
@@ -193,9 +195,9 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
             .map(|field| quote! { keys.insert(#field, 1); });
         quote! {
             {
-                let mut keys = mongodb::bson::Document::new();
+                let mut keys = #runtime::__private::mongodb::bson::Document::new();
                 #(#inserts)*
-                steps.push(lily_mongodb::MongoMigrationStep::ensure_index(
+                steps.push(#runtime::MongoMigrationStep::ensure_index(
                     #collection_name, #name, keys, true,
                 )?);
             }
@@ -207,7 +209,7 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
         quote! {
             // Factory mode: Get database from MongoFactory
             let db = self.mongo_factory.get(#cell)
-                .ok_or_else(|| lily_error::injection::InjectionError::ServiceNotFound(
+                .ok_or_else(|| #runtime::__private::InjectionError::ServiceNotFound(
                     format!("Database cell '{}' not found in MongoFactory", #cell)
                 ))?;
             self.db = db;
@@ -219,9 +221,6 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
     };
 
     let expanded = quote! {
-        // Required import for generated cursor collection.
-        use futures::TryStreamExt as _;
-
         impl #struct_name {
             /// Returns the validated MongoDB collection name declared by this
             /// adapter.
@@ -232,9 +231,9 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
             /// Returns explicit migration steps; calling this function does
             /// not execute DDL. The deployment-owned migration runner decides
             /// the version and applies the returned plan.
-            pub fn migration_steps() -> Result<Vec<lily_mongodb::MongoMigrationStep>, lily_mongo_repository::MongoRepositoryError> {
+            pub fn migration_steps() -> Result<Vec<#runtime::MongoMigrationStep>, #runtime::MongoRepositoryError> {
                 let mut steps = vec![
-                    lily_mongodb::MongoMigrationStep::ensure_collection(#collection_name)?
+                    #runtime::MongoMigrationStep::ensure_collection(#collection_name)?
                 ];
                 #(#index_steps)*
                 #(#unique_steps)*
@@ -243,17 +242,17 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
             }
 
             /// Insert one document using the explicit Mongo operation context.
-            #[lily_mongodb::lily_trace::lily_trace(
+            #[#runtime::lily_trace::lily_trace(
                 name = "mongodb.collection.insert_one",
-                crate_path = "::lily_mongodb::lily_trace"
+                crate_path = #trace_path
             )]
             pub async fn insert_one(
                 &self,
                 document: #coll_type,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<mongodb::results::InsertOneResult, lily_mongo_repository::MongoRepositoryError> {
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<#runtime::__private::mongodb::results::InsertOneResult, #runtime::MongoRepositoryError> {
                 let collection = self.collection.as_ref()
-                    .ok_or_else(|| lily_error::application::mongodb::MongoDbError::InternalError("Collection not initialized. Call initialize() first.".to_string()))?;
+                    .ok_or_else(|| #runtime::MongoDbError::InternalError("Collection not initialized. Call initialize() first.".to_string()))?;
                 operation.execute(async {
                     if let Some(transaction) = operation.transaction() {
                         let mut session = transaction.lock_session().await;
@@ -266,17 +265,17 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
             }
 
             /// Insert a bounded document batch.
-            #[lily_mongodb::lily_trace::lily_trace(
+            #[#runtime::lily_trace::lily_trace(
                 name = "mongodb.collection.insert_many",
-                crate_path = "::lily_mongodb::lily_trace"
+                crate_path = #trace_path
             )]
             pub async fn insert_many(
                 &self,
-                documents: lily_mongo_repository::MongoWriteBatch<#coll_type>,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<mongodb::results::InsertManyResult, lily_mongo_repository::MongoRepositoryError> {
+                documents: #runtime::MongoWriteBatch<#coll_type>,
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<#runtime::__private::mongodb::results::InsertManyResult, #runtime::MongoRepositoryError> {
                 let collection = self.collection.as_ref()
-                    .ok_or_else(|| lily_error::application::mongodb::MongoDbError::InternalError("Collection not initialized. Call initialize() first.".to_string()))?;
+                    .ok_or_else(|| #runtime::MongoDbError::InternalError("Collection not initialized. Call initialize() first.".to_string()))?;
                 let documents = documents.into_inner();
                 operation.execute(async {
                     if let Some(transaction) = operation.transaction() {
@@ -290,17 +289,17 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
             }
 
             /// Find one document using a validated filter.
-            #[lily_mongodb::lily_trace::lily_trace(
+            #[#runtime::lily_trace::lily_trace(
                 name = "mongodb.collection.find_one",
-                crate_path = "::lily_mongodb::lily_trace"
+                crate_path = #trace_path
             )]
             pub async fn find_one(
                 &self,
-                filter: lily_mongo_repository::MongoFilter,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<Option<#coll_type>, lily_mongo_repository::MongoRepositoryError> {
+                filter: #runtime::MongoFilter,
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<Option<#coll_type>, #runtime::MongoRepositoryError> {
                 let collection = self.collection.as_ref()
-                    .ok_or_else(|| lily_error::application::mongodb::MongoDbError::InternalError("Collection not initialized. Call initialize() first.".to_string()))?;
+                    .ok_or_else(|| #runtime::MongoDbError::InternalError("Collection not initialized. Call initialize() first.".to_string()))?;
                 let filter = filter.into_document();
                 operation.execute(async {
                     if let Some(transaction) = operation.transaction() {
@@ -314,25 +313,26 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
             }
 
             /// Find a bounded, deterministically ordered page.
-            #[lily_mongodb::lily_trace::lily_trace(
+            #[#runtime::lily_trace::lily_trace(
                 name = "mongodb.collection.find_page",
-                crate_path = "::lily_mongodb::lily_trace"
+                crate_path = #trace_path
             )]
             pub async fn find_page(
                 &self,
-                filter: lily_mongo_repository::MongoFilter,
-                page: lily_mongo_repository::MongoPageRequest,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<lily_mongo_repository::MongoPage<#coll_type>, lily_mongo_repository::MongoRepositoryError> {
+                filter: #runtime::MongoFilter,
+                page: #runtime::MongoPageRequest,
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<#runtime::MongoPage<#coll_type>, #runtime::MongoRepositoryError> {
                 let collection = self.collection.as_ref()
-                    .ok_or_else(|| lily_error::application::mongodb::MongoDbError::InternalError("Collection not initialized. Call initialize() first.".to_string()))?;
+                    .ok_or_else(|| #runtime::MongoDbError::InternalError("Collection not initialized. Call initialize() first.".to_string()))?;
                 let filter = filter.into_document();
-                let options = mongodb::options::FindOptions::builder()
+                let options = #runtime::__private::mongodb::options::FindOptions::builder()
                     .skip(page.offset())
                     .limit(page.driver_limit())
                     .sort(page.sort().clone())
                     .build();
                 let results = operation.execute(async {
+                    use #runtime::__private::futures::TryStreamExt as _;
                     if let Some(transaction) = operation.transaction() {
                         let mut session = transaction.lock_session().await;
                         let mut cursor = collection
@@ -353,7 +353,7 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
                             .map_err(|error| operation.map_driver_error(error))
                     }
                 }).await?;
-                Ok(lily_mongo_repository::MongoPage::from_driver_window(results, &page))
+                Ok(#runtime::MongoPage::from_driver_window(results, &page))
             }
 
             /// Replace at most one document matching the supplied MongoDB
@@ -361,18 +361,18 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
             ///
             /// This lower-level collection API accepts the filter verbatim; an
             /// empty document may match an arbitrary first document.
-            #[lily_mongodb::lily_trace::lily_trace(
+            #[#runtime::lily_trace::lily_trace(
                 name = "mongodb.collection.replace_one",
-                crate_path = "::lily_mongodb::lily_trace"
+                crate_path = #trace_path
             )]
             pub async fn replace_one(
                 &self,
-                filter: mongodb::bson::Document,
+                filter: #runtime::__private::mongodb::bson::Document,
                 document: #coll_type,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<mongodb::results::UpdateResult, lily_mongo_repository::MongoRepositoryError> {
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<#runtime::__private::mongodb::results::UpdateResult, #runtime::MongoRepositoryError> {
                 let collection = self.collection.as_ref()
-                    .ok_or_else(|| lily_error::application::mongodb::MongoDbError::InternalError("Collection not initialized. Call initialize() first.".to_string()))?;
+                    .ok_or_else(|| #runtime::MongoDbError::InternalError("Collection not initialized. Call initialize() first.".to_string()))?;
                 operation.execute(async {
                     if let Some(transaction) = operation.transaction() {
                         let mut session = transaction.lock_session().await;
@@ -389,17 +389,17 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
             ///
             /// This lower-level collection API accepts the filter verbatim; an
             /// empty document may match an arbitrary first document.
-            #[lily_mongodb::lily_trace::lily_trace(
+            #[#runtime::lily_trace::lily_trace(
                 name = "mongodb.collection.delete_one",
-                crate_path = "::lily_mongodb::lily_trace"
+                crate_path = #trace_path
             )]
             pub async fn delete_one(
                 &self,
-                filter: mongodb::bson::Document,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<mongodb::results::DeleteResult, lily_mongo_repository::MongoRepositoryError> {
+                filter: #runtime::__private::mongodb::bson::Document,
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<#runtime::__private::mongodb::results::DeleteResult, #runtime::MongoRepositoryError> {
                 let collection = self.collection.as_ref()
-                    .ok_or_else(|| lily_error::application::mongodb::MongoDbError::InternalError("Collection not initialized. Call initialize() first.".to_string()))?;
+                    .ok_or_else(|| #runtime::MongoDbError::InternalError("Collection not initialized. Call initialize() first.".to_string()))?;
                 operation.execute(async {
                     if let Some(transaction) = operation.transaction() {
                         let mut session = transaction.lock_session().await;
@@ -415,17 +415,17 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
             ///
             /// An empty filter matches the whole collection. Callers using the
             /// collection adapter directly must make that choice deliberately.
-            #[lily_mongodb::lily_trace::lily_trace(
+            #[#runtime::lily_trace::lily_trace(
                 name = "mongodb.collection.delete_many",
-                crate_path = "::lily_mongodb::lily_trace"
+                crate_path = #trace_path
             )]
             pub async fn delete_many(
                 &self,
-                filter: mongodb::bson::Document,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<mongodb::results::DeleteResult, lily_mongo_repository::MongoRepositoryError> {
+                filter: #runtime::__private::mongodb::bson::Document,
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<#runtime::__private::mongodb::results::DeleteResult, #runtime::MongoRepositoryError> {
                 let collection = self.collection.as_ref()
-                    .ok_or_else(|| lily_error::application::mongodb::MongoDbError::InternalError("Collection not initialized. Call initialize() first.".to_string()))?;
+                    .ok_or_else(|| #runtime::MongoDbError::InternalError("Collection not initialized. Call initialize() first.".to_string()))?;
                 operation.execute(async {
                     if let Some(transaction) = operation.transaction() {
                         let mut session = transaction.lock_session().await;
@@ -438,17 +438,17 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
             }
 
             /// Count documents by validated filter.
-            #[lily_mongodb::lily_trace::lily_trace(
+            #[#runtime::lily_trace::lily_trace(
                 name = "mongodb.collection.count",
-                crate_path = "::lily_mongodb::lily_trace"
+                crate_path = #trace_path
             )]
             pub async fn count_documents(
                 &self,
-                filter: lily_mongo_repository::MongoFilter,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<u64, lily_mongo_repository::MongoRepositoryError> {
+                filter: #runtime::MongoFilter,
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<u64, #runtime::MongoRepositoryError> {
                 let collection = self.collection.as_ref()
-                    .ok_or_else(|| lily_error::application::mongodb::MongoDbError::InternalError("Collection not initialized. Call initialize() first.".to_string()))?;
+                    .ok_or_else(|| #runtime::MongoDbError::InternalError("Collection not initialized. Call initialize() first.".to_string()))?;
                 let filter = filter.into_document();
                 operation.execute(async {
                     if let Some(transaction) = operation.transaction() {
@@ -464,9 +464,9 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
 
         // The collection is itself a DI service. Repository derives do not
         // generate this lifecycle implementation.
-        #[async_trait::async_trait]
-        impl lily_injection::ServiceTrait for #struct_name {
-            async fn initialize(&mut self) -> Result<(), lily_error::injection::InjectionError> {
+        #[#runtime::__private::async_trait]
+        impl #runtime::__private::ServiceTrait for #struct_name {
+            async fn initialize(&mut self) -> Result<(), #runtime::__private::InjectionError> {
                 #init_db_code
 
                 let coll_name = Self::collection_name();
@@ -476,11 +476,11 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
                 // versioned migration runner and never execute as a DI side
                 // effect.
                 self.collection = Some(self.db.collection::<#coll_type>(coll_name)
-                    .map_err(|error| lily_error::injection::InjectionError::InitError(error.to_string()))?);
+                    .map_err(|error| #runtime::__private::InjectionError::InitError(error.to_string()))?);
                 Ok(())
             }
 
-            async fn dispose(&self) -> Result<(), lily_error::injection::InjectionError> {
+            async fn dispose(&self) -> Result<(), #runtime::__private::InjectionError> {
                 // A MongoDB Collection is a lightweight shared handle; the
                 // owning client/factory performs actual resource shutdown.
                 // Shared disposal deliberately does not require unique `Arc`

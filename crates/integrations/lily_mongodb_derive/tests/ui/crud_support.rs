@@ -1,14 +1,14 @@
 #![allow(dead_code)]
 
 use async_trait::async_trait;
-use lily_mongo_repository::{
+use lily_injection::Injectable;
+use lily_injection::ServiceTrait;
+use lily_mongodb::bson::oid::ObjectId;
+use lily_mongodb::{
     MongoDocumentId, MongoFilter, MongoIdBatch, MongoOperationContext, MongoPage, MongoPageRequest,
     MongoRepository, MongoRepositoryError, MongoWriteBatch,
 };
-use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
-use lily_injectable_derive::Injectable;
-use lily_injection::ServiceTrait;
 
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Entity {

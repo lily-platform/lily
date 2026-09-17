@@ -1,0 +1,3 @@
+[workspace]
+resolver = "3"
+members = ["mongodb", "mongodb_renamed", "postgresql", "postgresql_renamed", "clickhouse", "clickhouse_renamed", "trace", "trace_renamed", "queue", "queue_renamed"]

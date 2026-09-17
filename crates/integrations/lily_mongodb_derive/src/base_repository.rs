@@ -12,6 +12,7 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
 }
 
 fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
+    let runtime = crate::runtime_path::lily_mongodb();
     let struct_name = &ast.ident;
     let entity_type = required_type_attribute(ast, "entity_type", "YourEntityType")?;
     let collection_type = required_type_attribute(ast, "collection_type", "YourCollectionType")?;
@@ -26,37 +27,37 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
     })?;
 
     Ok(quote! {
-        #[async_trait::async_trait]
-        impl lily_mongo_repository::MongoRepository<#entity_type> for #struct_name {
+        #[#runtime::__private::async_trait]
+        impl #runtime::MongoRepository<#entity_type> for #struct_name {
             async fn create(
                 &self,
                 document: #entity_type,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<#entity_type, lily_mongo_repository::MongoRepositoryError> {
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<#entity_type, #runtime::MongoRepositoryError> {
                 let result = self.#collection_field
                     .insert_one(document.clone(), operation)
                     .await?;
-                let mut persisted = mongodb::bson::to_document(&document)
-                    .map_err(lily_mongo_repository::MongoRepositoryError::from)?;
+                let mut persisted = #runtime::__private::mongodb::bson::to_document(&document)
+                    .map_err(#runtime::MongoRepositoryError::from)?;
                 persisted.insert("_id", result.inserted_id);
-                mongodb::bson::from_document(persisted)
-                    .map_err(lily_mongo_repository::MongoRepositoryError::from)
+                #runtime::__private::mongodb::bson::from_document(persisted)
+                    .map_err(#runtime::MongoRepositoryError::from)
             }
 
             async fn create_many(
                 &self,
-                documents: lily_mongo_repository::MongoWriteBatch<#entity_type>,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<Vec<#entity_type>, lily_mongo_repository::MongoRepositoryError> {
+                documents: #runtime::MongoWriteBatch<#entity_type>,
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<Vec<#entity_type>, #runtime::MongoRepositoryError> {
                 let mut returned = documents.as_slice().to_vec();
                 let result = self.#collection_field.insert_many(documents, operation).await?;
                 for (index, id) in result.inserted_ids {
                     if let Some(document) = returned.get_mut(index) {
-                        let mut persisted = mongodb::bson::to_document(&*document)
-                            .map_err(lily_mongo_repository::MongoRepositoryError::from)?;
+                        let mut persisted = #runtime::__private::mongodb::bson::to_document(&*document)
+                            .map_err(#runtime::MongoRepositoryError::from)?;
                         persisted.insert("_id", id);
-                        *document = mongodb::bson::from_document(persisted)
-                            .map_err(lily_mongo_repository::MongoRepositoryError::from)?;
+                        *document = #runtime::__private::mongodb::bson::from_document(persisted)
+                            .map_err(#runtime::MongoRepositoryError::from)?;
                     }
                 }
                 Ok(returned)
@@ -65,31 +66,31 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             async fn update(
                 &self,
                 document: #entity_type,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<#entity_type, lily_mongo_repository::MongoRepositoryError> {
-                let mut serialized = mongodb::bson::to_document(&document)
-                    .map_err(lily_mongo_repository::MongoRepositoryError::from)?;
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<#entity_type, #runtime::MongoRepositoryError> {
+                let mut serialized = #runtime::__private::mongodb::bson::to_document(&document)
+                    .map_err(#runtime::MongoRepositoryError::from)?;
                 let id = serialized
                     .get("_id")
-                    .filter(|id| !matches!(id, mongodb::bson::Bson::Null))
+                    .filter(|id| !matches!(id, #runtime::__private::mongodb::bson::Bson::Null))
                     .cloned()
                     .ok_or_else(|| {
-                        lily_mongo_repository::MongoRepositoryError::InvalidDocumentId(
+                        #runtime::MongoRepositoryError::InvalidDocumentId(
                             "update requires a non-null BSON value in `_id`".to_string()
                         )
                     })?;
                 let filter = operation.apply_concurrency_filter(
-                    mongodb::bson::doc! { "_id": id }
+                    #runtime::__private::mongodb::bson::doc! { "_id": id }
                 );
                 let document = if let Some(revision) = operation.expected_revision() {
                     let next_revision = revision.checked_add(1).ok_or_else(|| {
-                        lily_mongo_repository::MongoRepositoryError::InvalidOperationContext(
+                        #runtime::MongoRepositoryError::InvalidOperationContext(
                             "expected revision cannot be incremented".to_string()
                         )
                     })?;
                     serialized.insert("_revision", next_revision);
-                    mongodb::bson::from_document(serialized)
-                        .map_err(lily_mongo_repository::MongoRepositoryError::from)?
+                    #runtime::__private::mongodb::bson::from_document(serialized)
+                        .map_err(#runtime::MongoRepositoryError::from)?
                 } else {
                     document
                 };
@@ -98,9 +99,9 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
                     .await?;
                 if result.matched_count == 0 {
                     return if operation.expected_revision().is_some() {
-                        Err(lily_mongo_repository::MongoRepositoryError::ConcurrencyConflict)
+                        Err(#runtime::MongoRepositoryError::ConcurrencyConflict)
                     } else {
-                        Err(lily_mongo_repository::MongoRepositoryError::DocumentNotFound(
+                        Err(#runtime::MongoRepositoryError::DocumentNotFound(
                             "update target does not exist".to_string()
                         ))
                     };
@@ -110,53 +111,53 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
 
             async fn delete_by_id(
                 &self,
-                id: lily_mongo_repository::MongoDocumentId,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<bool, lily_mongo_repository::MongoRepositoryError> {
+                id: #runtime::MongoDocumentId,
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<bool, #runtime::MongoRepositoryError> {
                 let filter = operation.apply_concurrency_filter(
-                    mongodb::bson::doc! { "_id": id.into_object_id() }
+                    #runtime::__private::mongodb::bson::doc! { "_id": id.into_object_id() }
                 );
                 let result = self.#collection_field.delete_one(filter, operation).await?;
                 if result.deleted_count == 0 && operation.expected_revision().is_some() {
-                    return Err(lily_mongo_repository::MongoRepositoryError::ConcurrencyConflict);
+                    return Err(#runtime::MongoRepositoryError::ConcurrencyConflict);
                 }
                 Ok(result.deleted_count > 0)
             }
 
             async fn delete_one(
                 &self,
-                filter: lily_mongo_repository::MongoFilter,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<bool, lily_mongo_repository::MongoRepositoryError> {
+                filter: #runtime::MongoFilter,
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<bool, #runtime::MongoRepositoryError> {
                 let filter = operation.apply_concurrency_filter(filter.into_document());
                 let result = self.#collection_field.delete_one(filter, operation).await?;
                 if result.deleted_count == 0 && operation.expected_revision().is_some() {
-                    return Err(lily_mongo_repository::MongoRepositoryError::ConcurrencyConflict);
+                    return Err(#runtime::MongoRepositoryError::ConcurrencyConflict);
                 }
                 Ok(result.deleted_count > 0)
             }
 
             async fn delete_many(
                 &self,
-                filter: lily_mongo_repository::MongoFilter,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<u64, lily_mongo_repository::MongoRepositoryError> {
+                filter: #runtime::MongoFilter,
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<u64, #runtime::MongoRepositoryError> {
                 let filter = operation.apply_concurrency_filter(filter.into_document());
                 let result = self.#collection_field.delete_many(filter, operation).await?;
                 if result.deleted_count == 0 && operation.expected_revision().is_some() {
-                    return Err(lily_mongo_repository::MongoRepositoryError::ConcurrencyConflict);
+                    return Err(#runtime::MongoRepositoryError::ConcurrencyConflict);
                 }
                 Ok(result.deleted_count)
             }
 
             async fn find_by_id(
                 &self,
-                id: lily_mongo_repository::MongoDocumentId,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<Option<#entity_type>, lily_mongo_repository::MongoRepositoryError> {
+                id: #runtime::MongoDocumentId,
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<Option<#entity_type>, #runtime::MongoRepositoryError> {
                 self.#collection_field.find_one(
-                    lily_mongo_repository::MongoFilter::new(
-                        mongodb::bson::doc! { "_id": id.into_object_id() }
+                    #runtime::MongoFilter::new(
+                        #runtime::__private::mongodb::bson::doc! { "_id": id.into_object_id() }
                     )?,
                     operation,
                 ).await
@@ -164,25 +165,25 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
 
             async fn find_by_ids(
                 &self,
-                ids: lily_mongo_repository::MongoIdBatch,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<Vec<#entity_type>, lily_mongo_repository::MongoRepositoryError> {
+                ids: #runtime::MongoIdBatch,
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<Vec<#entity_type>, #runtime::MongoRepositoryError> {
                 let object_ids = ids
                     .as_slice()
                     .iter()
                     .map(|id| *id.as_object_id())
                     .collect::<Vec<_>>();
-                let page = lily_mongo_repository::MongoPageRequest::new(
+                let page = #runtime::MongoPageRequest::new(
                     0,
                     u32::try_from(object_ids.len()).map_err(|_| {
-                        lily_mongo_repository::MongoRepositoryError::InvalidBatch(
+                        #runtime::MongoRepositoryError::InvalidBatch(
                             "id batch length does not fit the driver page limit".to_string()
                         )
                     })?,
                 )?;
                 Ok(self.#collection_field.find_page(
-                    lily_mongo_repository::MongoFilter::new(
-                        mongodb::bson::doc! { "_id": { "$in": object_ids } }
+                    #runtime::MongoFilter::new(
+                        #runtime::__private::mongodb::bson::doc! { "_id": { "$in": object_ids } }
                     )?,
                     page,
                     operation,
@@ -191,34 +192,34 @@ fn expand(ast: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
 
             async fn find_one(
                 &self,
-                filter: lily_mongo_repository::MongoFilter,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<Option<#entity_type>, lily_mongo_repository::MongoRepositoryError> {
+                filter: #runtime::MongoFilter,
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<Option<#entity_type>, #runtime::MongoRepositoryError> {
                 self.#collection_field.find_one(filter, operation).await
             }
 
             async fn find_page(
                 &self,
-                filter: lily_mongo_repository::MongoFilter,
-                page: lily_mongo_repository::MongoPageRequest,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<lily_mongo_repository::MongoPage<#entity_type>, lily_mongo_repository::MongoRepositoryError> {
+                filter: #runtime::MongoFilter,
+                page: #runtime::MongoPageRequest,
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<#runtime::MongoPage<#entity_type>, #runtime::MongoRepositoryError> {
                 self.#collection_field.find_page(filter, page, operation).await
             }
 
             async fn count(
                 &self,
-                filter: lily_mongo_repository::MongoFilter,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<u64, lily_mongo_repository::MongoRepositoryError> {
+                filter: #runtime::MongoFilter,
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<u64, #runtime::MongoRepositoryError> {
                 self.#collection_field.count_documents(filter, operation).await
             }
 
             async fn exists(
                 &self,
-                filter: lily_mongo_repository::MongoFilter,
-                operation: &lily_mongo_repository::MongoOperationContext<'_>,
-            ) -> Result<bool, lily_mongo_repository::MongoRepositoryError> {
+                filter: #runtime::MongoFilter,
+                operation: &#runtime::MongoOperationContext<'_>,
+            ) -> Result<bool, #runtime::MongoRepositoryError> {
                 Ok(self.#collection_field.find_one(filter, operation).await?.is_some())
             }
         }

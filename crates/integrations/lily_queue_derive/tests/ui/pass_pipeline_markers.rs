@@ -1,9 +1,10 @@
 use std::sync::Arc;
 
-use lily_error::application::QueueHandlerError;
+use lily_injection::Extensions;
+use queue_runtime::QueueHandlerError;
 use queue_runtime::{
-    async_trait, guard, middleware, queue, queue_service, Extensions, QueueDeliveryExchange,
-    QueueGuard, QueueMiddleware, QueuePipelineComponentInitError,
+    QueueDeliveryExchange, QueueGuard, QueueMiddleware, QueuePipelineComponentInitError,
+    async_trait, guard, middleware, queue, queue_service,
 };
 
 struct ServiceFirst;
@@ -83,31 +84,47 @@ fn main() {
         .expect("pipeline metadata");
 
     assert_eq!(metadata.service_middlewares.len(), 2);
-    assert!(metadata.service_middlewares[0]
-        .type_name()
-        .ends_with("ServiceFirst"));
-    assert!(metadata.service_middlewares[1]
-        .type_name()
-        .ends_with("ServiceSecond"));
+    assert!(
+        metadata.service_middlewares[0]
+            .type_name()
+            .ends_with("ServiceFirst")
+    );
+    assert!(
+        metadata.service_middlewares[1]
+            .type_name()
+            .ends_with("ServiceSecond")
+    );
     assert_eq!(metadata.service_guards.len(), 2);
-    assert!(metadata.service_guards[0]
-        .type_name()
-        .ends_with("ServiceGuard"));
-    assert!(metadata.service_guards[1]
-        .type_name()
-        .ends_with("ServiceGuardSecond"));
+    assert!(
+        metadata.service_guards[0]
+            .type_name()
+            .ends_with("ServiceGuard")
+    );
+    assert!(
+        metadata.service_guards[1]
+            .type_name()
+            .ends_with("ServiceGuardSecond")
+    );
     assert_eq!(metadata.handler_middlewares.len(), 2);
-    assert!(metadata.handler_middlewares[0]
-        .type_name()
-        .ends_with("HandlerFirst"));
-    assert!(metadata.handler_middlewares[1]
-        .type_name()
-        .ends_with("HandlerSecond"));
+    assert!(
+        metadata.handler_middlewares[0]
+            .type_name()
+            .ends_with("HandlerFirst")
+    );
+    assert!(
+        metadata.handler_middlewares[1]
+            .type_name()
+            .ends_with("HandlerSecond")
+    );
     assert_eq!(metadata.handler_guards.len(), 2);
-    assert!(metadata.handler_guards[0]
-        .type_name()
-        .ends_with("HandlerGuard"));
-    assert!(metadata.handler_guards[1]
-        .type_name()
-        .ends_with("HandlerGuardSecond"));
+    assert!(
+        metadata.handler_guards[0]
+            .type_name()
+            .ends_with("HandlerGuard")
+    );
+    assert!(
+        metadata.handler_guards[1]
+            .type_name()
+            .ends_with("HandlerGuardSecond")
+    );
 }

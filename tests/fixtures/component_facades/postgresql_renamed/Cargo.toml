@@ -1,0 +1,19 @@
+[package]
+name = "component-facade-postgresql-renamed"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# The only direct Lily dependency. No derive, registry, DI or helper crates.
+component_runtime = { package = "lily_postgresql", path = "../../../../crates/integrations/lily_postgresql", default-features = false }
+
+diesel = { version = "=2.3.11", default-features = false, features = ["postgres_backend", "uuid"] } # table! requires the driver name.
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt"] }
+
+[features]
+default = ["single"]
+single = ["component_runtime/single"]
+factory = ["component_runtime/factory"]

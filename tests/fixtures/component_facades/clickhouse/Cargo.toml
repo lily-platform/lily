@@ -1,0 +1,19 @@
+[package]
+name = "component-facade-clickhouse"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# The only direct Lily dependency. No derive, registry, DI or helper crates.
+lily_clickhouse = { package = "lily_clickhouse", path = "../../../../crates/integrations/lily_clickhouse", default-features = false }
+serde = { version = "1", features = ["derive"] }
+clickhouse = "0.13.3" # Row is an application-owned driver derive.
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt"] }
+
+[features]
+default = ["single"]
+single = ["lily_clickhouse/single"]
+factory = ["lily_clickhouse/factory"]

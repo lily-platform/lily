@@ -78,16 +78,18 @@
 //! [`ClickhouseMigrationRunner::apply`]. ClickHouse DDL is not transactional,
 //! so failed migrations require an operator-reviewed forward fix or restore.
 //!
-//! The derive output is compiled in the application crate. Until Lily's
-//! umbrella facade owns generated paths, downstream crates using table or
-//! repository derives must directly declare the crates named by that generated
-//! code (`async-trait`, `lily_error`, `lily_injection` and `serde`). This is a
-//! macro ABI constraint, not a second lifecycle or registration API.
+//! Import all three derives from this crate. Generated code uses the runtime
+//! facade, including Cargo-renamed dependencies, and does not need direct
+//! helper dependencies. Application-written Serde/ClickHouse row derives retain
+//! their own dependency requirements. DI registration uses `lily_injection` or
+//! the HTTP/WebSocket/Consumer facade chosen by the application.
 
 #[cfg(all(feature = "single", feature = "factory"))]
 compile_error!(
     "lily_clickhouse features `single` and `factory` are mutually exclusive; disable default features before enabling `factory`"
 );
+
+extern crate self as lily_clickhouse;
 
 mod database;
 mod error;
@@ -123,3 +125,11 @@ pub use schema::ClickhouseSchemaProvider;
 pub use tokio_util::sync::CancellationToken;
 
 pub use lily_clickhouse_derive::{ClickhouseRepository, ClickhouseSchema, ClickhouseTable};
+
+/// Support paths used by the re-exported derives.
+#[doc(hidden)]
+pub mod __private {
+    pub use async_trait::async_trait;
+    pub use lily_injection::{InjectionError, ServiceTrait};
+    pub use serde;
+}

@@ -3,7 +3,7 @@ mod crud_support;
 use std::sync::Arc;
 
 use crud_support::{Entity, GoodDto};
-use lily_injectable_derive::CrudService;
+use lily_mongodb::CrudService;
 
 struct NotARepository;
 

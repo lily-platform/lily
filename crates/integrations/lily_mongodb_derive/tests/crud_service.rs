@@ -1,13 +1,13 @@
 use std::sync::{Arc, Mutex};
 
 use async_trait::async_trait;
-use lily_mongo_repository::{
+use lily_mongodb::CrudService;
+use lily_mongodb::bson::{Document, oid::ObjectId};
+use lily_mongodb::{BaseService, BaseServiceError, BaseServiceOperation};
+use lily_mongodb::{
     MongoDocumentId, MongoFilter, MongoIdBatch, MongoOperationContext, MongoPage, MongoPageRequest,
     MongoRepository, MongoRepositoryError, MongoWriteBatch,
 };
-use lily_mongo_service::{BaseServiceError, BaseServiceOperation};
-use lily_injectable_derive::CrudService;
-use mongodb::bson::{oid::ObjectId, Document};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -226,13 +226,15 @@ async fn generated_service_maps_dtos_ids_batches_and_required_reads() {
         .unwrap();
     assert_eq!(found_many.len(), 2);
 
-    assert!(service
-        .delete(UserDto {
-            id: Some(id_one.clone()),
-            name: "ignored".to_string(),
-        })
-        .await
-        .unwrap());
+    assert!(
+        service
+            .delete(UserDto {
+                id: Some(id_one.clone()),
+                name: "ignored".to_string(),
+            })
+            .await
+            .unwrap()
+    );
     assert_eq!(
         service
             .delete_many(vec![

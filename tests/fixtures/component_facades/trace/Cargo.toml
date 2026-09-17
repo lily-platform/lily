@@ -1,0 +1,12 @@
+[package]
+name = "component-facade-trace"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# The only direct Lily dependency. No derive, registry, DI or helper crates.
+lily_trace = { package = "lily_trace", path = "../../../../crates/integrations/lily_trace", default-features = false }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt"] }

@@ -4,6 +4,7 @@ use syn::DeriveInput;
 
 pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
     let ast = syn::parse_macro_input!(input as DeriveInput);
+    let runtime = crate::runtime_path::lily_clickhouse();
     let struct_name = &ast.ident;
     let mut table_type: Option<syn::Type> = None;
     let mut entity_type: Option<syn::Type> = None;
@@ -67,8 +68,8 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
             pub async fn create(
                 &self,
                 entity: #entity_type,
-                operation: &lily_clickhouse::ClickhouseOperationContext,
-            ) -> Result<#entity_type, lily_clickhouse::ClickhouseError> {
+                operation: &#runtime::ClickhouseOperationContext,
+            ) -> Result<#entity_type, #runtime::ClickhouseError> {
                 self.table.insert_one(&entity, operation).await?;
                 Ok(entity)
             }
@@ -77,72 +78,72 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
             pub async fn create_many(
                 &self,
                 entities: Vec<#entity_type>,
-                operation: &lily_clickhouse::ClickhouseOperationContext,
-            ) -> Result<Vec<#entity_type>, lily_clickhouse::ClickhouseError> {
+                operation: &#runtime::ClickhouseOperationContext,
+            ) -> Result<Vec<#entity_type>, #runtime::ClickhouseError> {
                 self.table.insert_many(&entities, operation).await?;
                 Ok(entities)
             }
 
             /// Reads one page by equality on an allowlisted column.
-            pub async fn find_equal<V: serde::Serialize>(
+            pub async fn find_equal<V: #runtime::__private::serde::Serialize>(
                 &self,
                 column: &str,
                 value: V,
-                page: lily_clickhouse::ClickhousePageRequest,
-                operation: &lily_clickhouse::ClickhouseOperationContext,
-            ) -> Result<Vec<#entity_type>, lily_clickhouse::ClickhouseError> {
+                page: #runtime::ClickhousePageRequest,
+                operation: &#runtime::ClickhouseOperationContext,
+            ) -> Result<Vec<#entity_type>, #runtime::ClickhouseError> {
                 self.table.find_equal(column, value, page, operation).await
             }
 
             /// Executes a validated, bound and bounded select plan.
             pub async fn select(
                 &self,
-                plan: &lily_clickhouse::ClickhouseSelectPlan,
-                operation: &lily_clickhouse::ClickhouseOperationContext,
-            ) -> Result<Vec<#entity_type>, lily_clickhouse::ClickhouseError> {
+                plan: &#runtime::ClickhouseSelectPlan,
+                operation: &#runtime::ClickhouseOperationContext,
+            ) -> Result<Vec<#entity_type>, #runtime::ClickhouseError> {
                 self.table.select(plan, operation).await
             }
 
             /// Creates a deadline-bounded context without caller cancellation.
             pub fn bounded_operation(
                 &self,
-            ) -> Result<lily_clickhouse::ClickhouseOperationContext, lily_clickhouse::ClickhouseError> {
+            ) -> Result<#runtime::ClickhouseOperationContext, #runtime::ClickhouseError> {
                 self.table.bounded_operation()
             }
 
             /// Creates a context carrying caller cancellation and the configured deadline.
             pub fn operation_context(
                 &self,
-                cancellation: lily_clickhouse::CancellationToken,
-            ) -> Result<lily_clickhouse::ClickhouseOperationContext, lily_clickhouse::ClickhouseError> {
+                cancellation: #runtime::CancellationToken,
+            ) -> Result<#runtime::ClickhouseOperationContext, #runtime::ClickhouseError> {
                 self.table.operation_context(cancellation)
             }
 
             /// Reads at most one entity by equality on an allowlisted column.
-            pub async fn find_one_equal<V: serde::Serialize>(
+            pub async fn find_one_equal<V: #runtime::__private::serde::Serialize>(
                 &self,
                 column: &str,
                 value: V,
-                operation: &lily_clickhouse::ClickhouseOperationContext,
-            ) -> Result<Option<#entity_type>, lily_clickhouse::ClickhouseError> {
+                operation: &#runtime::ClickhouseOperationContext,
+            ) -> Result<Option<#entity_type>, #runtime::ClickhouseError> {
                 self.table.find_one_equal(column, value, operation).await
             }
 
             /// Counts all rows in the repository's table.
             pub async fn count(
                 &self,
-                operation: &lily_clickhouse::ClickhouseOperationContext,
-            ) -> Result<u64, lily_clickhouse::ClickhouseError> {
+                operation: &#runtime::ClickhouseOperationContext,
+            ) -> Result<u64, #runtime::ClickhouseError> {
                 self.table.count(operation).await
             }
 
             /// Issues an asynchronous delete mutation on an allowlisted column.
-            pub async fn delete_equal<V: serde::Serialize>(
+            pub async fn delete_equal<V: #runtime::__private::serde::Serialize>(
                 &self,
                 column: &str,
                 value: V,
-                operation: &lily_clickhouse::ClickhouseOperationContext,
-            ) -> Result<(), lily_clickhouse::ClickhouseError> {
+                operation: &#runtime::ClickhouseOperationContext,
+            ) -> Result<(), #runtime::ClickhouseError> {
                 self.table.delete_equal(column, value, operation).await
             }
 
@@ -152,15 +153,15 @@ pub(crate) fn derive_impl(input: TokenStream) -> TokenStream {
             }
         }
 
-        #[async_trait::async_trait]
-        impl lily_injection::ServiceTrait for #struct_name {
+        #[#runtime::__private::async_trait]
+        impl #runtime::__private::ServiceTrait for #struct_name {
             async fn initialize(
                 &mut self,
-            ) -> Result<(), lily_error::injection::InjectionError> {
+            ) -> Result<(), #runtime::__private::InjectionError> {
                 Ok(())
             }
 
-            async fn dispose(&self) -> Result<(), lily_error::injection::InjectionError> {
+            async fn dispose(&self) -> Result<(), #runtime::__private::InjectionError> {
                 Ok(())
             }
         }
