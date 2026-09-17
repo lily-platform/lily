@@ -112,12 +112,7 @@ fn expand_impl(mut input: ItemImpl) -> syn::Result<TokenStream2> {
     let runtime = runtime_path::lily_websocket()?;
     let runtime_path: syn::Path =
         syn::parse2(runtime.clone()).expect("resolved Lily WebSocket runtime must be a Rust path");
-    let runtime_crate = &runtime_path
-        .segments
-        .last()
-        .expect("resolved Lily WebSocket runtime path must contain its crate name")
-        .ident;
-    validate_lifecycle_arguments(&operations, runtime_crate)?;
+    validate_lifecycle_arguments(&operations, &runtime_path)?;
     let generated = operations.iter().map(|operation| {
         generate_operation(&runtime, &controller, &controller_identifier, operation)
     });
@@ -407,7 +402,7 @@ fn operation_argument_type(argument: &FnArg) -> syn::Result<Type> {
 
 fn validate_lifecycle_arguments(
     operations: &[Operation],
-    runtime_crate: &syn::Ident,
+    runtime_crate: &syn::Path,
 ) -> syn::Result<()> {
     for operation in operations {
         for argument_type in &operation.argument_types {
@@ -420,7 +415,7 @@ fn validate_lifecycle_arguments(
 fn validate_lifecycle_argument(
     argument_type: &Type,
     kind: OperationKind,
-    runtime_crate: &syn::Ident,
+    runtime_crate: &syn::Path,
 ) -> syn::Result<()> {
     let lifecycle_attribute = match kind {
         OperationKind::Message => return Ok(()),
@@ -439,24 +434,28 @@ fn validate_lifecycle_argument(
     ))
 }
 
-fn message_only_extractor<'a>(ty: &'a Type, runtime_crate: &syn::Ident) -> Option<&'a syn::Ident> {
+fn message_only_extractor<'a>(ty: &'a Type, runtime_crate: &syn::Path) -> Option<&'a syn::Ident> {
     let path = match ty {
         Type::Group(group) => return message_only_extractor(&group.elem, runtime_crate),
         Type::Paren(paren) => return message_only_extractor(&paren.elem, runtime_crate),
         Type::Path(path) => path,
         _ => return None,
     };
-    if path.qself.is_some() || path.path.segments.len() != 2 {
+    if path.qself.is_some() || path.path.segments.len() != runtime_crate.segments.len() + 1 {
         return None;
     }
-    let mut segments = path.path.segments.iter();
-    let crate_segment = segments.next()?;
-    if crate_segment.ident != *runtime_crate
-        || !matches!(crate_segment.arguments, PathArguments::None)
+    if !path
+        .path
+        .segments
+        .iter()
+        .zip(&runtime_crate.segments)
+        .all(|(actual, expected)| {
+            actual.ident == expected.ident && matches!(actual.arguments, PathArguments::None)
+        })
     {
         return None;
     }
-    let identifier = &segments.next()?.ident;
+    let identifier = &path.path.segments.last()?.ident;
     match identifier.to_string().as_str() {
         "Payload" | "TextPayload" | "BinaryPayload" | "RawPayload" | "RawEnvelope" => {
             Some(identifier)
@@ -984,6 +983,16 @@ mod tests {
             ),
             ("ws", "ws::RawPayload", "RawPayload"),
             ("ws", "ws::RawEnvelope", "RawEnvelope"),
+            (
+                "lily::websocket",
+                "lily::websocket::Payload<Input>",
+                "Payload",
+            ),
+            (
+                "platform::websocket",
+                "::platform::websocket::BinaryPayload",
+                "BinaryPayload",
+            ),
         ] {
             let source = format!(
                 r#"
@@ -994,8 +1003,8 @@ mod tests {
             );
             let mut method: ImplItemFn = syn::parse_str(&source).expect("fixture method parses");
             let operation = parse_operation(&mut method).expect("operation syntax is valid");
-            let runtime_crate: syn::Ident =
-                syn::parse_str(runtime_crate).expect("runtime crate alias is an identifier");
+            let runtime_crate: syn::Path =
+                syn::parse_str(runtime_crate).expect("runtime facade is a path");
             let error = match validate_lifecycle_arguments(
                 std::slice::from_ref(&operation),
                 &runtime_crate,
@@ -1015,7 +1024,7 @@ mod tests {
 
     #[test]
     fn lifecycle_custom_extractors_and_aliases_keep_trait_bound_fallback() {
-        let runtime_crate: syn::Ident = parse_quote!(ws);
+        let runtime_crate: syn::Path = parse_quote!(ws);
         for argument_type in [
             "Payload<Input>",
             "custom::Payload<Input>",

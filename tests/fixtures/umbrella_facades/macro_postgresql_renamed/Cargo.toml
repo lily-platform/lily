@@ -1,0 +1,18 @@
+[package]
+name = "umbrella-macro-postgresql-renamed"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# Only this component is enabled; no other facade feature may mask macro paths.
+platform = { package = "lily", path = "../../../../crates/lily", default-features = false }
+diesel = { version = "=2.3.11", default-features = false, features = ["postgres_backend", "uuid"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt"] }
+
+[features]
+default = ["single"]
+single = ["platform/postgresql"]
+factory = ["platform/postgresql-factory"]

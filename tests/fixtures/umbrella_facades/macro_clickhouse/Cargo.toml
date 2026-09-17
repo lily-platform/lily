@@ -1,0 +1,19 @@
+[package]
+name = "umbrella-macro-clickhouse"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# Only this component is enabled; no other facade feature may mask macro paths.
+lily = { package = "lily", path = "../../../../crates/lily", default-features = false }
+serde = { version = "1", features = ["derive"] }
+clickhouse = "0.13.3"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt"] }
+
+[features]
+default = ["single"]
+single = ["lily/clickhouse"]
+factory = ["lily/clickhouse-factory"]

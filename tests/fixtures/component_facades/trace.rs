@@ -25,7 +25,7 @@ async fn async_operation(fail: bool) -> Result<u64, Rejected> {
 
 // Explicit paths continue to take precedence over automatic discovery.
 mod provider {
-    pub use runtime as telemetry;
+    pub use crate::runtime as telemetry;
 }
 #[lily_trace(name = "facade.override", crate_path = "crate::provider::telemetry")]
 fn explicit_runtime() -> bool {

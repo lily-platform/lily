@@ -1,15 +1,23 @@
-//! Locate the runtime without requiring callers to use its Cargo package name.
+//! Locate the component runtime, including renamed umbrella dependencies.
 
 use proc_macro_crate::{FoundCrate, crate_name};
 use proc_macro2::{Ident, Span};
 
 pub(crate) fn lily_clickhouse() -> syn::Path {
-    let name = match crate_name("lily_clickhouse") {
-        Ok(FoundCrate::Name(name)) => name,
-        // The runtime exposes a self alias, also usable from integration tests.
-        // Standalone derive contracts may supply that alias themselves.
-        Ok(FoundCrate::Itself) | Err(_) => "lily_clickhouse".to_owned(),
+    if let Some(identifier) = dependency("lily_clickhouse") {
+        return syn::parse_quote!(::#identifier);
+    }
+    if let Some(identifier) = dependency("lily") {
+        return syn::parse_quote!(::#identifier::clickhouse);
+    }
+    // Standalone derive contracts may supply the runtime self alias themselves.
+    syn::parse_quote!(::lily_clickhouse)
+}
+
+fn dependency(package: &str) -> Option<Ident> {
+    let name = match crate_name(package).ok()? {
+        FoundCrate::Itself => package.to_owned(),
+        FoundCrate::Name(name) => name,
     };
-    let identifier = Ident::new(&name.replace('-', "_"), Span::call_site());
-    syn::parse_quote!(::#identifier)
+    Some(Ident::new(&name.replace('-', "_"), Span::call_site()))
 }

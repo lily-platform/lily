@@ -4,28 +4,41 @@ use quote::quote;
 
 pub(crate) struct RuntimePath {
     pub(crate) tokens: TokenStream,
-    pub(crate) attribute_prefix: String,
+    pub(crate) attribute_prefixes: Vec<String>,
 }
 
 pub(crate) fn lily_queue() -> syn::Result<RuntimePath> {
-    match crate_name("lily_queue") {
-        Ok(FoundCrate::Itself) => Ok(RuntimePath {
-            tokens: quote!(crate),
-            attribute_prefix: "crate".to_string(),
-        }),
-        Ok(FoundCrate::Name(name)) => {
-            let name = name.replace('-', "_");
-            let identifier = Ident::new(&name, Span::call_site());
-            Ok(RuntimePath {
-                tokens: quote!(::#identifier),
-                attribute_prefix: name,
-            })
-        }
-        Err(error) => Err(syn::Error::new(
-            Span::call_site(),
-            format!(
-                "could not locate the `lily_queue` runtime dependency for queue handler expansion: {error}"
-            ),
-        )),
+    let mut paths = Vec::new();
+    if let Ok(found) = crate_name("lily_queue") {
+        let name = match found {
+            FoundCrate::Itself => "crate".to_owned(),
+            FoundCrate::Name(name) => name.replace('-', "_"),
+        };
+        let identifier = Ident::new(&name, Span::call_site());
+        let tokens = if name == "crate" {
+            quote!(crate)
+        } else {
+            quote!(::#identifier)
+        };
+        paths.push((tokens, name));
     }
+    if let Ok(found) = crate_name("lily") {
+        let name = match found {
+            FoundCrate::Itself => "lily".to_owned(),
+            FoundCrate::Name(name) => name.replace('-', "_"),
+        };
+        let identifier = Ident::new(&name, Span::call_site());
+        paths.push((quote!(::#identifier::queue), format!("{name}::queue")));
+    }
+    let Some((tokens, _)) = paths.first() else {
+        return Err(syn::Error::new(
+            Span::call_site(),
+            "queue macros require `lily_queue` or `lily` with its `queue` or `consumer` feature",
+        ));
+    };
+    let tokens = tokens.clone();
+    Ok(RuntimePath {
+        tokens,
+        attribute_prefixes: paths.into_iter().map(|(_, prefix)| prefix).collect(),
+    })
 }

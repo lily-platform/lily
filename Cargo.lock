@@ -2202,6 +2202,24 @@ dependencies = [
 [[package]]
 name = "lily"
 version = "0.1.0"
+dependencies = [
+ "lily_background_service",
+ "lily_clickhouse",
+ "lily_config",
+ "lily_consumer",
+ "lily_error",
+ "lily_http_api",
+ "lily_http_client",
+ "lily_injection",
+ "lily_mongodb",
+ "lily_postgresql",
+ "lily_queue",
+ "lily_queue_client",
+ "lily_redis",
+ "lily_trace",
+ "lily_websocket",
+ "lily_websocket_client",
+]
 
 [[package]]
 name = "lily_asyncapi"

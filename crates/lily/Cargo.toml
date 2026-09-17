@@ -2,6 +2,96 @@
 name = "lily"
 version = "0.1.0"
 edition = "2024"
+description = "Optional, feature-selected facade for Lily application components"
 license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[features]
+# No component is enabled implicitly. Base component features preserve defaults.
+default = []
+consumer = ["dep:lily_consumer", "__injection", "queue"]
+http-api = ["dep:lily_http_api", "__injection"]
+websocket = ["dep:lily_websocket", "__injection"]
+clickhouse = ["clickhouse-single"]
+clickhouse-single = ["__clickhouse", "lily_clickhouse/single"]
+clickhouse-factory = ["__clickhouse", "lily_clickhouse/factory"]
+__clickhouse = ["dep:lily_clickhouse"]
+mongodb = ["mongodb-single"]
+mongodb-single = ["__mongodb", "lily_mongodb/single"]
+mongodb-factory = ["__mongodb", "lily_mongodb/factory"]
+__mongodb = ["dep:lily_mongodb"]
+postgresql = ["postgresql-single"]
+postgresql-single = ["__postgresql", "lily_postgresql/single"]
+postgresql-factory = ["__postgresql", "lily_postgresql/factory"]
+__postgresql = ["dep:lily_postgresql"]
+queue = ["dep:lily_queue"]
+queue-client = ["queue-client-single"]
+queue-client-single = ["__queue-client", "lily_queue_client/single"]
+queue-client-factory = ["__queue-client", "lily_queue_client/factory"]
+__queue-client = ["dep:lily_queue_client"]
+redis = ["redis-single"]
+redis-single = ["__redis", "lily_redis/single"]
+redis-factory = ["__redis", "lily_redis/factory"]
+__redis = ["dep:lily_redis"]
+trace = ["trace-console"]
+trace-console = ["dep:lily_trace", "lily_trace/console"]
+config = ["dep:lily_config"]
+websocket-client = ["websocket-client-single"]
+websocket-client-single = ["__websocket-client", "lily_websocket_client/single"]
+websocket-client-factory = ["__websocket-client", "lily_websocket_client/factory"]
+__websocket-client = ["dep:lily_websocket_client"]
+injection = ["__injection"]
+http-client = ["dep:lily_http_client"]
+error = ["dep:lily_error"]
+background-service = ["dep:lily_background_service"]
+__injection = ["dep:lily_injection"]
+consumer-asyncapi = ["consumer", "lily_consumer/asyncapi", "queue-asyncapi"]
+consumer-fuzzing = ["consumer", "lily_consumer/fuzzing"]
+consumer-transactional-inbox-mongodb = ["consumer", "lily_consumer/transactional-inbox-mongodb", "queue-transactional-inbox-mongodb", "mongodb"]
+consumer-transactional-inbox-mongodb-factory = ["consumer", "lily_consumer/transactional-inbox-mongodb-factory", "queue-transactional-inbox-mongodb-factory", "mongodb-factory"]
+consumer-transactional-inbox-postgresql = ["consumer", "lily_consumer/transactional-inbox-postgresql", "queue-transactional-inbox-postgresql", "postgresql"]
+consumer-transactional-inbox-postgresql-factory = ["consumer", "lily_consumer/transactional-inbox-postgresql-factory", "queue-transactional-inbox-postgresql-factory", "postgresql-factory"]
+http-api-fuzzing = ["http-api", "lily_http_api/fuzzing"]
+websocket-fuzzing = ["websocket", "lily_websocket/fuzzing"]
+mongodb-factory-api = ["__mongodb", "lily_mongodb/factory-api"]
+mongodb-test-support = ["__mongodb", "lily_mongodb/test-support"]
+postgresql-factory-api = ["__postgresql", "lily_postgresql/factory-api"]
+postgresql-test-support = ["__postgresql", "lily_postgresql/test-support"]
+queue-asyncapi = ["queue", "lily_queue/asyncapi"]
+queue-test-support = ["queue", "lily_queue/test-support"]
+queue-fuzzing = ["queue", "lily_queue/fuzzing"]
+queue-transactional-inbox-mongodb = ["queue", "lily_queue/transactional-inbox-mongodb", "__mongodb"]
+queue-transactional-inbox-mongodb-factory = ["queue", "lily_queue/transactional-inbox-mongodb-factory", "mongodb-factory-api"]
+queue-transactional-inbox-postgresql = ["queue", "lily_queue/transactional-inbox-postgresql", "__postgresql"]
+queue-transactional-inbox-postgresql-factory = ["queue", "lily_queue/transactional-inbox-postgresql-factory", "postgresql-factory-api"]
+config-transactional-inbox-mongodb = ["config", "lily_config/transactional-inbox-mongodb"]
+config-transactional-inbox-postgresql = ["config", "lily_config/transactional-inbox-postgresql"]
+websocket-client-di = ["__websocket-client", "lily_websocket_client/di"]
+error-mongodb-driver = ["error", "lily_error/mongodb-driver"]
 
 [dependencies]
+lily_consumer = { version = "0.1.0", path = "../framework/lily_consumer", optional = true, default-features = false }
+lily_http_api = { version = "0.1.0", path = "../framework/lily_http_api", optional = true, default-features = false }
+lily_websocket = { version = "0.1.0", path = "../framework/lily_websocket", optional = true, default-features = false }
+lily_clickhouse = { version = "0.1.0", path = "../integrations/lily_clickhouse", optional = true, default-features = false }
+lily_mongodb = { version = "0.1.0", path = "../integrations/lily_mongodb", optional = true, default-features = false }
+lily_postgresql = { version = "0.1.0", path = "../integrations/lily_postgresql", optional = true, default-features = false }
+lily_queue = { version = "0.1.0", path = "../integrations/lily_queue", optional = true, default-features = false }
+lily_queue_client = { version = "0.1.0", path = "../integrations/lily_queue_client", optional = true, default-features = false }
+lily_redis = { version = "0.1.0", path = "../integrations/lily_redis", optional = true, default-features = false }
+lily_trace = { version = "0.1.0", path = "../integrations/lily_trace", optional = true, default-features = false }
+lily_config = { version = "0.1.0", path = "../foundation/lily_config", optional = true, default-features = false }
+lily_websocket_client = { version = "0.1.0", path = "../foundation/lily_websocket_client", optional = true, default-features = false }
+lily_injection = { version = "0.1.0", path = "../foundation/lily_injection", optional = true, default-features = false }
+lily_http_client = { version = "0.1.0", path = "../foundation/lily_http_client", optional = true, default-features = false }
+lily_error = { version = "0.1.0", path = "../foundation/lily_error", optional = true, default-features = false }
+lily_background_service = { version = "0.1.0", path = "../foundation/lily_background_service", optional = true, default-features = false }
+
+[package.metadata.docs.rs]
+no-default-features = true
+features = ["consumer-asyncapi", "http-api", "websocket", "clickhouse", "mongodb", "postgresql", "queue-client", "redis", "trace", "config", "websocket-client", "injection", "http-client", "error", "background-service"]

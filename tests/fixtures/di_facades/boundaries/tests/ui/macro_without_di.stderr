@@ -1,4 +1,4 @@
-error: Injectable requires a direct dependency on `lily_injection` or a Lily DI facade (`lily_http_api`, `lily_websocket`, `lily_consumer`)
+error: Injectable requires a direct dependency on `lily_injection` or a Lily DI facade (`lily_http_api`, `lily_websocket`, `lily_consumer`, or `lily` with `injection` or a framework feature)
  --> tests/ui/macro_without_di.rs:1:10
   |
 1 | #[derive(lily_injectable_derive::Injectable)]

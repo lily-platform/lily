@@ -43,7 +43,11 @@ pub(crate) fn queue_service_impl(args: TokenStream, input: TokenStream) -> Token
     expand_queue_service(
         input_impl,
         &runtime.tokens,
-        runtime.attribute_prefix.as_str(),
+        &runtime
+            .attribute_prefixes
+            .iter()
+            .map(String::as_str)
+            .collect::<Vec<_>>(),
     )
     .into()
 }
@@ -56,7 +60,7 @@ pub(crate) fn queue_service_impl(args: TokenStream, input: TokenStream) -> Token
 fn expand_queue_service(
     mut input_impl: ItemImpl,
     runtime_path: &TokenStream2,
-    runtime_attribute_prefix: &str,
+    runtime_attribute_prefix: &[&str],
 ) -> TokenStream2 {
     if input_impl.trait_.is_some() || !input_impl.generics.params.is_empty() {
         return syn::Error::new_spanned(
@@ -85,15 +89,7 @@ fn expand_queue_service(
             .attrs
             .iter()
             .filter(|attribute| {
-                let segments = &attribute.path().segments;
-                match segments.len() {
-                    1 => segments[0].ident == "asyncapi",
-                    2 => {
-                        segments[0].ident == runtime_attribute_prefix
-                            && segments[1].ident == "asyncapi"
-                    }
-                    _ => false,
-                }
+                crate::utils::is_runtime_attribute(attribute, runtime_attribute_prefix, "asyncapi")
             })
             .collect::<Vec<_>>();
         if attributes.len() > 1 {
@@ -279,7 +275,7 @@ mod tests {
         let output = expand_queue_service(
             syn::parse2(input).unwrap(),
             &quote!(::lily_queue),
-            "lily_queue",
+            &["lily_queue"],
         );
         let output_str = output.to_string();
 
@@ -313,7 +309,7 @@ mod tests {
         let output = expand_queue_service(
             syn::parse2(input).unwrap(),
             &quote!(::lily_queue),
-            "lily_queue",
+            &["lily_queue"],
         );
         let output_str = output.to_string();
 
@@ -337,7 +333,7 @@ mod tests {
         let output = expand_queue_service(
             syn::parse2(input).unwrap(),
             &quote!(::lily_queue),
-            "lily_queue",
+            &["lily_queue"],
         );
         let output_str = output.to_string();
 
@@ -367,7 +363,7 @@ mod tests {
         let output = expand_queue_service(
             syn::parse2(input).unwrap(),
             &quote!(::lily_queue),
-            "lily_queue",
+            &["lily_queue"],
         );
         let output = output.to_string();
 
@@ -397,7 +393,7 @@ mod tests {
         let output = expand_queue_service(
             syn::parse2(input).unwrap(),
             &quote!(::lily_queue),
-            "lily_queue",
+            &["lily_queue"],
         )
         .to_string();
 
@@ -420,7 +416,7 @@ mod tests {
         let output = expand_queue_service(
             syn::parse2(input).unwrap(),
             &quote!(::lily_queue),
-            "lily_queue",
+            &["lily_queue"],
         )
         .to_string();
 
@@ -457,7 +453,7 @@ mod tests {
         let output = expand_queue_service(
             syn::parse2(input).unwrap(),
             &quote!(::lily_queue),
-            "lily_queue",
+            &["lily_queue"],
         )
         .to_string();
 
@@ -494,7 +490,7 @@ mod tests {
         let output = expand_queue_service(
             syn::parse2(input).unwrap(),
             &quote!(::lily_queue),
-            "lily_queue",
+            &["lily_queue"],
         )
         .to_string();
 
@@ -522,7 +518,7 @@ mod tests {
         let output = expand_queue_service(
             syn::parse2(input).unwrap(),
             &quote!(::lily_queue),
-            "lily_queue",
+            &["lily_queue"],
         )
         .to_string();
 
