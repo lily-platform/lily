@@ -2,5 +2,32 @@
 name = "lily_websocket_redis"
 version = "0.1.0"
 edition = "2024"
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
 
 [dependencies]
+async-trait = { workspace = true }
+futures-util = "0.3"
+lily_config = { version = "0.1.0", path = "../../foundation/lily_config" }
+lily_injection = { version = "0.1.0", path = "../../foundation/lily_injection" }
+lily_websocket = { version = "0.1.0", path = "../../framework/lily_websocket" }
+redis = { version = "0.32.7", default-features = false, features = ["tokio-rustls-comp", "tls-rustls-webpki-roots"] }
+rand = { workspace = true }
+rustls-pki-types = { workspace = true }
+tokio = { workspace = true }
+tokio-util = { workspace = true, features = ["rt"] }
+
+[dev-dependencies]
+linkme = { workspace = true }
+rcgen = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tempfile = { workspace = true }
+tokio-tungstenite = "0.23.1"
+uuid = { version = "1.3", features = ["v4", "serde"] }
