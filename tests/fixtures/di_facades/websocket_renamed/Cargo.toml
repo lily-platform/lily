@@ -1,0 +1,9 @@
+[package]
+name = "di-facade-websocket-renamed"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+# Deliberately the only normal dependency; macro helpers must stay transitive.
+app_di = { package = "lily_websocket", path = "../../../../crates/lily_websocket" }

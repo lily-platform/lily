@@ -1,0 +1,5 @@
+error: WebSocket message-only extractor `BinaryPayload` cannot be used by a `#[disconnected]` lifecycle operation because lifecycle operations do not receive message payloads
+  --> tests/ui/fail_controller_disconnected_payload.rs:21:19
+   |
+21 |         _payload: lily_websocket::BinaryPayload,
+   |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

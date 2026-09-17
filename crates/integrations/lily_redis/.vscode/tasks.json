@@ -1,0 +1,161 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cargo",
+            "command": "build",
+            "args": ["--examples"],
+            "group": "build",
+            "label": "cargo build --examples",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": ["$rustc"]
+        },
+        {
+            "type": "cargo",
+            "command": "build",
+            "args": ["--example", "simple_test"],
+            "group": "build",
+            "label": "cargo build simple_test",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": ["$rustc"]
+        },
+        {
+            "type": "cargo",
+            "command": "build",
+            "args": ["--example", "basic_usage"],
+            "group": "build",
+            "label": "cargo build basic_usage",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": ["$rustc"]
+        },
+        {
+            "type": "cargo",
+            "command": "build",
+            "args": ["--example", "advanced_operations"],
+            "group": "build",
+            "label": "cargo build advanced_operations",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": ["$rustc"]
+        },
+        {
+            "type": "cargo",
+            "command": "build",
+            "args": ["--example", "error_handling"],
+            "group": "build",
+            "label": "cargo build error_handling",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": ["$rustc"]
+        },
+        {
+            "type": "cargo",
+            "command": "build",
+            "args": ["--example", "factory_pattern"],
+            "group": "build",
+            "label": "cargo build factory_pattern",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": ["$rustc"]
+        },
+        {
+            "type": "cargo",
+            "command": "run",
+            "args": ["--example", "simple_test"],
+            "group": "test",
+            "label": "cargo run simple_test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "problemMatcher": ["$rustc"]
+        },
+        {
+            "type": "cargo",
+            "command": "run",
+            "args": ["--example", "basic_usage"],
+            "group": "test",
+            "label": "cargo run basic_usage",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "problemMatcher": ["$rustc"]
+        },
+        {
+            "type": "cargo",
+            "command": "run",
+            "args": ["--example", "advanced_operations"],
+            "group": "test",
+            "label": "cargo run advanced_operations",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "problemMatcher": ["$rustc"]
+        },
+        {
+            "type": "cargo",
+            "command": "run",
+            "args": ["--example", "error_handling"],
+            "group": "test",
+            "label": "cargo run error_handling",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "problemMatcher": ["$rustc"]
+        },
+        {
+            "type": "cargo",
+            "command": "run",
+            "args": ["--example", "factory_pattern"],
+            "group": "test",
+            "label": "cargo run factory_pattern",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "problemMatcher": ["$rustc"]
+        }
+    ]
+}

@@ -1,0 +1,25 @@
+# =============================================================================
+# Distributed Tracing Configuration - GetWorker Example Advanced
+# =============================================================================
+# Exports traces to Jaeger via OTLP protocol
+# Jaeger UI: http://localhost:16686
+# =============================================================================
+
+enabled = true
+level = "debug"
+service_name = "get-worker-example-advanced"
+service_version = "1.0.0"
+environment = "development"
+
+[sampling]
+strategy = "always"
+rate = 1.0
+
+[export]
+console = true
+
+# OTLP export to Jaeger
+[export.otlp]
+endpoint = "http://localhost:4317"
+protocol = "grpc"
+timeout = 10

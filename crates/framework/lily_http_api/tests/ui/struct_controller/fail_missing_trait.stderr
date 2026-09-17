@@ -1,0 +1,36 @@
+error[E0277]: the trait bound `MissingTraitController: lily_http_api::ControllerTrait` is not satisfied
+ --> tests/ui/struct_controller/fail_missing_trait.rs:7:8
+  |
+7 | struct MissingTraitController;
+  |        ^^^^^^^^^^^^^^^^^^^^^^ unsatisfied trait bound
+  |
+help: the trait `lily_http_api::ControllerTrait` is not implemented for `MissingTraitController`
+ --> tests/ui/struct_controller/fail_missing_trait.rs:7:1
+  |
+7 | struct MissingTraitController;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: required by a bound in `lily_http_api::__private::StructControllerDefinition`
+ --> src/private.rs
+  |
+  | pub trait StructControllerDefinition: ControllerTrait {
+  |                                       ^^^^^^^^^^^^^^^ required by this bound in `StructControllerDefinition`
+
+error[E0277]: the trait bound `MissingTraitController: lily_http_api::ControllerTrait` is not satisfied
+ --> tests/ui/struct_controller/fail_missing_trait.rs:7:8
+  |
+7 | struct MissingTraitController;
+  |        ^^^^^^^^^^^^^^^^^^^^^^ unsatisfied trait bound
+  |
+help: the trait `lily_http_api::ControllerTrait` is not implemented for `MissingTraitController`
+ --> tests/ui/struct_controller/fail_missing_trait.rs:7:1
+  |
+7 | struct MissingTraitController;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: required by a bound in `lily_http_api::__private::ControllerRegistration::of`
+ --> src/private.rs
+  |
+  |     pub fn of<C>() -> Self
+  |            -- required by a bound in this associated function
+  |     where
+  |         C: ControllerTrait,
+  |            ^^^^^^^^^^^^^^^ required by this bound in `ControllerRegistration::of`

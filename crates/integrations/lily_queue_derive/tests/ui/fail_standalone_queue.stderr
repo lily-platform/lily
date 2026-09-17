@@ -1,0 +1,7 @@
+error: #[queue] must be used on a method inside a #[queue_service] impl block
+ --> tests/ui/fail_standalone_queue.rs:3:1
+  |
+3 | #[queue("audit.standalone", version = 1, content = "json")]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: this error originates in the attribute macro `queue` (in Nightly builds, run with -Z macro-backtrace for more info)

@@ -1,0 +1,7 @@
+error: #[controller] does not accept arguments
+  --> tests/ui/struct_controller/fail_controller_argument.rs:11:1
+   |
+11 | #[controller(unexpected)]
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this error originates in the attribute macro `controller` (in Nightly builds, run with -Z macro-backtrace for more info)

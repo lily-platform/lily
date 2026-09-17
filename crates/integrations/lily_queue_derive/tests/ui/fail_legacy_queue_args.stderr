@@ -1,0 +1,5 @@
+error: unexpected end of input, #[queue] requires `version = 1..=65535` and exact `content = "..."` arguments
+ --> tests/ui/fail_legacy_queue_args.rs:7:28
+  |
+7 |     #[queue("audit.created")]
+  |                            ^

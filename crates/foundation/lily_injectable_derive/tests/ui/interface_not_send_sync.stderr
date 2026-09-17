@@ -1,0 +1,21 @@
+error[E0277]: `dyn LocalPaymentService` cannot be shared between threads safely
+ --> tests/ui/interface_not_send_sync.rs:6:10
+  |
+6 | #[derive(Injectable)]
+  |          ^^^^^^^^^^ `dyn LocalPaymentService` cannot be shared between threads safely
+  |
+  = help: the trait `Sync` is not implemented for `dyn LocalPaymentService`
+  = note: required for `Arc<dyn LocalPaymentService>` to implement `Sync`
+  = note: required for the cast from `Box<Arc<dyn LocalPaymentService>>` to `Box<dyn std::any::Any + std::marker::Send + Sync>`
+  = note: this error originates in the derive macro `Injectable` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: `dyn LocalPaymentService` cannot be sent between threads safely
+ --> tests/ui/interface_not_send_sync.rs:6:10
+  |
+6 | #[derive(Injectable)]
+  |          ^^^^^^^^^^ `dyn LocalPaymentService` cannot be sent between threads safely
+  |
+  = help: the trait `std::marker::Send` is not implemented for `dyn LocalPaymentService`
+  = note: required for `Arc<dyn LocalPaymentService>` to implement `Sync`
+  = note: required for the cast from `Box<Arc<dyn LocalPaymentService>>` to `Box<dyn std::any::Any + std::marker::Send + Sync>`
+  = note: this error originates in the derive macro `Injectable` (in Nightly builds, run with -Z macro-backtrace for more info)

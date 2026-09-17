@@ -1,0 +1,1 @@
+j{"rabbitmq":{"consumer":{},"topology":{"queues":[{"name":"orders.created","exchange_name":"OrderWorker","routing_key":"orders.created","concurrency":0,"prefetch_count":0}]}}}

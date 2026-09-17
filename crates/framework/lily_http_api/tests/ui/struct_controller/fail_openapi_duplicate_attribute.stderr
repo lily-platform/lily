@@ -1,0 +1,5 @@
+error: duplicate action OpenAPI authority
+  --> tests/ui/struct_controller/fail_openapi_duplicate_attribute.rs:21:5
+   |
+21 |     #[openapi]
+   |     ^^^^^^^^^^

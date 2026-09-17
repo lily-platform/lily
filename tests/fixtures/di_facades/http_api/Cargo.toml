@@ -1,0 +1,9 @@
+[package]
+name = "di-facade-http-api"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+# Deliberately the only normal dependency; macro helpers must stay transitive.
+lily_http_api = { package = "lily_http_api", path = "../../../../crates/lily_http_api" }

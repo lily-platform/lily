@@ -1,0 +1,12 @@
+error[E0277]: the trait bound `RuntimeStateService: Default` is not satisfied
+ --> tests/ui/runtime_state_requires_default.rs:4:10
+  |
+4 | #[derive(Injectable)]
+  |          ^^^^^^^^^^ the trait `Default` is not implemented for `RuntimeStateService`
+  |
+  = note: this error originates in the derive macro `Injectable` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: consider annotating `RuntimeStateService` with `#[derive(Default)]`
+  |
+5 + #[derive(Default)]
+6 | struct RuntimeStateService {
+  |

@@ -1,0 +1,10 @@
+error: queue AsyncAPI metadata requires enabling the `asyncapi` feature on `lily_queue`
+  --> tests/ui/fail_asyncapi_feature_disabled.rs:6:1
+   |
+ 6 | / #[asyncapi(documented)]
+ 7 | | impl AuditService {
+ 8 | |     #[queue("audit.created", version = 1, content = "json")]
+ 9 | |     async fn handle(
+...  |
+15 | | }
+   | |_^

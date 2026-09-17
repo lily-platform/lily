@@ -1,0 +1,1 @@
+j{"body_len":65536,"max_message_size_bytes":65536,"properties":{"headers":[{"key":"x-lily-event-id","nodes":[{"kind":7,"text":"11111111-1111-4111-8111-111111111111"}]},{"key":"x-lily-schema-version","nodes":[{"kind":7,"text":"1"}]},{"key":"x-lily-content-kind","nodes":[{"kind":7,"text":"json"}]}]}}

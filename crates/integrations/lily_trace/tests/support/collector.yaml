@@ -1,0 +1,40 @@
+# Disposable, local qualification only. No forwarding to production backends.
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+
+exporters:
+  file/traces:
+    path: /capture/traces.jsonl
+    format: json
+    flush_interval: 50ms
+  file/logs:
+    path: /capture/logs.jsonl
+    format: json
+    flush_interval: 50ms
+  file/metrics:
+    path: /capture/metrics.jsonl
+    format: json
+    flush_interval: 50ms
+
+service:
+  extensions: [health_check]
+  telemetry:
+    logs:
+      level: error
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [file/traces]
+    logs:
+      receivers: [otlp]
+      exporters: [file/logs]
+    metrics:
+      receivers: [otlp]
+      exporters: [file/metrics]

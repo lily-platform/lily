@@ -1,0 +1,50 @@
+# =============================================================================
+# Lily Consumer Example Configuration
+# =============================================================================
+
+[server]
+host = "127.0.0.1"
+port = 8080
+
+# =============================================================================
+# RabbitMQ Consumer and Topology Configuration
+# =============================================================================
+[rabbitmq.consumer]
+username = "admin"
+password = "183279"
+hostname = "localhost"
+port = 5672
+vhost = "/"
+use_tls = false
+pool_size = 2
+connection_timeout_secs = 10
+confirm_timeout_secs = 10
+heartbeat_secs = 30
+max_reconnect_attempts = 5
+reconnect_backoff_millis = 250
+persistence_enabled = true
+
+# Queue Definitions
+[[rabbitmq.topology.queues]]
+name = "user.created"
+exchange_name = "user-service"
+routing_key = "user.created"
+retention = { main_max_messages = 100000, main_max_bytes = 1073741824, retry_bucket_max_messages = 10000, retry_bucket_max_bytes = 268435456, dead_letter_max_messages = 10000, dead_letter_max_bytes = 268435456 }
+concurrency = 2
+prefetch_count = 10
+retry_attempts = 3
+retry_backoff_millis = 1000
+max_retry_backoff_millis = 60000
+durable = true
+
+[[rabbitmq.topology.queues]]
+name = "user.deleted"
+exchange_name = "user-service"
+routing_key = "user.deleted"
+retention = { main_max_messages = 100000, main_max_bytes = 1073741824, retry_bucket_max_messages = 10000, retry_bucket_max_bytes = 268435456, dead_letter_max_messages = 10000, dead_letter_max_bytes = 268435456 }
+concurrency = 1
+prefetch_count = 5
+retry_attempts = 3
+retry_backoff_millis = 1000
+max_retry_backoff_millis = 60000
+durable = true

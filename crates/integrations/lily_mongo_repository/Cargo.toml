@@ -2,5 +2,22 @@
 name = "lily_mongo_repository"
 version = "0.1.0"
 edition = "2024"
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
 
 [dependencies]
+async-trait = "0.1"
+mongodb = { workspace = true }
+serde = { version = "1.0", features = ["derive"] }
+tokio = { workspace = true }
+tokio-util = { workspace = true }
+lily_error = { version = "0.1.0", path = "../../foundation/lily_error", features = ["mongodb-driver"] }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["test-util"] }

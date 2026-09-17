@@ -1,0 +1,9 @@
+[server]
+host = "127.0.0.1"
+port = 18081
+max_connections = 128
+connection_idle_timeout_secs = 30
+tls_enabled = false
+
+[lifecycle]
+shutdown_timeout_secs = 30

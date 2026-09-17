@@ -1,0 +1,5 @@
+error: queue schema version must be an integer in 1..=65535
+ --> tests/ui/fail_version_overflow.rs:7:40
+  |
+7 |     #[queue("audit.created", version = 65536, content = "json")]
+  |                                        ^^^^^

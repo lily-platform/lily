@@ -2,5 +2,68 @@
 name = "lily_http_api"
 version = "0.1.0"
 edition = "2024"
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
 
 [dependencies]
+lily_background_service.workspace = true
+async-trait = { workspace = true }
+futures = { workspace = true }
+tokio = { workspace = true }
+tokio-util = { workspace = true }
+bytes = { workspace = true }
+http = { workspace = true }
+hyper = { workspace = true }
+hyper-util = { workspace = true }
+http-body-util = { workspace = true }
+tower-service = { workspace = true }
+hyper-rustls = { workspace = true }
+rustls = { workspace = true, features = ["ring"] }
+rustls-pki-types = { workspace = true }
+tokio-rustls = { workspace = true }
+webpki-roots = { workspace = true }
+url = { workspace = true }
+ipnet = { workspace = true }
+linkme = { workspace = true }
+once_cell = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_html_form = { workspace = true }
+headers = { workspace = true }
+utoipa = { workspace = true }
+percent-encoding = { workspace = true }
+ring = { workspace = true }
+lily_web_core = { version = "0.1.0", path = "../../foundation/lily_web_core" }
+lily_core = { version = "0.1.0", path = "../../foundation/lily_core" }
+lily_cancellation = { workspace = true }
+lily_error = { version = "0.1.0", path = "../../foundation/lily_error" }
+lily_config = { version = "0.1.0", path = "../../foundation/lily_config" }
+lily_injection = { version = "0.1.0", path = "../../foundation/lily_injection" }
+lily_http_api_macros = { version = "0.1.0", path = "../../foundation/lily_http_api_macros" }
+lily_middleware = { version = "0.1.0", path = "../../foundation/lily_middleware" }
+lily_shutdown = { version = "0.1.0", path = "../../foundation/lily_shutdown" }
+lily_monitoring = { version = "0.1.0", path = "../../foundation/lily_monitoring" }
+lily_trace = { version = "0.1.0", path = "../../integrations/lily_trace" }
+tracing = { workspace = true }
+opentelemetry = "0.30"
+
+[features]
+default = []
+fuzzing = []
+
+[dev-dependencies]
+opentelemetry_sdk = { version = "0.30", features = ["testing"] }
+tracing-opentelemetry = "0.31"
+tracing-subscriber = { workspace = true }
+tokio = { workspace = true, features = ["test-util"] }
+lily_mongo_service = { version = "0.1.0", path = "../../integrations/lily_mongo_service" }
+rcgen = { workspace = true }
+tempfile = { workspace = true }
+trybuild = "1.0"
+uuid = { version = "1.23.5", features = ["serde"] }

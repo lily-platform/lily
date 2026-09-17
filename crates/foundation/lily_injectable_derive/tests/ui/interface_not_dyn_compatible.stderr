@@ -1,0 +1,16 @@
+error[E0038]: the trait `GenericPaymentService` is not dyn compatible
+ --> tests/ui/interface_not_dyn_compatible.rs:9:27
+  |
+9 | #[service(interface = dyn GenericPaymentService)]
+  |                           ^^^^^^^^^^^^^^^^^^^^^ `GenericPaymentService` is not dyn compatible
+  |
+note: for a trait to be dyn compatible it needs to allow building a vtable
+      for more information, visit <https://doc.rust-lang.org/reference/items/traits.html#dyn-compatibility>
+ --> tests/ui/interface_not_dyn_compatible.rs:5:8
+  |
+4 | trait GenericPaymentService: Send + Sync {
+  |       --------------------- this trait is not dyn compatible...
+5 |     fn charge<T>(&self, command: T);
+  |        ^^^^^^ ...because method `charge` has generic type parameters
+  = help: consider moving `charge` to another trait
+  = help: only type `GenericPaymentServiceImpl` implements `GenericPaymentService`; consider using it directly instead.

@@ -1,0 +1,5 @@
+error: duplicate action middleware authority
+  --> tests/ui/struct_controller/fail_duplicate_middleware.rs:18:5
+   |
+18 |     #[middleware(SecondMiddleware)]
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

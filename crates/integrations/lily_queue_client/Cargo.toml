@@ -2,5 +2,48 @@
 name = "lily_queue_client"
 version = "0.1.0"
 edition = "2024"
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
 
 [dependencies]
+async-trait = { workspace = true }
+tokio = { workspace = true }
+tokio-util = { workspace = true }
+dashmap = "6.1"
+lapin = { workspace = true }
+rustls = { workspace = true }
+rustls-pki-types = { workspace = true }
+zeroize = { workspace = true }
+opentelemetry = "0.30"
+serde = { workspace = true }
+serde_json = { workspace = true }
+mime = { workspace = true }
+percent-encoding = { workspace = true }
+uuid = { version = "1.11", features = ["v4"] }
+url = "2.5"
+lily_trace = { version = "0.1.0", path = "../lily_trace" }
+lily_error = { version = "0.1.0", path = "../../foundation/lily_error" }
+lily_config = { version = "0.1.0", path = "../../foundation/lily_config" }
+lily_injection = { version = "0.1.0", path = "../../foundation/lily_injection" }
+lily_injectable_derive = { version = "0.1.0", path = "../../foundation/lily_injectable_derive" }
+lily_injection_registry = { version = "0.1.0", path = "../../foundation/lily_injection_registry" }
+linkme = {workspace=true}
+[dev-dependencies]
+rcgen = { workspace = true }
+tempfile = { workspace = true }
+tokio-rustls = { workspace = true }
+
+[features]
+default = ["single"]
+single = []
+factory = []
+
+[[example]]
+name = "basic_publisher"
+required-features = ["single"]

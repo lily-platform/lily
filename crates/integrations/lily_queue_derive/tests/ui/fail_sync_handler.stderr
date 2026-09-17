@@ -1,0 +1,5 @@
+error: Queue handler must be async. Add 'async' keyword before 'fn'
+ --> tests/ui/fail_sync_handler.rs:8:5
+  |
+8 |     fn handle(&self, _message: String) -> Result<(), String> {
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

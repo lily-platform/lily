@@ -1,0 +1,5 @@
+error: Injectable services cannot declare generic type or lifetime parameters; register a concrete 'static wrapper type instead
+ --> tests/ui/generic_service.rs:4:22
+  |
+4 | struct GenericService<T> {
+  |                      ^^^

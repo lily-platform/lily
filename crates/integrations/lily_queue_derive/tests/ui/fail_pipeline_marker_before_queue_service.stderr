@@ -1,0 +1,7 @@
+error: #[middleware] must be placed beneath an outer #[queue_service] attribute
+ --> tests/ui/fail_pipeline_marker_before_queue_service.rs:8:1
+  |
+8 | #[middleware(Audit)]
+  | ^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: this error originates in the attribute macro `middleware` (in Nightly builds, run with -Z macro-backtrace for more info)

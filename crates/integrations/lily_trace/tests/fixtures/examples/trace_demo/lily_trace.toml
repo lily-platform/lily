@@ -1,0 +1,13 @@
+# Lily Trace Configuration
+# This file configures the distributed tracing system
+
+enabled = true
+level = "info"
+service_name = "trace-demo-service"
+
+[sampling]
+strategy = "always"
+rate = 1.0
+
+[export]
+console = true

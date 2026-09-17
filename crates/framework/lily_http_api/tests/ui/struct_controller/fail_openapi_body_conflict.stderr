@@ -1,0 +1,5 @@
+error: typed body extractor and explicit request_body metadata are competing authorities
+  --> tests/ui/struct_controller/fail_openapi_body_conflict.rs:27:43
+   |
+27 |     #[openapi(request_body(content_type = "application/json", schema = Input))]
+   |                                           ^^^^^^^^^^^^^^^^^^

@@ -1,0 +1,10 @@
+[package]
+name = "di-config-with-injection"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+# Configuration and DI are explicit, separate dependencies.
+lily_config = { package = "lily_config", path = "../../../../crates/lily_config" }
+lily_injection = { path = "../../../../crates/lily_injection" }

@@ -1,0 +1,83 @@
+name: lily-v1-qualification
+
+# No image has a moving default. The qualification runner must supply every
+# selected LILY_Q_*_IMAGE as an immutable name@sha256 digest and records the
+# resolved values in the release evidence bundle.
+services:
+  nginx-min:
+    profiles: [nginx-min]
+    image: "${LILY_Q_NGINX_MIN_IMAGE:?set an immutable NGINX minimum-version image digest}"
+    read_only: true
+    tmpfs: [/var/cache/nginx, /var/run]
+  nginx-max:
+    profiles: [nginx-max]
+    image: "${LILY_Q_NGINX_MAX_IMAGE:?set an immutable NGINX maximum-version image digest}"
+    read_only: true
+    tmpfs: [/var/cache/nginx, /var/run]
+
+  rabbitmq-min:
+    profiles: [rabbitmq-min]
+    image: "${LILY_Q_RABBITMQ_MIN_IMAGE:?set an immutable RabbitMQ minimum-version image digest}"
+    environment: &rabbitmq-environment
+      RABBITMQ_DEFAULT_USER: "${LILY_Q_RABBITMQ_USER:?set an ephemeral RabbitMQ user}"
+      RABBITMQ_DEFAULT_PASS: "${LILY_Q_RABBITMQ_PASSWORD:?set an ephemeral RabbitMQ password}"
+  rabbitmq-max:
+    profiles: [rabbitmq-max]
+    image: "${LILY_Q_RABBITMQ_MAX_IMAGE:?set an immutable RabbitMQ maximum-version image digest}"
+    environment: *rabbitmq-environment
+
+  postgresql-min:
+    profiles: [postgresql-min]
+    image: "${LILY_Q_POSTGRESQL_MIN_IMAGE:?set an immutable PostgreSQL minimum-version image digest}"
+    environment: &postgres-environment
+      POSTGRES_USER: "${LILY_Q_POSTGRES_USER:?set an ephemeral PostgreSQL user}"
+      POSTGRES_PASSWORD: "${LILY_Q_POSTGRES_PASSWORD:?set an ephemeral PostgreSQL password}"
+      POSTGRES_DB: lily_qualification
+  postgresql-max:
+    profiles: [postgresql-max]
+    image: "${LILY_Q_POSTGRESQL_MAX_IMAGE:?set an immutable PostgreSQL maximum-version image digest}"
+    environment: *postgres-environment
+
+  mongodb-min:
+    profiles: [mongodb-min]
+    image: "${LILY_Q_MONGODB_MIN_IMAGE:?set an immutable MongoDB minimum-version image digest}"
+    environment: &mongodb-environment
+      MONGO_INITDB_ROOT_USERNAME: "${LILY_Q_MONGODB_USER:?set an ephemeral MongoDB user}"
+      MONGO_INITDB_ROOT_PASSWORD: "${LILY_Q_MONGODB_PASSWORD:?set an ephemeral MongoDB password}"
+  mongodb-max:
+    profiles: [mongodb-max]
+    image: "${LILY_Q_MONGODB_MAX_IMAGE:?set an immutable MongoDB maximum-version image digest}"
+    environment: *mongodb-environment
+
+  clickhouse-min:
+    profiles: [clickhouse-min]
+    image: "${LILY_Q_CLICKHOUSE_MIN_IMAGE:?set an immutable ClickHouse minimum-version image digest}"
+    environment: &clickhouse-environment
+      CLICKHOUSE_USER: "${LILY_Q_CLICKHOUSE_USER:?set an ephemeral ClickHouse user}"
+      CLICKHOUSE_PASSWORD: "${LILY_Q_CLICKHOUSE_PASSWORD:?set an ephemeral ClickHouse password}"
+  clickhouse-max:
+    profiles: [clickhouse-max]
+    image: "${LILY_Q_CLICKHOUSE_MAX_IMAGE:?set an immutable ClickHouse maximum-version image digest}"
+    environment: *clickhouse-environment
+
+  redis-min:
+    profiles: [redis-min]
+    image: "${LILY_Q_REDIS_MIN_IMAGE:?set an immutable Redis minimum-version image digest}"
+    command: ["redis-server", "--requirepass", "${LILY_Q_REDIS_PASSWORD:?set an ephemeral Redis password}"]
+  redis-max:
+    profiles: [redis-max]
+    image: "${LILY_Q_REDIS_MAX_IMAGE:?set an immutable Redis maximum-version image digest}"
+    command: ["redis-server", "--requirepass", "${LILY_Q_REDIS_PASSWORD:?set an ephemeral Redis password}"]
+
+  otel-min:
+    profiles: [otel-min]
+    image: "${LILY_Q_OTEL_MIN_IMAGE:?set an immutable Collector minimum-version image digest}"
+    command: ["--config=/etc/otelcol/config.yaml"]
+  otel-max:
+    profiles: [otel-max]
+    image: "${LILY_Q_OTEL_MAX_IMAGE:?set an immutable Collector maximum-version image digest}"
+    command: ["--config=/etc/otelcol/config.yaml"]
+
+networks:
+  default:
+    internal: true

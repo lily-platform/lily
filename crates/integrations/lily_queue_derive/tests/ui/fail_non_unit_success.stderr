@@ -1,0 +1,7 @@
+error[E0308]: mismatched types
+ --> tests/ui/fail_non_unit_success.rs:6:1
+  |
+6 | #[queue_service]
+  | ^^^^^^^^^^^^^^^^ expected `()`, found `String`
+  |
+  = note: this error originates in the attribute macro `queue_service` (in Nightly builds, run with -Z macro-backtrace for more info)

@@ -2,5 +2,96 @@
 name = "lily_queue"
 version = "0.1.0"
 edition = "2024"
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[features]
+default = []
+asyncapi = [
+    "dep:lily_asyncapi",
+    "lily_queue_registry/asyncapi",
+    "lily_queue_derive/asyncapi",
+]
+test-support = []
+fuzzing = []
+transactional-inbox-mongodb = [
+    "dep:lily_mongo_repository",
+    "dep:lily_mongodb",
+    "dep:mongodb",
+    "dep:sha2",
+    "lily_config/transactional-inbox-mongodb",
+]
+transactional-inbox-mongodb-factory = [
+    "dep:lily_mongo_repository",
+    "dep:lily_mongodb",
+    "dep:mongodb",
+    "dep:sha2",
+    "lily_config/transactional-inbox-mongodb",
+    "lily_mongodb/factory-api",
+]
+transactional-inbox-postgresql = [
+    "dep:lily_postgresql",
+    "dep:sha2",
+    "lily_config/transactional-inbox-postgresql",
+]
+transactional-inbox-postgresql-factory = [
+    "dep:lily_postgresql",
+    "dep:sha2",
+    "lily_config/transactional-inbox-postgresql",
+    "lily_postgresql/factory-api",
+]
 
 [dependencies]
+linkme = { workspace = true }
+lapin = { workspace = true }
+tokio = { workspace = true, features = [
+    "rt-multi-thread",
+    "macros",
+    "sync",
+    "time",
+] }
+uuid = { version = "1.3", features = ["v4"] }
+native-tls = { version = "0.2.14" }
+async-trait = { workspace = true }
+lily_core = { version = "0.1.0", path = "../../foundation/lily_core" }
+lily_error = { version = "0.1.0", path = "../../foundation/lily_error" }
+# Dependency Injection (optional)
+lily_injection = { version = "0.1.0", path = "../../foundation/lily_injection" }
+lily_injectable_derive = { version = "0.1.0", path = "../../foundation/lily_injectable_derive" }
+lily_injection_registry = { version = "0.1.0", path = "../../foundation/lily_injection_registry" }
+lily_queue_registry = { version = "=0.1.0", path = "../lily_queue_registry" }
+lily_queue_derive = { version = "=0.1.0", path = "../lily_queue_derive" }
+lily_asyncapi = { version = "=0.1.0", path = "../lily_asyncapi", optional = true }
+lily_queue_client = { version = "0.1.0", path = "../lily_queue_client", default-features = false }
+lily_config = { version = "0.1.0", path = "../../foundation/lily_config" }
+lily_mongo_repository = { version = "0.1.0", path = "../lily_mongo_repository", optional = true }
+lily_mongodb = { version = "0.1.0", path = "../lily_mongodb", default-features = false, optional = true }
+mongodb = { workspace = true, optional = true }
+lily_postgresql = { version = "0.1.0", path = "../lily_postgresql", default-features = false, optional = true }
+sha2 = { workspace = true, optional = true }
+lily_trace = { version = "0.1.0", path = "../lily_trace" }
+lily_shutdown = { version = "0.1.0", path = "../../foundation/lily_shutdown" }
+tokio-native-tls = { version = "0.3.1" }
+futures = { workspace = true }
+serde = { workspace = true }
+urlencoding = { workspace = true }
+serde_json = { workspace = true }
+bytes = { workspace = true }
+tracing = { workspace = true }
+opentelemetry = "0.30"
+tracing-subscriber = { workspace = true }
+dashmap = { workspace = true } # Concurrent map (ConcurrentDictionary muadili)
+tokio-util = { workspace = true }
+anyhow = "1.0"
+thiserror = { workspace = true }
+parking_lot = "0.12" # hafif mutex
+once_cell = { workspace = true } # statics, cert cache
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["test-util"] }

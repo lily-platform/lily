@@ -1,0 +1,79 @@
+# =============================================================================
+# Lily Consumer - Multi-Queue Example Configuration
+# =============================================================================
+
+[server]
+host = "127.0.0.1"
+port = 8080
+
+# =============================================================================
+# RabbitMQ Consumer and Topology Configuration
+# =============================================================================
+[rabbitmq.consumer]
+username = "admin"
+password = "183279"
+hostname = "localhost"
+port = 5672
+vhost = "/"
+use_tls = false
+connection_timeout_secs = 10
+confirm_timeout_secs = 10
+heartbeat_secs = 30
+max_reconnect_attempts = 5
+reconnect_backoff_millis = 250
+
+# =============================================================================
+# Queue Definitions - Multiple Services
+# =============================================================================
+
+# UserService Queues
+[[rabbitmq.topology.queues]]
+name = "user.created"
+exchange_name = "UserService"
+routing_key = "user.created"
+retention = { main_max_messages = 100000, main_max_bytes = 1073741824, retry_bucket_max_messages = 10000, retry_bucket_max_bytes = 268435456, dead_letter_max_messages = 10000, dead_letter_max_bytes = 268435456 }
+concurrency = 2
+prefetch_count = 10
+retry_attempts = 3
+durable = true
+
+[[rabbitmq.topology.queues]]
+name = "user.deleted"
+exchange_name = "UserService"
+routing_key = "user.deleted"
+retention = { main_max_messages = 100000, main_max_bytes = 1073741824, retry_bucket_max_messages = 10000, retry_bucket_max_bytes = 268435456, dead_letter_max_messages = 10000, dead_letter_max_bytes = 268435456 }
+concurrency = 1
+prefetch_count = 5
+durable = true
+
+# OrderService Queues
+[[rabbitmq.topology.queues]]
+name = "order.placed"
+exchange_name = "OrderService"
+routing_key = "order.placed"
+retention = { main_max_messages = 100000, main_max_bytes = 1073741824, retry_bucket_max_messages = 10000, retry_bucket_max_bytes = 268435456, dead_letter_max_messages = 10000, dead_letter_max_bytes = 268435456 }
+concurrency = 4
+prefetch_count = 20
+retry_attempts = 5
+durable = true
+
+[[rabbitmq.topology.queues]]
+name = "order.cancelled"
+exchange_name = "OrderService"
+routing_key = "order.cancelled"
+retention = { main_max_messages = 100000, main_max_bytes = 1073741824, retry_bucket_max_messages = 10000, retry_bucket_max_bytes = 268435456, dead_letter_max_messages = 10000, dead_letter_max_bytes = 268435456 }
+concurrency = 2
+prefetch_count = 10
+retry_attempts = 2
+durable = true
+
+# NotificationService Queues
+[[rabbitmq.topology.queues]]
+name = "notification.email"
+exchange_name = "NotificationService"
+routing_key = "notification.email"
+retention = { main_max_messages = 100000, main_max_bytes = 1073741824, retry_bucket_max_messages = 10000, retry_bucket_max_bytes = 268435456, dead_letter_max_messages = 10000, dead_letter_max_bytes = 268435456 }
+concurrency = 3
+prefetch_count = 15
+retry_attempts = 2
+durable = true

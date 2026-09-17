@@ -1,0 +1,51 @@
+error[E0277]: the trait bound `(lily_queue::Json<String>, DeliveryContext): lily_queue::extractor::ExtractDeliveryArguments<_>` is not satisfied
+ --> tests/ui/fail_payload_not_terminal.rs:6:1
+  |
+6 | #[queue_service]
+  | ^^^^^^^^^^^^^^^^ the trait `lily_queue::extractor::ExtractDeliveryArguments<_>` is not implemented for `(lily_queue::Json<String>, DeliveryContext)`
+  |
+  = help: the following other types implement trait `lily_queue::extractor::ExtractDeliveryArguments<Plan>`:
+            `()` implements `lily_queue::extractor::ExtractDeliveryArguments<()>`
+            `(A, B)` implements `lily_queue::extractor::ExtractDeliveryArguments<(lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode)>`
+            `(A, B)` implements `lily_queue::extractor::ExtractDeliveryArguments<(lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPayloadMode)>`
+            `(A, B, C)` implements `lily_queue::extractor::ExtractDeliveryArguments<(lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode)>`
+            `(A, B, C)` implements `lily_queue::extractor::ExtractDeliveryArguments<(lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPayloadMode)>`
+            `(A, B, C, D)` implements `lily_queue::extractor::ExtractDeliveryArguments<(lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode)>`
+            `(A, B, C, D)` implements `lily_queue::extractor::ExtractDeliveryArguments<(lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPayloadMode)>`
+            `(A, B, C, D, E)` implements `lily_queue::extractor::ExtractDeliveryArguments<(lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode)>`
+          and $N others
+note: required by a bound in `lily_queue::__private::extract_delivery_arguments`
+ --> $WORKSPACE/crates/integrations/lily_queue/src/extractor/mod.rs
+  |
+  | pub fn extract_delivery_arguments<'a, Arguments, Plan>(
+  |        -------------------------- required by a bound in this function
+...
+  |     Arguments: ExtractDeliveryArguments<Plan> + 'a,
+  |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `extract_delivery_arguments`
+  = note: this error originates in the attribute macro `queue_service` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `(lily_queue::Json<String>, DeliveryContext): lily_queue::extractor::ExtractDeliveryArguments<_>` is not satisfied
+ --> tests/ui/fail_payload_not_terminal.rs:6:1
+  |
+6 | #[queue_service]
+  | ^^^^^^^^^^^^^^^^ the trait `lily_queue::extractor::ExtractDeliveryArguments<_>` is not implemented for `(lily_queue::Json<String>, DeliveryContext)`
+  |
+  = help: the following other types implement trait `lily_queue::extractor::ExtractDeliveryArguments<Plan>`:
+            `()` implements `lily_queue::extractor::ExtractDeliveryArguments<()>`
+            `(A, B)` implements `lily_queue::extractor::ExtractDeliveryArguments<(lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode)>`
+            `(A, B)` implements `lily_queue::extractor::ExtractDeliveryArguments<(lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPayloadMode)>`
+            `(A, B, C)` implements `lily_queue::extractor::ExtractDeliveryArguments<(lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode)>`
+            `(A, B, C)` implements `lily_queue::extractor::ExtractDeliveryArguments<(lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPayloadMode)>`
+            `(A, B, C, D)` implements `lily_queue::extractor::ExtractDeliveryArguments<(lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode)>`
+            `(A, B, C, D)` implements `lily_queue::extractor::ExtractDeliveryArguments<(lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPayloadMode)>`
+            `(A, B, C, D, E)` implements `lily_queue::extractor::ExtractDeliveryArguments<(lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode, lily_queue::extractor::DeliveryPartsMode)>`
+          and $N others
+note: required by a bound in `lily_queue::__private::delivery_input_contract`
+ --> $WORKSPACE/crates/integrations/lily_queue/src/extractor/mod.rs
+  |
+  | pub fn delivery_input_contract<Arguments, Plan>() -> QueueHandlerInputContract
+  |        ----------------------- required by a bound in this function
+  | where
+  |     Arguments: ExtractDeliveryArguments<Plan>,
+  |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `delivery_input_contract`
+  = note: this error originates in the attribute macro `queue_service` (in Nightly builds, run with -Z macro-backtrace for more info)

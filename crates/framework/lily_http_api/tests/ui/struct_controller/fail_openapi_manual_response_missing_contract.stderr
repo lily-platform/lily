@@ -1,0 +1,7 @@
+error: manual and passthrough response actions require explicit responses(...) metadata or #[openapi(skip)]
+  --> tests/ui/struct_controller/fail_openapi_manual_response_missing_contract.rs:17:1
+   |
+17 | #[controller]
+   | ^^^^^^^^^^^^^
+   |
+   = note: this error originates in the attribute macro `controller` (in Nightly builds, run with -Z macro-backtrace for more info)

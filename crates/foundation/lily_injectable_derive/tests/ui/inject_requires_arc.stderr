@@ -1,0 +1,5 @@
+error: `#[inject]` fields must use `Arc<T>`; supported examples are `Arc<MyService>` and `Arc<dyn MyService>`
+  --> tests/ui/inject_requires_arc.rs:12:17
+   |
+12 |     dependency: Dependency,
+   |                 ^^^^^^^^^^

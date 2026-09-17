@@ -1,0 +1,5 @@
+error: controller actions accept at most one &mut Request binding
+  --> tests/ui/struct_controller/fail_duplicate_raw_request.rs:14:49
+   |
+14 |     async fn index(&self, _first: &mut Request, _second: &mut Request) -> Result<(), HttpApiError> {
+   |                                                 ^^^^^^^^^^^^^^^^^^^^^

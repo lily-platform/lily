@@ -1,0 +1,9 @@
+[package]
+name = "di-facade-consumer"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+# Deliberately the only normal dependency; macro helpers must stay transitive.
+lily_consumer = { package = "lily_consumer", path = "../../../../crates/lily_consumer" }

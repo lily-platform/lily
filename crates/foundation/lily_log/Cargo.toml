@@ -2,5 +2,35 @@
 name = "lily_log"
 version = "0.1.0"
 edition = "2024"
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
 
 [dependencies]
+# Core dependencies
+serde = { workspace = true }
+serde_json = { workspace = true }
+async-trait = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+
+# ClickHouse
+clickhouse = { workspace = true }
+chrono = { workspace = true }
+
+# Lily framework
+lily_clickhouse = { version = "0.1.0", path = "../../integrations/lily_clickhouse" }
+lily_clickhouse_derive = { version = "0.1.0", path = "../../integrations/lily_clickhouse_derive" }
+lily_injectable_derive = { version = "0.1.0", path = "../lily_injectable_derive" }
+lily_injection = { version = "0.1.0", path = "../lily_injection" }
+lily_injection_registry = { version = "0.1.0", path = "../lily_injection_registry" }
+lily_error = { version = "0.1.0", path = "../lily_error" }
+lily_trace = { version = "0.1.0", path = "../../integrations/lily_trace" }
+
+# Utilities
+linkme = { workspace = true }

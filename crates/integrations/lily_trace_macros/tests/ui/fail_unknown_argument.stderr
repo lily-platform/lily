@@ -1,0 +1,5 @@
+error: unknown lily_trace argument `target`
+ --> tests/ui/fail_unknown_argument.rs:3:14
+  |
+3 | #[lily_trace(target = "secret")]
+  |              ^^^^^^^^^^^^^^^^^

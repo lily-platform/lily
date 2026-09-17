@@ -1,0 +1,5 @@
+error: duplicate lily_trace argument `result`
+ --> tests/ui/fail_result_duplicate.rs:3:22
+  |
+3 | #[lily_trace(result, result)]
+  |                      ^^^^^^

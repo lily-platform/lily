@@ -1,0 +1,51 @@
+[package]
+name = "lily-websocket-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+lily_websocket = { path = "..", features = ["fuzzing"] }
+tokio = { version = "1", features = ["rt", "sync", "time"] }
+
+[[bin]]
+name = "websocket_envelope"
+path = "fuzz_targets/websocket_envelope.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "websocket_handshake_policy"
+path = "fuzz_targets/websocket_handshake_policy.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "websocket_message_chain"
+path = "fuzz_targets/websocket_message_chain.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "websocket_lifecycle"
+path = "fuzz_targets/websocket_lifecycle.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "websocket_backplane_envelope"
+path = "fuzz_targets/websocket_backplane_envelope.rs"
+test = false
+doc = false
+bench = false
+
+[workspace]
+members = ["."]

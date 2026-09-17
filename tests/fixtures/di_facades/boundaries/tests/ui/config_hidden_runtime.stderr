@@ -1,0 +1,5 @@
+error[E0432]: unresolved import `lily_config::__private`
+ --> tests/ui/config_hidden_runtime.rs:1:18
+  |
+1 | use lily_config::__private::lily_injection;
+  |                  ^^^^^^^^^ could not find `__private` in `lily_config`

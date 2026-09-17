@@ -1,0 +1,7 @@
+error: `fields` references unknown function argument `password`
+ --> tests/ui/fail_unknown_field.rs:4:1
+  |
+4 | / fn record(user_id: u64) {
+5 | |     let _ = user_id;
+6 | | }
+  | |_^

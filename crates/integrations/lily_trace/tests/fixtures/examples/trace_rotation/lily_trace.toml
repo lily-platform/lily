@@ -1,0 +1,21 @@
+# File Rotation Test Configuration
+
+enabled = true
+level = "info"
+service_name = "rotation-test"
+
+[sampling]
+strategy = "always"
+rate = 1.0
+
+[export]
+console = false
+
+# File export with rotation
+[export.file]
+path = "./trace-rotation.jsonl"
+rotation = "daily"
+max_file_bytes = 1048576
+max_files = 3
+buffered_lines = 1024
+max_record_bytes = 16384

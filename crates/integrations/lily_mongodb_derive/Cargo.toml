@@ -2,5 +2,36 @@
 name = "lily_mongodb_derive"
 version = "0.1.0"
 edition = "2024"
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[lib]
+proc-macro = true
+
+[features]
+default = ["single"]
+single = []
+factory = []
 
 [dependencies]
+mongodb = { workspace = true }
+syn = { version = "2.0", features = ["full"] }
+quote = "1.0"
+proc-macro2 = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+async-trait = { workspace = true }
+lily_injectable_derive = { version = "0.1.0", path = "../../foundation/lily_injectable_derive" }
+lily_injection_registry = { version = "0.1.0", path = "../../foundation/lily_injection_registry" }
+lily_injection = { version = "0.1.0", path = "../../foundation/lily_injection" }
+lily_error = { version = "0.1.0", path = "../../foundation/lily_error" }
+lily_mongo_repository = { version = "0.1.0", path = "../lily_mongo_repository" }
+futures = {workspace = true}
+
+[dev-dependencies]
+trybuild = "1.0"

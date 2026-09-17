@@ -1,0 +1,5 @@
+error: ClickhouseTable requires #[entity_type(YourType)] attribute
+ --> tests/ui/fail_table_missing_entity.rs:4:8
+  |
+4 | struct AuditTable {
+  |        ^^^^^^^^^^

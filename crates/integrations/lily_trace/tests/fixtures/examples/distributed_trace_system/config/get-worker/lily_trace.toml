@@ -1,0 +1,17 @@
+environment = "development"
+enabled = true
+level = "info"
+service_name = "trace-example-get-worker"
+service_version = "1.0.0"
+
+[sampling]
+strategy = "always"
+rate = 1.0
+
+[export]
+console = true
+
+[export.otlp]
+endpoint = "http://127.0.0.1:4317"
+protocol = "tonic"
+timeout = 10

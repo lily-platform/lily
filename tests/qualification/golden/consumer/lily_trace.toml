@@ -1,0 +1,20 @@
+enabled = true
+level = "info"
+service_name = "lily-golden-consumer"
+service_version = "1.0.0-rc"
+environment = "qualification"
+enable_events = true
+max_attributes = 128
+max_event_attributes = 128
+
+[sampling]
+strategy = "always"
+rate = 1.0
+
+[export]
+console = false
+
+[export.otlp]
+endpoint = "http://127.0.0.1:4317"
+protocol = "grpc"
+timeout = 10

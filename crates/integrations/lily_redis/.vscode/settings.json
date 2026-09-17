@@ -1,0 +1,55 @@
+{
+    "rust-analyzer.cargo.buildScripts.enable": true,
+    "rust-analyzer.checkOnSave.command": "check",
+    "rust-analyzer.checkOnSave.allTargets": true,
+    "rust-analyzer.cargo.allFeatures": true,
+    "rust-analyzer.procMacro.enable": true,
+    "rust-analyzer.diagnostics.enable": true,
+    "rust-analyzer.completion.addCallParentheses": true,
+    "rust-analyzer.completion.addCallArgumentSnippets": true,
+    "rust-analyzer.inlayHints.enable": true,
+    "rust-analyzer.inlayHints.parameterHints": true,
+    "rust-analyzer.inlayHints.typeHints": true,
+    "rust-analyzer.inlayHints.chainingHints": true,
+    "rust-analyzer.lens.enable": true,
+    "rust-analyzer.lens.methodReferences": true,
+    "rust-analyzer.lens.references": true,
+    "rust-analyzer.hover.actions.enable": true,
+    "rust-analyzer.hover.actions.implementations": true,
+    "rust-analyzer.hover.actions.references": true,
+    "rust-analyzer.hover.actions.run": true,
+    "rust-analyzer.hover.actions.debug": true,
+    "rust-analyzer.runnables.overrideCargo": null,
+    "rust-analyzer.runnables.cargoExtraArgs": [],
+    "rust-analyzer.debug.engine": "vadimcn.vscode-lldb",
+    "rust-analyzer.debug.sourceFileMap": {
+        "/rustc/*": null
+    },
+    "files.watcherExclude": {
+        "**/target/**": true
+    },
+    "search.exclude": {
+        "**/target": true,
+        "**/Cargo.lock": true
+    },
+    "files.exclude": {
+        "**/target/debug": true,
+        "**/target/release": true,
+        "**/target/.rustc_info.json": true,
+        "**/target/CACHEDIR.TAG": true
+    },
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "rust-lang.rust-analyzer",
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer",
+        "editor.formatOnSave": true,
+        "editor.semanticHighlighting.enabled": true
+    },
+    "terminal.integrated.env.linux": {
+        "RUST_BACKTRACE": "1",
+        "RUST_LOG": "debug"
+    },
+    "debug.console.fontSize": 14,
+    "debug.console.fontFamily": "monospace",
+    "debug.internalConsoleOptions": "openOnSessionStart"
+}

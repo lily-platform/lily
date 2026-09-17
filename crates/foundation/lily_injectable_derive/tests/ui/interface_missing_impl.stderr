@@ -1,0 +1,18 @@
+error[E0277]: the trait bound `NotAPaymentService: PaymentService` is not satisfied
+ --> tests/ui/interface_missing_impl.rs:6:19
+  |
+6 | #[derive(Default, Injectable)]
+  |                   ^^^^^^^^^^ unsatisfied trait bound
+  |
+help: the trait `PaymentService` is not implemented for `NotAPaymentService`
+ --> tests/ui/interface_missing_impl.rs:8:1
+  |
+8 | struct NotAPaymentService;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^
+help: this trait has no implementations, consider adding one
+ --> tests/ui/interface_missing_impl.rs:4:1
+  |
+4 | trait PaymentService: Send + Sync {}
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  = note: required for the cast from `Arc<NotAPaymentService>` to `Arc<dyn PaymentService>`
+  = note: this error originates in the derive macro `Injectable` (in Nightly builds, run with -Z macro-backtrace for more info)

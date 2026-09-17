@@ -2,5 +2,25 @@
 name = "lily_background_service"
 version = "0.1.0"
 edition = "2024"
+description = "Supervised background services with owned DI scopes and bounded host shutdown"
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
 
 [dependencies]
+async-trait.workspace = true
+futures.workspace = true
+tokio.workspace = true
+tokio-util.workspace = true
+tracing.workspace = true
+thiserror.workspace = true
+lily_cancellation.workspace = true
+lily_injection.workspace = true
+
+[dev-dependencies]
+lily_process = { path = "../lily_process" }
+lily_injectable_derive = { path = "../lily_injectable_derive" }
+lily_injection_registry = { path = "../lily_injection_registry" }
+lily_error.workspace = true
+linkme.workspace = true
+tokio = { workspace = true, features = ["test-util"] }

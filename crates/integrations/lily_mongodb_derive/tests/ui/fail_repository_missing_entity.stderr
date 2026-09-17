@@ -1,0 +1,5 @@
+error: Repository requires #[entity_type(YourEntityType)] attribute
+ --> tests/ui/fail_repository_missing_entity.rs:8:8
+  |
+8 | struct AuditRepository {
+  |        ^^^^^^^^^^^^^^^

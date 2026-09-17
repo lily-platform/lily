@@ -1,0 +1,7 @@
+error[E0599]: no method named `dependency` found for reference `&Consumer` in the current scope
+  --> tests/ui/injected_field_accessor_not_generated.rs:24:21
+   |
+24 |     let _ = service.dependency();
+   |                     ^^^^^^^^^^-- help: remove the arguments
+   |                     |
+   |                     field, not a method

@@ -1,0 +1,5 @@
+error: raw Request binding must use &mut Request
+  --> tests/ui/struct_controller/fail_signature.rs:16:19
+   |
+16 |         _request: &Request,
+   |                   ^^^^^^^^

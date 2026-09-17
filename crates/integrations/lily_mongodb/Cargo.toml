@@ -2,5 +2,51 @@
 name = "lily_mongodb"
 version = "0.1.0"
 edition = "2024"
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[features]
+default = ["single"]
+single = []
+factory-api = []
+factory = ["factory-api"]
+test-support = []
 
 [dependencies]
+mongodb = { workspace = true }                                    # MongoDB driver
+tokio = { workspace = true }
+uuid = { version = "1.3", features = ["v4"] }
+async-trait = { workspace = true }
+lily_config = { version = "0.1.0", path = "../../foundation/lily_config" }
+lily_core = { version = "0.1.0", path = "../../foundation/lily_core" }
+lily_error = { version = "0.1.0", path = "../../foundation/lily_error", features = ["mongodb-driver"] }
+lily_injection = { version = "0.1.0", path = "../../foundation/lily_injection" }
+lily_injectable_derive = { version = "0.1.0", path = "../../foundation/lily_injectable_derive" }
+lily_trace = { version = "0.1.0", path = "../lily_trace" }
+lily_shutdown = { version = "0.1.0", path = "../../foundation/lily_shutdown" }
+lily_injection_registry = { version = "0.1.0", path = "../../foundation/lily_injection_registry" }
+futures = { workspace = true }
+serde = { workspace = true }
+urlencoding = { workspace = true }
+serde_json = { workspace = true }
+bytes = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+thiserror = { workspace = true }
+sha2 = "0.10"
+dashmap = { workspace = true }                                    # Concurrent map (ConcurrentDictionary muadili)
+tokio-util = { workspace = true }
+once_cell = { workspace = true }                                  # statics, cert cache
+linkme = { workspace = true }                                     # logging
+lily_mongodb_derive = { version = "0.1.0", path = "../lily_mongodb_derive" }
+lily_mongo_repository = { version = "0.1.0", path = "../lily_mongo_repository" }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["test-util"] }
+trybuild = "1.0"

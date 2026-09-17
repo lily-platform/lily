@@ -1,0 +1,7 @@
+error: custom request extractor requires explicit parameters(...), request_body(...) metadata or #[openapi(skip)]
+  --> tests/ui/struct_controller/fail_openapi_custom_extractor_missing_metadata.rs:19:1
+   |
+19 | #[controller]
+   | ^^^^^^^^^^^^^
+   |
+   = note: this error originates in the attribute macro `controller` (in Nightly builds, run with -Z macro-backtrace for more info)

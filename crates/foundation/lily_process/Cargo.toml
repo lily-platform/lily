@@ -2,5 +2,14 @@
 name = "lily_process"
 version = "0.1.0"
 edition = "2024"
+description = "Process context management for async multi-request systems" 
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
 
 [dependencies]
+tokio = { version = "1.0", features = ["full"] }

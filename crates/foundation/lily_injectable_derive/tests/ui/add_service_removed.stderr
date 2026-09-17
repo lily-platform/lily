@@ -1,0 +1,5 @@
+error[E0599]: no associated function or constant named `add_service` found for struct `ApplicationContainer` in the current scope
+  --> tests/ui/add_service_removed.rs:10:27
+   |
+10 |     ApplicationContainer::add_service::<dyn PaymentService, StripePaymentService>();
+   |                           ^^^^^^^^^^^ associated function or constant not found in `ApplicationContainer`

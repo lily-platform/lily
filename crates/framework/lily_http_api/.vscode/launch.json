@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug example test_controller_demo",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/target/debug/examples/test_controller_demo",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopOnEntry": false,
+            "sourceLanguages": [
+                "rust"
+            ]
+        }
+    ]
+}

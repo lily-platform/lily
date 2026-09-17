@@ -1,0 +1,5 @@
+error: controller action requires exactly one HTTP method attribute
+  --> tests/ui/struct_controller/fail_missing_method.rs:13:14
+   |
+13 |     async fn index(&self) -> Result<(), HttpApiError> {
+   |              ^^^^^

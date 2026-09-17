@@ -1,0 +1,5 @@
+error: struct controllers require #[base_path("/...")]
+ --> tests/ui/struct_controller/fail_missing_base_path.rs:6:8
+  |
+6 | struct MissingBasePathController;
+  |        ^^^^^^^^^^^^^^^^^^^^^^^^^

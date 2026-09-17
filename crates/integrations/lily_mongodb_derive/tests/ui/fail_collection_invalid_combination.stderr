@@ -1,0 +1,5 @@
+error: unique_combination requires 2 to 8 valid string field paths
+ --> tests/ui/fail_collection_invalid_combination.rs:6:1
+  |
+6 | #[unique_combination("only_one")]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

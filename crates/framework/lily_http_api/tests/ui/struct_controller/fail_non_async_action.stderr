@@ -1,0 +1,5 @@
+error: controller actions must be async
+  --> tests/ui/struct_controller/fail_non_async_action.rs:14:5
+   |
+14 |     fn index(&self) -> Result<(), HttpApiError> {
+   |     ^^

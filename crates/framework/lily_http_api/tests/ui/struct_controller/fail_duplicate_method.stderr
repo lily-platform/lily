@@ -1,0 +1,5 @@
+error: controller action has more than one HTTP method attribute
+  --> tests/ui/struct_controller/fail_duplicate_method.rs:14:5
+   |
+14 |     #[post("/")]
+   |     ^^^^^^^^^^^^

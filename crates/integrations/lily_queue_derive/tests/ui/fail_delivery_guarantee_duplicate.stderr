@@ -1,0 +1,5 @@
+error: duplicate `delivery_guarantee` argument
+  --> tests/ui/fail_delivery_guarantee_duplicate.rs:12:9
+   |
+12 |         delivery_guarantee = "transactional_inbox"
+   |         ^^^^^^^^^^^^^^^^^^

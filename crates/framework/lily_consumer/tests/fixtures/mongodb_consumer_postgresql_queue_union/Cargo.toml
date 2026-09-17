@@ -1,0 +1,11 @@
+[package]
+name = "lily_consumer_mongodb_postgresql_feature_union"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+lily_consumer = { path = "../../..", default-features = false, features = ["transactional-inbox-mongodb"] }
+lily_queue = { path = "../../../../../integrations/lily_queue", default-features = false, features = ["transactional-inbox-postgresql"] }
+
+[workspace]

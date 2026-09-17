@@ -1,0 +1,17 @@
+[package]
+name = "lily-downstream-http-fixture"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+# These paths stand in for the current registry releases. The fixture deliberately
+# consumes only Lily's application-facing HTTP crates from outside the workspace;
+# middleware, web-core, and procedural-macro implementation crates stay transitive.
+lily_http_api = { path = "../../../crates/lily_http_api" }
+lily_http_client = { path = "../../../crates/lily_http_client" }
+serde = { version = "1", features = ["derive"] }
+
+# Do not inherit dependency or feature declarations from the repository root.
+[workspace]
+resolver = "2"

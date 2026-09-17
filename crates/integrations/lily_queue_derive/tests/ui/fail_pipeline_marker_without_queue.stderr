@@ -1,0 +1,5 @@
+error: queue handler middleware and guards require #[queue(...)] on the same method
+  --> tests/ui/fail_pipeline_marker_without_queue.rs:11:5
+   |
+11 |     async fn helper(&self) -> Result<(), String> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

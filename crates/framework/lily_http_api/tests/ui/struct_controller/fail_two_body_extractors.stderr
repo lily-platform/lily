@@ -1,0 +1,5 @@
+error: controller actions accept at most one request-body extractor
+  --> tests/ui/struct_controller/fail_two_body_extractors.rs:17:48
+   |
+17 |     async fn index(&self, _json: Json<String>, _raw: RawBody) -> Result<(), HttpApiError> {
+   |                                                ^^^^^^^^^^^^^

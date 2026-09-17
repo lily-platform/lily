@@ -1,0 +1,51 @@
+[package]
+name = "lily-http-api-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+arbitrary = { version = "1", features = ["derive"] }
+async-trait = "0.1"
+bytes = "1"
+http-body-util = "0.1"
+hyper = { version = "1", features = ["server", "http1", "http2"] }
+hyper-util = { version = "0.1", features = ["server-auto", "tokio"] }
+libfuzzer-sys = "0.4"
+tokio = { version = "1", features = ["io-util", "rt", "sync", "time"] }
+lily_core = { path = "../../../foundation/lily_core" }
+lily_http_api = { path = "..", features = ["fuzzing"] }
+
+[[bin]]
+name = "http_transport"
+path = "fuzz_targets/http_transport.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "http_app_dispatch"
+path = "fuzz_targets/http_app_dispatch.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "http_multipart"
+path = "fuzz_targets/http_multipart.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "http_middleware_chain"
+path = "fuzz_targets/http_middleware_chain.rs"
+test = false
+doc = false
+bench = false
+
+[workspace]
+members = ["."]

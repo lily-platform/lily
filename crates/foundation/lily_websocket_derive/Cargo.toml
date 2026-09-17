@@ -2,5 +2,31 @@
 name = "lily_websocket_derive"
 version = "0.1.0"
 edition = "2024"
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[lib]
+proc-macro = true
 
 [dependencies]
+proc-macro2 = { workspace = true }
+proc-macro-crate = "3"
+syn = { version = "2.0", features = ["full"] }
+quote = "1.0"
+url = "2"
+
+[dev-dependencies]
+trybuild = "1.0"
+async-trait = { workspace = true }
+tokio-util = { workspace = true }
+lily_error = { version = "0.1.0", path = "../lily_error" }
+lily_injection = { version = "0.1.0", path = "../lily_injection" }
+lily_websocket_client = { version = "0.1.0", path = "../lily_websocket_client" }
+lily_websocket = { version = "0.1.0", path = "../../framework/lily_websocket" }
+serde = { workspace = true }

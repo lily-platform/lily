@@ -1,0 +1,5 @@
+error: `disabled` is a flag; use `disabled` without a value
+ --> tests/ui/disabled_invalid_syntax.rs:5:11
+  |
+5 | #[service(disabled = true)]
+  |           ^^^^^^^^

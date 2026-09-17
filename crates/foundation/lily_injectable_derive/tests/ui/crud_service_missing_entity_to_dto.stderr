@@ -1,0 +1,38 @@
+error[E0277]: the trait bound `WriteOnlyDto: From<Entity>` is not satisfied
+  --> tests/ui/crud_service_missing_entity_to_dto.rs:16:10
+   |
+16 | #[derive(CrudService)]
+   |          ^^^^^^^^^^^ unsatisfied trait bound
+   |
+help: the trait `From<Entity>` is not implemented for `WriteOnlyDto`
+  --> tests/ui/crud_service_missing_entity_to_dto.rs:8:1
+   |
+ 8 | struct WriteOnlyDto;
+   | ^^^^^^^^^^^^^^^^^^^
+   = note: required for `Entity` to implement `Into<WriteOnlyDto>`
+   = note: this error originates in the derive macro `CrudService` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `WriteOnlyDto: From<Entity>` is not satisfied
+  --> tests/ui/crud_service_missing_entity_to_dto.rs:18:12
+   |
+18 | #[dto_type(WriteOnlyDto)]
+   |            ^^^^^^^^^^^^ unsatisfied trait bound
+   |
+help: the trait `From<Entity>` is not implemented for `WriteOnlyDto`
+  --> tests/ui/crud_service_missing_entity_to_dto.rs:8:1
+   |
+ 8 | struct WriteOnlyDto;
+   | ^^^^^^^^^^^^^^^^^^^
+
+error[E0277]: the trait bound `WriteOnlyDto: From<Entity>` is not satisfied
+  --> tests/ui/crud_service_missing_entity_to_dto.rs:16:10
+   |
+16 | #[derive(CrudService)]
+   |          ^^^^^^^^^^^ unsatisfied trait bound
+   |
+help: the trait `From<Entity>` is not implemented for `WriteOnlyDto`
+  --> tests/ui/crud_service_missing_entity_to_dto.rs:8:1
+   |
+ 8 | struct WriteOnlyDto;
+   | ^^^^^^^^^^^^^^^^^^^
+   = note: this error originates in the derive macro `CrudService` (in Nightly builds, run with -Z macro-backtrace for more info)

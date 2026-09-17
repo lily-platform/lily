@@ -1,0 +1,5 @@
+error: action #[openapi(...)] accepts only `skip`, `operation_id`, `summary`, `description`, `deprecated`, `parameters(...)`, `request_body(...)`, `responses(...)` and `security(...)`
+  --> tests/ui/struct_controller/fail_openapi_unknown_option.rs:22:15
+   |
+22 |     #[openapi(unknown = "value")]
+   |               ^^^^^^^

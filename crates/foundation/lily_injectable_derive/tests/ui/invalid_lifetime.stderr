@@ -1,0 +1,7 @@
+error: Invalid lifetime: 'PerThread'. Valid options: Singleton, Scoped, Transient
+ --> tests/ui/invalid_lifetime.rs:4:19
+  |
+4 | #[derive(Default, Injectable)]
+  |                   ^^^^^^^^^^
+  |
+  = note: this error originates in the derive macro `Injectable` (in Nightly builds, run with -Z macro-backtrace for more info)

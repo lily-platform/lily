@@ -1,0 +1,5 @@
+error: BodyStream and &mut Request cannot be used by the same controller action
+  --> tests/ui/struct_controller/fail_body_stream_with_raw_request.rs:16:20
+   |
+16 |     async fn index(&self, _body: BodyStream, _request: &mut Request) -> Result<(), HttpApiError> {
+   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

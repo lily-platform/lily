@@ -1,0 +1,7 @@
+error: queue service middleware and guards require at least one #[queue(...)] handler
+  --> tests/ui/fail_service_pipeline_without_handler.rs:10:1
+   |
+10 | / impl AuditService {
+11 | |     async fn helper(&self) {}
+12 | | }
+   | |_^

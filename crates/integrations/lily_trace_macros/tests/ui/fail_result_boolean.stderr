@@ -1,0 +1,5 @@
+error: invalid syntax for lily_trace argument `result`
+ --> tests/ui/fail_result_boolean.rs:3:14
+  |
+3 | #[lily_trace(result = true)]
+  |              ^^^^^^^^^^^^^

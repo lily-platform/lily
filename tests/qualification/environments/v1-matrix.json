@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "description": "Candidate V1 qualification cells. Every image environment variable must resolve to an immutable image digest in the RC evidence record.",
+  "cells": [
+    {"id": "foundation-process", "profiles": ["foundation-v1"], "kind": "host-runtime", "immutable_image_required": false},
+    {"id": "nginx-min", "profiles": ["http-v1", "websocket-v1"], "kind": "edge", "image_env": "LILY_Q_NGINX_MIN_IMAGE", "immutable_image_required": true},
+    {"id": "nginx-max", "profiles": ["http-v1", "websocket-v1"], "kind": "edge", "image_env": "LILY_Q_NGINX_MAX_IMAGE", "immutable_image_required": true},
+    {"id": "rabbitmq-min", "profiles": ["consumer-v1"], "kind": "broker", "image_env": "LILY_Q_RABBITMQ_MIN_IMAGE", "immutable_image_required": true},
+    {"id": "rabbitmq-max", "profiles": ["consumer-v1"], "kind": "broker", "image_env": "LILY_Q_RABBITMQ_MAX_IMAGE", "immutable_image_required": true},
+    {"id": "postgresql-min", "profiles": ["postgresql-v1"], "kind": "database", "image_env": "LILY_Q_POSTGRESQL_MIN_IMAGE", "immutable_image_required": true},
+    {"id": "postgresql-max", "profiles": ["postgresql-v1"], "kind": "database", "image_env": "LILY_Q_POSTGRESQL_MAX_IMAGE", "immutable_image_required": true},
+    {"id": "mongodb-min", "profiles": ["mongodb-v1"], "kind": "database", "image_env": "LILY_Q_MONGODB_MIN_IMAGE", "immutable_image_required": true},
+    {"id": "mongodb-max", "profiles": ["mongodb-v1"], "kind": "database", "image_env": "LILY_Q_MONGODB_MAX_IMAGE", "immutable_image_required": true},
+    {"id": "clickhouse-min", "profiles": ["clickhouse-v1"], "kind": "database", "image_env": "LILY_Q_CLICKHOUSE_MIN_IMAGE", "immutable_image_required": true},
+    {"id": "clickhouse-max", "profiles": ["clickhouse-v1"], "kind": "database", "image_env": "LILY_Q_CLICKHOUSE_MAX_IMAGE", "immutable_image_required": true},
+    {"id": "redis-min", "profiles": ["redis-v1"], "kind": "cache", "image_env": "LILY_Q_REDIS_MIN_IMAGE", "immutable_image_required": true},
+    {"id": "redis-max", "profiles": ["redis-v1"], "kind": "cache", "image_env": "LILY_Q_REDIS_MAX_IMAGE", "immutable_image_required": true},
+    {"id": "otel-min", "profiles": ["observability-v1"], "kind": "collector", "image_env": "LILY_Q_OTEL_MIN_IMAGE", "immutable_image_required": true},
+    {"id": "otel-max", "profiles": ["observability-v1"], "kind": "collector", "image_env": "LILY_Q_OTEL_MAX_IMAGE", "immutable_image_required": true}
+  ]
+}

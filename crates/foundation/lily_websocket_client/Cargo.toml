@@ -2,5 +2,83 @@
 name = "lily_websocket_client"
 version = "0.1.0"
 edition = "2024"
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
 
 [dependencies]
+# Async runtime
+tokio = { workspace = true, features = ["fs", "io-util", "net", "rt", "sync", "time"] }
+tokio-util = { workspace = true }
+async-trait = { workspace = true }
+
+# WebSocket
+tokio-tungstenite = { version = "0.23.1", default-features = false, features = ["connect", "handshake", "rustls-tls-webpki-roots"] }
+rustls = { workspace = true }
+rustls-pki-types = { workspace = true }
+webpki-roots = "0.26.11"
+
+# Concurrency
+dashmap = { workspace = true }
+futures-util = "0.3"
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+base64 = { workspace = true }
+
+# Utilities
+thiserror = "1.0"
+rand = "0.8"
+url = "2"
+tracing = { workspace = true }
+opentelemetry = { version = "0.30", features = ["metrics"] }
+
+# Lily dependencies
+lily_error = { version = "0.1.0", path = "../lily_error", optional = true }
+lily_config = { version = "0.1.0", path = "../lily_config", optional = true }
+lily_trace = { version = "0.1.0", path = "../../integrations/lily_trace", optional = true }
+lily_shutdown = { version = "0.1.0", path = "../lily_shutdown" }
+
+# Optional DI support
+lily_injection = { version = "0.1.0", path = "../lily_injection", optional = true }
+lily_injectable_derive = { version = "0.1.0", path = "../lily_injectable_derive", optional = true }
+lily_injection_registry = { version = "0.1.0", path = "../lily_injection_registry", optional = true }
+linkme = { workspace = true, optional = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+tokio = { workspace = true, features = ["full", "test-util"] }
+tokio-rustls = { workspace = true }
+tempfile = "3"
+
+[features]
+default = ["single"]
+single = ["di"]
+factory = ["di"]
+di = [
+    "dep:lily_error",
+    "dep:lily_config",
+    "dep:lily_trace",
+    "dep:lily_injection",
+    "dep:lily_injectable_derive",
+    "dep:lily_injection_registry",
+    "dep:linkme",
+]
+
+[[example]]
+name = "basic_client"
+required-features = ["single"]
+
+[[example]]
+name = "factory_example"
+required-features = ["factory"]
+
+[package.metadata.docs.rs]
+no-default-features = true
+features = ["single"]

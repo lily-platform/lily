@@ -1,0 +1,5 @@
+error: controller action mutable references support only &mut Request or &mut Response
+  --> tests/ui/struct_controller/fail_unsupported_mutable_reference.rs:14:35
+   |
+14 |     async fn index(&self, _value: &mut String) -> Result<(), HttpApiError> {
+   |                                   ^^^^^^^^^^^
