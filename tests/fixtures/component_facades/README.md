@@ -7,8 +7,8 @@ Diesel (`table!` requires a direct driver dependency), and ClickHouse's Row deri
 are application-owned third-party dependencies.
 
 The packages test macro/runtime boundaries; they are not runnable application
-examples. HTTP/WebSocket/Consumer examples belong to the later umbrella-facade
-stage. ClickHouse is included only as a compile/contract check, not an example.
+examples. Runnable HTTP/WebSocket/Consumer applications are in
+[examples](../../../examples/README.md). ClickHouse is included only as a compile/contract check, not an example.
 
 From the repository root:
 
@@ -21,3 +21,6 @@ cargo test --manifest-path tests/fixtures/component_facades/Cargo.toml -p compon
 No database or message broker is needed: these contracts exercise generated code,
 typed validation, metadata, registry identity and acquisition-free paths. Live
 integration semantics are covered separately by the component integration suites.
+
+The [facade qualification command](../../qualification/FACADE.md) runs these
+packages **separately**, so a sibling package cannot supply missing features.

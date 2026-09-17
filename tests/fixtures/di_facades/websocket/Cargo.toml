@@ -6,4 +6,4 @@ publish = false
 
 [dependencies]
 # Deliberately the only normal dependency; macro helpers must stay transitive.
-lily_websocket = { package = "lily_websocket", path = "../../../../crates/lily_websocket" }
+lily_websocket = { package = "lily_websocket", path = "../../../../crates/framework/lily_websocket" }

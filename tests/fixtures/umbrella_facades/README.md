@@ -2,7 +2,9 @@
 
 Every consumer has `lily` as its **only** direct Lily dependency. Each contract
 also runs under the renamed dependency `platform`. These are compile/runtime
-contracts; runnable framework examples belong to the next implementation stage.
+contracts. The [connected examples](../../../examples/README.md) provide runnable
+HTTP, WebSocket and Consumer applications. The [final qualification command](../../qualification/FACADE.md)
+also runs direct component and DI regressions.
 
 Run from the repository root (Python 3.11+, Rust 1.96.1):
 

@@ -17,11 +17,11 @@ missing-selectable = []
 [dependencies]
 diesel = { version = "=2.3.11", default-features = false, features = ["postgres_backend", "uuid"] }
 diesel-async = { version = "=0.9.2", features = ["postgres"] }
-lily_error = { path = "../../../crates/lily_error" }
-lily_injectable_derive = { path = "../../../crates/lily_injectable_derive" }
-lily_injection = { path = "../../../crates/lily_injection" }
-lily_injection_registry = { path = "../../../crates/lily_injection_registry" }
-lily_postgresql = { path = "../../../crates/lily_postgresql", default-features = false }
+lily_error = { path = "../../../crates/foundation/lily_error" }
+lily_injectable_derive = { path = "../../../crates/foundation/lily_injectable_derive" }
+lily_injection = { path = "../../../crates/foundation/lily_injection" }
+lily_injection_registry = { path = "../../../crates/foundation/lily_injection_registry" }
+lily_postgresql = { path = "../../../crates/integrations/lily_postgresql", default-features = false }
 linkme = "0.3"
 uuid = "1"
 

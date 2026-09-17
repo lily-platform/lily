@@ -6,5 +6,5 @@ publish = false
 
 [dependencies]
 # Both dependencies can be renamed without routing DI through configuration.
-app_config = { package = "lily_config", path = "../../../../crates/lily_config" }
-app_di = { package = "lily_injection", path = "../../../../crates/lily_injection" }
+app_config = { package = "lily_config", path = "../../../../crates/foundation/lily_config" }
+app_di = { package = "lily_injection", path = "../../../../crates/foundation/lily_injection" }

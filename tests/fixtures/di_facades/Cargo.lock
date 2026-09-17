@@ -1721,14 +1721,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "lily_base_service"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "lily_error",
-]
-
-[[package]]
 name = "lily_cancellation"
 version = "0.1.0"
 dependencies = [
@@ -1841,10 +1833,6 @@ dependencies = [
 name = "lily_injectable_derive"
 version = "0.1.0"
 dependencies = [
- "lily_base_service",
- "lily_error",
- "lily_injection_registry",
- "lily_trace",
  "proc-macro-crate",
  "proc-macro2",
  "quote",
@@ -2048,6 +2036,7 @@ dependencies = [
 name = "lily_trace_macros"
 version = "0.1.0"
 dependencies = [
+ "proc-macro-crate",
  "proc-macro2",
  "quote",
  "syn 2.0.119",
@@ -2095,6 +2084,7 @@ dependencies = [
  "base64",
  "futures-util",
  "ipnet",
+ "lily_background_service",
  "lily_config",
  "lily_injection",
  "lily_middleware",

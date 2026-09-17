@@ -1645,31 +1645,11 @@ checksum = "68ab91017fe16c622486840e4c83c9a37afeff978bd239b5293d61ece587de66"
 name = "lily-downstream-consumer-fixture"
 version = "0.0.0"
 dependencies = [
- "lily_base_repository",
  "lily_consumer",
+ "lily_mongo_repository",
  "lily_mongodb",
  "lily_queue",
  "serde",
-]
-
-[[package]]
-name = "lily_base_repository"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "lily_error",
- "mongodb",
- "serde",
- "tokio",
- "tokio-util",
-]
-
-[[package]]
-name = "lily_base_service"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "lily_error",
 ]
 
 [[package]]
@@ -1723,10 +1703,6 @@ dependencies = [
 name = "lily_injectable_derive"
 version = "0.1.0"
 dependencies = [
- "lily_base_service",
- "lily_error",
- "lily_injection_registry",
- "lily_trace",
  "proc-macro-crate",
  "proc-macro2",
  "quote",
@@ -1763,6 +1739,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "lily_mongo_repository"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "lily_error",
+ "mongodb",
+ "serde",
+ "tokio",
+ "tokio-util",
+]
+
+[[package]]
+name = "lily_mongo_service"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "lily_error",
+]
+
+[[package]]
 name = "lily_mongodb"
 version = "0.1.0"
 dependencies = [
@@ -1770,13 +1766,14 @@ dependencies = [
  "bytes",
  "dashmap 5.5.3",
  "futures",
- "lily_base_repository",
  "lily_config",
  "lily_core",
  "lily_error",
  "lily_injectable_derive",
  "lily_injection",
  "lily_injection_registry",
+ "lily_mongo_repository",
+ "lily_mongo_service",
  "lily_mongodb_derive",
  "lily_shutdown",
  "lily_trace",
@@ -1799,17 +1796,9 @@ dependencies = [
 name = "lily_mongodb_derive"
 version = "0.1.0"
 dependencies = [
- "async-trait",
- "futures",
- "lily_base_repository",
- "lily_error",
- "lily_injectable_derive",
- "lily_injection",
- "lily_injection_registry",
- "mongodb",
+ "proc-macro-crate",
  "proc-macro2",
  "quote",
- "serde",
  "syn",
 ]
 
@@ -1948,6 +1937,7 @@ dependencies = [
 name = "lily_trace_macros"
 version = "0.1.0"
 dependencies = [
+ "proc-macro-crate",
  "proc-macro2",
  "quote",
  "syn",

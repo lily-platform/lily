@@ -218,7 +218,6 @@ dependencies = [
  "iana-time-zone",
  "js-sys",
  "num-traits",
- "serde",
  "wasm-bindgen",
  "windows-link",
 ]
@@ -1186,36 +1185,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "68ab91017fe16c622486840e4c83c9a37afeff978bd239b5293d61ece587de66"
 
 [[package]]
-name = "lily_base_repository"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "lily_error",
- "mongodb",
- "serde",
- "tokio",
- "tokio-util",
-]
-
-[[package]]
-name = "lily_base_service"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "lily_error",
-]
-
-[[package]]
 name = "lily_config"
 version = "0.1.0"
 dependencies = [
  "async-trait",
  "lily_error",
- "lily_injectable_derive",
  "lily_injection",
- "lily_injection_registry",
- "lily_trace",
- "linkme",
  "serde",
  "tokio",
  "toml",
@@ -1233,7 +1208,6 @@ dependencies = [
 name = "lily_error"
 version = "0.1.0"
 dependencies = [
- "itoa",
  "mongodb",
  "serde",
  "serde_json",
@@ -1244,10 +1218,7 @@ dependencies = [
 name = "lily_injectable_derive"
 version = "0.1.0"
 dependencies = [
- "lily_base_service",
- "lily_error",
- "lily_injection_registry",
- "lily_trace",
+ "proc-macro-crate",
  "proc-macro2",
  "quote",
  "syn",
@@ -1261,6 +1232,7 @@ dependencies = [
  "futures",
  "lily_core",
  "lily_error",
+ "lily_injectable_derive",
  "lily_injection_registry",
  "lily_process",
  "lily_trace",
@@ -1282,6 +1254,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "lily_mongo_repository"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "lily_error",
+ "mongodb",
+ "serde",
+ "tokio",
+ "tokio-util",
+]
+
+[[package]]
+name = "lily_mongo_service"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "lily_error",
+]
+
+[[package]]
 name = "lily_mongodb"
 version = "0.1.0"
 dependencies = [
@@ -1289,13 +1281,14 @@ dependencies = [
  "bytes",
  "dashmap",
  "futures",
- "lily_base_repository",
  "lily_config",
  "lily_core",
  "lily_error",
  "lily_injectable_derive",
  "lily_injection",
  "lily_injection_registry",
+ "lily_mongo_repository",
+ "lily_mongo_service",
  "lily_mongodb_derive",
  "lily_shutdown",
  "lily_trace",
@@ -1318,17 +1311,9 @@ dependencies = [
 name = "lily_mongodb_derive"
 version = "0.1.0"
 dependencies = [
- "async-trait",
- "futures",
- "lily_base_repository",
- "lily_error",
- "lily_injectable_derive",
- "lily_injection",
- "lily_injection_registry",
- "mongodb",
+ "proc-macro-crate",
  "proc-macro2",
  "quote",
- "serde",
  "syn",
 ]
 
@@ -1345,7 +1330,6 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "futures",
- "serde",
  "thiserror 1.0.69",
  "tokio",
  "tokio-util",
@@ -1356,19 +1340,15 @@ name = "lily_trace"
 version = "0.1.0"
 dependencies = [
  "async-trait",
- "chrono",
- "dashmap",
+ "futures-util",
  "lily_core",
  "lily_shutdown",
  "lily_trace_macros",
- "once_cell",
  "opentelemetry",
- "opentelemetry-appender-tracing",
  "opentelemetry-otlp",
  "opentelemetry_sdk",
- "parking_lot",
  "pin-project-lite",
- "rand 0.8.7",
+ "rolling-file",
  "serde",
  "serde_json",
  "thiserror 1.0.69",
@@ -1377,7 +1357,9 @@ dependencies = [
  "tonic",
  "tracing",
  "tracing-appender",
+ "tracing-log",
  "tracing-opentelemetry",
+ "tracing-serde",
  "tracing-subscriber",
 ]
 
@@ -1385,6 +1367,7 @@ dependencies = [
 name = "lily_trace_macros"
 version = "0.1.0"
 dependencies = [
+ "proc-macro-crate",
  "proc-macro2",
  "quote",
  "syn",
@@ -1564,9 +1547,9 @@ checksum = "851fac73f7fe22f6a3ab87f720ce509cae7c9fd08e7dd27866cc232dee07ccf4"
 
 [[package]]
 name = "mongodb"
-version = "3.8.1"
+version = "3.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "99a95f3a5e3b3912e93f10d6784cd641a70a94d7ffe15561a2c89891d1bf85fd"
+checksum = "fd64784a1fdbcf2a334717446edc583061159067a2e7cc326ee567ecf035f07b"
 dependencies = [
  "base64",
  "bitflags",
@@ -1614,11 +1597,11 @@ version = "0.0.0"
 dependencies = [
  "async-trait",
  "futures",
- "lily_base_repository",
  "lily_error",
  "lily_injectable_derive",
  "lily_injection",
  "lily_injection_registry",
+ "lily_mongo_repository",
  "lily_mongodb",
  "linkme",
  "mongodb",
@@ -1627,9 +1610,9 @@ dependencies = [
 
 [[package]]
 name = "mongodb-internal-macros"
-version = "3.8.1"
+version = "3.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a503007cb8ae06f77fbc111136222565e377d9e3f14230998950d2caaabaeeba"
+checksum = "f243f9039382cd06378f13980b79700236468b6fb22f24abfa99783e9569f1a3"
 dependencies = [
  "macro_magic",
  "proc-macro2",
@@ -1695,18 +1678,6 @@ dependencies = [
  "pin-project-lite",
  "thiserror 2.0.18",
  "tracing",
-]
-
-[[package]]
-name = "opentelemetry-appender-tracing"
-version = "0.30.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e68f63eca5fad47e570e00e893094fc17be959c80c79a7d6ec1abdd5ae6ffc16"
-dependencies = [
- "opentelemetry",
- "tracing",
- "tracing-core",
- "tracing-subscriber",
 ]
 
 [[package]]
@@ -1877,6 +1848,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "proc-macro-crate"
+version = "3.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e67ba7e9b2b56446f1d419b1d807906278ffa1a658a8a5d8a39dcb1f5a78614f"
+dependencies = [
+ "toml_edit 0.25.15+spec-1.1.0",
+]
+
+[[package]]
 name = "proc-macro2"
 version = "1.0.106"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1937,22 +1917,11 @@ checksum = "dc33ff2d4973d518d823d61aa239014831e521c75da58e3df4840d3f47749d09"
 
 [[package]]
 name = "rand"
-version = "0.8.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "22f6172bdec972074665ed81ed53b71da00bfc44b65a753cfde883ec4c702a1a"
-dependencies = [
- "libc",
- "rand_chacha 0.3.1",
- "rand_core 0.6.4",
-]
-
-[[package]]
-name = "rand"
 version = "0.9.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b9ef1d0d795eb7d84685bca4f72f3649f064e6641543d3a8c415898726a57b41"
 dependencies = [
- "rand_chacha 0.9.0",
+ "rand_chacha",
  "rand_core 0.9.5",
 ]
 
@@ -1969,31 +1938,12 @@ dependencies = [
 
 [[package]]
 name = "rand_chacha"
-version = "0.3.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e6c10a63a0fa32252be49d21e7709d4d4baf8d231c2dbce1eaa8141b9b127d88"
-dependencies = [
- "ppv-lite86",
- "rand_core 0.6.4",
-]
-
-[[package]]
-name = "rand_chacha"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d3022b5f1df60f26e1ffddd6c66e8aa15de382ae63b3a0c1bfc0e4d3e3f325cb"
 dependencies = [
  "ppv-lite86",
  "rand_core 0.9.5",
-]
-
-[[package]]
-name = "rand_core"
-version = "0.6.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec0be4795e2f6a28069bec0b5ff3e2ac9bafc99e6a9a7dc3547996c5c816922c"
-dependencies = [
- "getrandom 0.2.17",
 ]
 
 [[package]]
@@ -2089,6 +2039,15 @@ dependencies = [
  "libc",
  "untrusted",
  "windows-sys 0.52.0",
+]
+
+[[package]]
+name = "rolling-file"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8395b4f860856b740f20a296ea2cd4d823e81a2658cf05ef61be22916026a906"
+dependencies = [
+ "chrono",
 ]
 
 [[package]]
@@ -2715,8 +2674,8 @@ checksum = "dc1beb996b9d83529a9e75c17a1686767d148d70663143c7854d8b4a09ced362"
 dependencies = [
  "serde",
  "serde_spanned",
- "toml_datetime",
- "toml_edit",
+ "toml_datetime 0.6.11",
+ "toml_edit 0.22.27",
 ]
 
 [[package]]
@@ -2729,6 +2688,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "toml_datetime"
+version = "1.1.1+spec-1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3165f65f62e28e0115a00b2ebdd37eb6f3b641855f9d636d3cd4103767159ad7"
+dependencies = [
+ "serde_core",
+]
+
+[[package]]
 name = "toml_edit"
 version = "0.22.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2737,9 +2705,30 @@ dependencies = [
  "indexmap",
  "serde",
  "serde_spanned",
- "toml_datetime",
+ "toml_datetime 0.6.11",
  "toml_write",
- "winnow",
+ "winnow 0.7.15",
+]
+
+[[package]]
+name = "toml_edit"
+version = "0.25.15+spec-1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1340ea94a5856333492c9064b02c778b191dd2c853778d9609debdcdfea3a614"
+dependencies = [
+ "indexmap",
+ "toml_datetime 1.1.1+spec-1.1.0",
+ "toml_parser",
+ "winnow 1.0.4",
+]
+
+[[package]]
+name = "toml_parser"
+version = "1.1.3+spec-1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1d38ac1cf9b95face32296c0a3ede1fdc270627c9d9c02a7274dd6d960dc4d56"
+dependencies = [
+ "winnow 1.0.4",
 ]
 
 [[package]]
@@ -3349,6 +3338,15 @@ name = "winnow"
 version = "0.7.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "df79d97927682d2fd8adb29682d1140b343be4ac0f08fd68b7765d9c059d3945"
+dependencies = [
+ "memchr",
+]
+
+[[package]]
+name = "winnow"
+version = "1.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "23b97319f7b8343df12cc98938e5c3eb436064524c8d2b4e30a1d3a36eecdf81"
 dependencies = [
  "memchr",
 ]

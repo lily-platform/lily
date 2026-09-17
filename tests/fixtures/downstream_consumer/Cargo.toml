@@ -9,16 +9,16 @@ default = []
 # Provider adapters belong to the application. Enabling this fixture feature
 # proves a Mongo-backed handler can opt in without coupling lily_consumer's
 # provider-neutral default graph to MongoDB.
-mongodb-adapter = ["dep:lily_base_repository", "dep:lily_mongodb"]
+mongodb-adapter = ["dep:lily_mongo_repository", "dep:lily_mongodb"]
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
 
 # Both facades supply their own macro expansion support dependencies.
-lily_consumer = { path = "../../../crates/lily_consumer" }
-lily_queue = { path = "../../../crates/lily_queue" }
-lily_base_repository = { path = "../../../crates/lily_base_repository", optional = true }
-lily_mongodb = { path = "../../../crates/lily_mongodb", optional = true }
+lily_consumer = { path = "../../../crates/framework/lily_consumer" }
+lily_queue = { path = "../../../crates/integrations/lily_queue" }
+lily_mongo_repository = { path = "../../../crates/integrations/lily_mongo_repository", optional = true }
+lily_mongodb = { path = "../../../crates/integrations/lily_mongodb", optional = true }
 
 [workspace]
 resolver = "2"

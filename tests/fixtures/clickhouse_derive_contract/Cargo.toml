@@ -14,11 +14,11 @@ manual-collision = []
 [dependencies]
 async-trait = "0.1"
 clickhouse = "0.13.3"
-lily_clickhouse = { path = "../../../crates/lily_clickhouse", default-features = false }
-lily_error = { path = "../../../crates/lily_error" }
-lily_injectable_derive = { path = "../../../crates/lily_injectable_derive" }
-lily_injection = { path = "../../../crates/lily_injection" }
-lily_injection_registry = { path = "../../../crates/lily_injection_registry" }
+lily_clickhouse = { path = "../../../crates/integrations/lily_clickhouse", default-features = false }
+lily_error = { path = "../../../crates/foundation/lily_error" }
+lily_injectable_derive = { path = "../../../crates/foundation/lily_injectable_derive" }
+lily_injection = { path = "../../../crates/foundation/lily_injection" }
+lily_injection_registry = { path = "../../../crates/foundation/lily_injection_registry" }
 linkme = "0.3"
 serde = { version = "1", features = ["derive"] }
 
