@@ -19,12 +19,12 @@ manual-collision = []
 [dependencies]
 async-trait = "0.1"
 futures = "0.3"
-lily_base_repository = { path = "../../../crates/lily_base_repository" }
-lily_error = { path = "../../../crates/lily_error" }
-lily_injectable_derive = { path = "../../../crates/lily_injectable_derive", optional = true }
-lily_injection = { path = "../../../crates/lily_injection" }
-lily_injection_registry = { path = "../../../crates/lily_injection_registry", optional = true }
-lily_mongodb = { path = "../../../crates/lily_mongodb", default-features = false }
+lily_mongo_repository = { path = "../../../crates/integrations/lily_mongo_repository" }
+lily_error = { path = "../../../crates/foundation/lily_error" }
+lily_injectable_derive = { path = "../../../crates/foundation/lily_injectable_derive", optional = true }
+lily_injection = { path = "../../../crates/foundation/lily_injection" }
+lily_injection_registry = { path = "../../../crates/foundation/lily_injection_registry", optional = true }
+lily_mongodb = { path = "../../../crates/integrations/lily_mongodb", default-features = false }
 linkme = { version = "0.3", optional = true }
 mongodb = "3.8.2"
 serde = { version = "1", features = ["derive"] }

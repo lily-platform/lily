@@ -7,7 +7,7 @@ publish = false
 [dependencies]
 # Deliberately rename the runtime dependency. Proc-macro expansion must resolve
 # this Cargo alias instead of hard-coding `lily_http_api` in generated code.
-framework = { package = "lily_http_api", path = "../../../crates/lily_http_api" }
+framework = { package = "lily_http_api", path = "../../../crates/framework/lily_http_api" }
 serde = { version = "1", features = ["derive"] }
 
 [workspace]

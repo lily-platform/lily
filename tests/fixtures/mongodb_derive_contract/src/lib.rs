@@ -4,7 +4,7 @@
 //!
 //! Single mode intentionally omits `Injectable` to prove that the collection
 //! derive's generated contract compiles independently. Canonical DI composition
-//! is exercised in `crates/lily_mongodb/tests/ui/pass_derive_contract.rs`.
+//! is exercised in `crates/integrations/lily_mongodb/tests/ui/pass_derive_contract.rs`.
 
 use std::sync::Arc;
 
@@ -54,7 +54,7 @@ struct EntityRepository {
 }
 
 fn generated_contract_is_public() {
-    fn implements_repository<T: lily_base_repository::MongoRepository<Entity>>() {}
+    fn implements_repository<T: lily_mongo_repository::MongoRepository<Entity>>() {}
     implements_repository::<EntityRepository>();
     let _ = EntityCollection::collection_name();
 }

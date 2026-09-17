@@ -8,7 +8,7 @@ publish = false
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 
 # One DI dependency must supply both the derive and its expansion support.
-lily_injection = { path = "../../../crates/lily_injection" }
+lily_injection = { path = "../../../crates/foundation/lily_injection" }
 
 # This fixture is deliberately independent from the repository workspace. It
 # therefore cannot inherit workspace dependencies or hide missing direct deps.

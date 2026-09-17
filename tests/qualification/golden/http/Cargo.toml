@@ -5,7 +5,7 @@ edition = "2021"
 publish = false
 
 [dependencies]
-lily_http_api = { path = "../../../../crates/lily_http_api" }
-lily_trace = { path = "../../../../crates/lily_trace" }
+lily_http_api = { path = "../../../../crates/framework/lily_http_api" }
+lily_trace = { path = "../../../../crates/integrations/lily_trace" }
 serde = { version = "1", features = ["derive"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }

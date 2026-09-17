@@ -6,7 +6,7 @@ publish = false
 
 [dependencies]
 # Deliberately the only normal dependency; macro helpers must stay transitive.
-lily_injection = { package = "lily_injection", path = "../../../../crates/lily_injection" }
+lily_injection = { package = "lily_injection", path = "../../../../crates/foundation/lily_injection" }
 
 [dev-dependencies]
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }

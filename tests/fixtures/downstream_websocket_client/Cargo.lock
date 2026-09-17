@@ -957,11 +957,24 @@ dependencies = [
 ]
 
 [[package]]
-name = "lily_base_service"
+name = "lily_background_service"
 version = "0.1.0"
 dependencies = [
  "async-trait",
- "lily_error",
+ "futures",
+ "lily_cancellation",
+ "lily_injection",
+ "thiserror 1.0.69",
+ "tokio",
+ "tokio-util",
+ "tracing",
+]
+
+[[package]]
+name = "lily_cancellation"
+version = "0.1.0"
+dependencies = [
+ "tokio",
 ]
 
 [[package]]
@@ -970,10 +983,7 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "lily_error",
- "lily_injectable_derive",
  "lily_injection",
- "lily_injection_registry",
- "linkme",
  "serde",
  "tokio",
  "toml",
@@ -1000,10 +1010,7 @@ dependencies = [
 name = "lily_injectable_derive"
 version = "0.1.0"
 dependencies = [
- "lily_base_service",
- "lily_error",
- "lily_injection_registry",
- "lily_trace",
+ "proc-macro-crate",
  "proc-macro2",
  "quote",
  "syn",
@@ -1017,6 +1024,7 @@ dependencies = [
  "futures",
  "lily_core",
  "lily_error",
+ "lily_injectable_derive",
  "lily_injection_registry",
  "lily_process",
  "lily_trace",
@@ -1045,6 +1053,7 @@ dependencies = [
  "base64",
  "hmac",
  "http",
+ "lily_cancellation",
  "lily_injection",
  "lily_web_core",
  "pin-project-lite",
@@ -1099,6 +1108,7 @@ dependencies = [
  "opentelemetry",
  "opentelemetry-otlp",
  "opentelemetry_sdk",
+ "pin-project-lite",
  "rolling-file",
  "serde",
  "serde_json",
@@ -1108,7 +1118,9 @@ dependencies = [
  "tonic",
  "tracing",
  "tracing-appender",
+ "tracing-log",
  "tracing-opentelemetry",
+ "tracing-serde",
  "tracing-subscriber",
 ]
 
@@ -1116,6 +1128,7 @@ dependencies = [
 name = "lily_trace_macros"
 version = "0.1.0"
 dependencies = [
+ "proc-macro-crate",
  "proc-macro2",
  "quote",
  "syn",
@@ -1134,6 +1147,7 @@ dependencies = [
  "http",
  "httpdate",
  "itoa",
+ "lily_cancellation",
  "lily_core",
  "lily_error",
  "log",
@@ -1162,6 +1176,7 @@ dependencies = [
  "base64",
  "futures-util",
  "ipnet",
+ "lily_background_service",
  "lily_config",
  "lily_injection",
  "lily_middleware",

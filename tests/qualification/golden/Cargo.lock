@@ -1642,11 +1642,24 @@ dependencies = [
 ]
 
 [[package]]
-name = "lily_base_service"
+name = "lily_background_service"
 version = "0.1.0"
 dependencies = [
  "async-trait",
- "lily_error",
+ "futures",
+ "lily_cancellation",
+ "lily_injection",
+ "thiserror 1.0.69",
+ "tokio",
+ "tokio-util",
+ "tracing",
+]
+
+[[package]]
+name = "lily_cancellation"
+version = "0.1.0"
+dependencies = [
+ "tokio",
 ]
 
 [[package]]
@@ -1655,10 +1668,7 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "lily_error",
- "lily_injectable_derive",
  "lily_injection",
- "lily_injection_registry",
- "linkme",
  "serde",
  "tokio",
  "toml",
@@ -1669,12 +1679,14 @@ dependencies = [
 name = "lily_consumer"
 version = "0.1.0"
 dependencies = [
+ "futures-util",
  "lily_config",
  "lily_error",
  "lily_injection",
  "lily_queue",
  "lily_shutdown",
  "lily_trace",
+ "serde",
  "tokio",
  "tokio-util",
  "tracing",
@@ -1710,13 +1722,13 @@ dependencies = [
  "hyper-rustls",
  "hyper-util",
  "ipnet",
+ "lily_background_service",
+ "lily_cancellation",
  "lily_config",
  "lily_core",
  "lily_error",
  "lily_http_api_macros",
- "lily_injectable_derive",
  "lily_injection",
- "lily_injection_registry",
  "lily_middleware",
  "lily_monitoring",
  "lily_shutdown",
@@ -1756,10 +1768,7 @@ dependencies = [
 name = "lily_injectable_derive"
 version = "0.1.0"
 dependencies = [
- "lily_base_service",
- "lily_error",
- "lily_injection_registry",
- "lily_trace",
+ "proc-macro-crate",
  "proc-macro2",
  "quote",
  "syn",
@@ -1773,6 +1782,7 @@ dependencies = [
  "futures",
  "lily_core",
  "lily_error",
+ "lily_injectable_derive",
  "lily_injection_registry",
  "lily_process",
  "lily_trace",
@@ -1801,6 +1811,7 @@ dependencies = [
  "base64",
  "hmac",
  "http",
+ "lily_cancellation",
  "lily_injection",
  "lily_web_core",
  "pin-project-lite",
@@ -1884,7 +1895,9 @@ dependencies = [
  "lily_injection_registry",
  "lily_trace",
  "linkme",
+ "mime",
  "opentelemetry",
+ "percent-encoding",
  "rustls",
  "rustls-pki-types",
  "serde",
@@ -1931,12 +1944,14 @@ name = "lily_trace"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "futures-util",
  "lily_core",
  "lily_shutdown",
  "lily_trace_macros",
  "opentelemetry",
  "opentelemetry-otlp",
  "opentelemetry_sdk",
+ "pin-project-lite",
  "rolling-file",
  "serde",
  "serde_json",
@@ -1946,7 +1961,9 @@ dependencies = [
  "tonic",
  "tracing",
  "tracing-appender",
+ "tracing-log",
  "tracing-opentelemetry",
+ "tracing-serde",
  "tracing-subscriber",
 ]
 
@@ -1954,6 +1971,7 @@ dependencies = [
 name = "lily_trace_macros"
 version = "0.1.0"
 dependencies = [
+ "proc-macro-crate",
  "proc-macro2",
  "quote",
  "syn",
@@ -1972,6 +1990,7 @@ dependencies = [
  "http",
  "httpdate",
  "itoa",
+ "lily_cancellation",
  "lily_core",
  "lily_error",
  "log",
@@ -2000,6 +2019,7 @@ dependencies = [
  "base64",
  "futures-util",
  "ipnet",
+ "lily_background_service",
  "lily_config",
  "lily_injection",
  "lily_middleware",

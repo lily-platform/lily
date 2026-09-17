@@ -6,4 +6,4 @@ publish = false
 
 [dependencies]
 # Deliberately the only normal dependency; macro helpers must stay transitive.
-app_di = { package = "lily_consumer", path = "../../../../crates/lily_consumer" }
+app_di = { package = "lily_consumer", path = "../../../../crates/framework/lily_consumer" }

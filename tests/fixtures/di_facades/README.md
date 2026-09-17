@@ -11,8 +11,12 @@ None of these positive fixtures declares `linkme`, `lily_error`,
 Run from the repository root:
 
 ```sh
-cargo test --manifest-path tests/fixtures/di_facades/Cargo.toml --workspace --locked
+python3 tests/qualification/facade.py --stage di
 ```
+
+The runner tests each package separately so another fixture cannot enable a
+missing dependency or feature through workspace unification. See the
+[qualification guide](../../qualification/FACADE.md) for requirements and logs.
 
 The ten positive fixtures compile concrete and trait-object constructor
 injection, lifecycle hooks, a nested-module scoped service, default transient lifetime, mixed

@@ -6,4 +6,4 @@ publish = false
 
 [dependencies]
 # Deliberately the only normal dependency; macro helpers must stay transitive.
-app_di = { package = "lily_http_api", path = "../../../../crates/lily_http_api" }
+app_di = { package = "lily_http_api", path = "../../../../crates/framework/lily_http_api" }

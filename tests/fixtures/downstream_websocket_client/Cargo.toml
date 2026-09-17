@@ -9,9 +9,9 @@ serde = { version = "1", features = ["derive"] }
 
 # Current/N path dependencies are explicit so this independent workspace cannot
 # hide an undeclared public API dependency through the Lily workspace root.
-lily_injection = { path = "../../../crates/lily_injection" }
-lily_websocket = { path = "../../../crates/lily_websocket" }
-lily_websocket_client = { path = "../../../crates/lily_websocket_client" }
+lily_injection = { path = "../../../crates/foundation/lily_injection" }
+lily_websocket = { path = "../../../crates/framework/lily_websocket" }
+lily_websocket_client = { path = "../../../crates/foundation/lily_websocket_client" }
 
 [workspace]
 resolver = "2"

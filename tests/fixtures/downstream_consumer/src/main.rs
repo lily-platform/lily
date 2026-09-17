@@ -38,8 +38,8 @@ fn compile_consumer_application() {
 #[allow(dead_code)]
 fn compile_application_owned_mongodb_adapter(
     id: &str,
-) -> Result<(), lily_base_repository::MongoRepositoryError> {
-    let _document_id = lily_base_repository::MongoDocumentId::parse(id)?;
+) -> Result<(), lily_mongo_repository::MongoRepositoryError> {
+    let _document_id = lily_mongo_repository::MongoDocumentId::parse(id)?;
     let _client_plan: Option<lily_mongodb::MongoClientPlan> = None;
     Ok(())
 }

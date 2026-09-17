@@ -108,8 +108,10 @@ own macros require them.
 `tests/fixtures/umbrella_facades` contains isolated downstream contracts for this
 facade, including renamed dependencies, framework-only builds, singleton/factory
 modes and negative compile checks. Run its documented validation command from
-the repository. Runnable HTTP, WebSocket and Consumer examples are a subsequent
-stage; ClickHouse is tested as a facade contract only.
+the repository. The [qualification guide](../../tests/qualification/FACADE.md)
+combines these with direct-component regressions, workspace tests, documentation
+builds and an optional isolated live example run. ClickHouse is tested as a facade
+contract only.
 
 ## Runnable examples
 
