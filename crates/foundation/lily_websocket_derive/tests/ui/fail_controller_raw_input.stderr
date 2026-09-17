@@ -1,0 +1,5 @@
+error: raw WebSocket invocation/request inputs are not action extractors; use WebSocketMessageContext or a typed extractor
+  --> tests/ui/fail_controller_raw_input.rs:13:19
+   |
+13 |         _request: std::sync::Arc<WsRequest>,
+   |                   ^^^^^^^^^^^^^^^^^^^^^^^^^

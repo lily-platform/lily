@@ -1,0 +1,5 @@
+error: BaseGateway requires a field marked with #[gateway_client] of type TokioWsClient. Example: #[gateway_client] pub client: lily_websocket_client::TokioWsClient
+ --> tests/ui/fail_gateway_missing_client.rs:8:8
+  |
+8 | struct AuditGateway {
+  |        ^^^^^^^^^^^^

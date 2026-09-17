@@ -1,0 +1,5 @@
+error: #[frame_codec(Type)] is controller-level metadata and cannot be declared on an operation
+  --> tests/ui/fail_controller_action_frame_codec.rs:12:5
+   |
+12 |     #[frame_codec(FrameCodec)]
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^

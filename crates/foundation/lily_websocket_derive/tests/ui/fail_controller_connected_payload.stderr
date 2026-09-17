@@ -1,0 +1,5 @@
+error: WebSocket message-only extractor `Payload` cannot be used by a `#[connected]` lifecycle operation because lifecycle operations do not receive message payloads
+  --> tests/ui/fail_controller_connected_payload.rs:21:19
+   |
+21 |         _payload: lily_websocket::Payload<String>,
+   |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

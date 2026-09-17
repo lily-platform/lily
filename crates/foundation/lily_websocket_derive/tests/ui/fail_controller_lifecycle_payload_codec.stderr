@@ -1,0 +1,5 @@
+error: lifecycle operations cannot declare a payload codec
+  --> tests/ui/fail_controller_lifecycle_payload_codec.rs:11:5
+   |
+11 |     #[payload_codec(PayloadCodec)]
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -1,0 +1,5 @@
+error: WebSocket message operations must return Result<O, WebSocketActionError> where O is a typed action outcome; unit success is not supported
+ --> tests/ui/fail_controller_message_signature.rs:8:26
+  |
+8 |     async fn send(&self) -> Result<(), ()> {
+  |                          ^^^^^^^^^^^^^^^^^

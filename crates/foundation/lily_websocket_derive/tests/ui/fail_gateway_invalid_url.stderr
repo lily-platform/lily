@@ -1,0 +1,5 @@
+error: Invalid WebSocket URL: 'https://example.invalid'. WebSocket URLs must start with 'ws://' or 'wss://'. Example: #[gateway(url = "ws://127.0.0.1:43000", namespace = "appmanager")]
+ --> tests/ui/fail_gateway_invalid_url.rs:8:8
+  |
+8 | struct AuditGateway {
+  |        ^^^^^^^^^^^^

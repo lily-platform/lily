@@ -1,0 +1,5 @@
+error: WebSocket controllers require #[namespace("...")]
+ --> tests/ui/fail_controller_missing_namespace.rs:4:8
+  |
+4 | struct MissingNamespaceController;
+  |        ^^^^^^^^^^^^^^^^^^^^^^^^^^

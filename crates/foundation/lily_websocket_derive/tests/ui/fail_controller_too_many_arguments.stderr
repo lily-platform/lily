@@ -1,0 +1,11 @@
+error: WebSocket controller operations accept at most 16 typed extractor arguments
+  --> tests/ui/fail_controller_too_many_arguments.rs:12:9
+   |
+12 | /         &self,
+13 | |         _00: Extractor,
+14 | |         _01: Extractor,
+15 | |         _02: Extractor,
+...  |
+28 | |         _15: Extractor,
+29 | |         _16: Extractor,
+   | |_______________________^

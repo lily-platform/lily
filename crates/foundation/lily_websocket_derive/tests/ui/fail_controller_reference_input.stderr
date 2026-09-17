@@ -1,0 +1,5 @@
+error: WebSocket controller extractor arguments must be owned values; references and mutable raw inputs are not supported
+  --> tests/ui/fail_controller_reference_input.rs:13:19
+   |
+13 |         _context: &WebSocketContext,
+   |                   ^^^^^^^^^^^^^^^^^
