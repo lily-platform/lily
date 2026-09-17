@@ -60,6 +60,7 @@ def validate_graph():
                 expected[component + "-" + feature] = (package, {feature})
     assert public == set(expected), (public - set(expected), set(expected) - public)
     matrix = HERE / "matrix/Cargo.toml"
+    assert set(tomllib.loads(matrix.read_text())["features"]) - {"default"} == public
     for feature in [None, *sorted(public)]:
         args = ["metadata", "--format-version=1", "--filter-platform", HOST, "--manifest-path", str(matrix), "--no-default-features"]
         if feature:
@@ -71,6 +72,13 @@ def validate_graph():
             assert nodes["lily"]["deps"] == [], "empty facade pulls optional dependencies"
             assert set(nodes) == {"umbrella-feature-matrix", "lily"}
             continue
+        if feature == "cancellation":
+            assert {name for name in nodes if name.startswith("lily_")} == {"lily_cancellation"}
+        if feature == "websocket-redis":
+            assert set(nodes["lily"]["features"]) == {"websocket-redis"}
+            assert {dep["name"] for dep in nodes["lily"]["deps"]} == {"lily_websocket_redis"}
+            assert "lily_websocket" in nodes
+            assert "lily_redis" not in nodes, "backplane must not activate cache DI"
         package, required = expected[feature]
         assert package in nodes, (feature, package)
         selected = set(nodes[package]["features"])
@@ -123,7 +131,7 @@ def validate_builds():
             run(base + ["--features", feature], "build-" + feature)
     for mode in ("single", "factory"):
         combined = ["consumer-asyncapi", "http-api", "websocket", "trace", "config", "injection",
-                    "http-client", "error", "background-service"]
+                    "http-client", "error", "background-service", "cancellation", "websocket-redis"]
         combined += [c + "-" + mode for c in ("mongodb", "postgresql", "clickhouse", "redis", "queue-client", "websocket-client")]
         run(base + ["--features", ",".join(combined)], "build-combined-" + mode)
 

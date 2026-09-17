@@ -164,7 +164,7 @@ class Qualification:
         # Root-workspace defaults do not enable any public umbrella component.
         for mode in ("single", "factory"):
             features = ["consumer-asyncapi", "http-api", "websocket", "trace", "config", "injection",
-                        "http-client", "error", "background-service"]
+                        "http-client", "error", "background-service", "cancellation", "websocket-redis"]
             features += [name + "-" + mode for name in ("mongodb", "postgresql", "clickhouse", "redis", "queue-client", "websocket-client")]
             self.cargo("facade-docs-" + mode, "doc", "-p", "lily", "--no-deps", "--no-default-features", "--features", ",".join(features))
 

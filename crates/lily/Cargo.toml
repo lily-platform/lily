@@ -17,6 +17,7 @@ default = []
 consumer = ["dep:lily_consumer", "__injection", "queue"]
 http-api = ["dep:lily_http_api", "__injection"]
 websocket = ["dep:lily_websocket", "__injection"]
+websocket-redis = ["dep:lily_websocket_redis"]
 clickhouse = ["clickhouse-single"]
 clickhouse-single = ["__clickhouse", "lily_clickhouse/single"]
 clickhouse-factory = ["__clickhouse", "lily_clickhouse/factory"]
@@ -49,6 +50,7 @@ injection = ["__injection"]
 http-client = ["dep:lily_http_client"]
 error = ["dep:lily_error"]
 background-service = ["dep:lily_background_service"]
+cancellation = ["dep:lily_cancellation"]
 __injection = ["dep:lily_injection"]
 consumer-asyncapi = ["consumer", "lily_consumer/asyncapi", "queue-asyncapi"]
 consumer-fuzzing = ["consumer", "lily_consumer/fuzzing"]
@@ -91,7 +93,9 @@ lily_injection = { version = "0.1.0", path = "../foundation/lily_injection", opt
 lily_http_client = { version = "0.1.0", path = "../foundation/lily_http_client", optional = true, default-features = false }
 lily_error = { version = "0.1.0", path = "../foundation/lily_error", optional = true, default-features = false }
 lily_background_service = { version = "0.1.0", path = "../foundation/lily_background_service", optional = true, default-features = false }
+lily_cancellation = { version = "0.1.0", path = "../foundation/lily_cancellation", optional = true, default-features = false }
+lily_websocket_redis = { version = "0.1.0", path = "../integrations/lily_websocket_redis", optional = true, default-features = false }
 
 [package.metadata.docs.rs]
 no-default-features = true
-features = ["consumer-asyncapi", "http-api", "websocket", "clickhouse", "mongodb", "postgresql", "queue-client", "redis", "trace", "config", "websocket-client", "injection", "http-client", "error", "background-service"]
+features = ["consumer-asyncapi", "http-api", "websocket", "clickhouse", "mongodb", "postgresql", "queue-client", "redis", "trace", "config", "websocket-client", "injection", "http-client", "error", "background-service", "cancellation", "websocket-redis"]

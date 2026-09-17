@@ -21,6 +21,7 @@ component dependency takes precedence if both forms are present.
 | `consumer` | `lily::consumer` | Queue handlers are also available at `lily::queue` |
 | `http-api` | `lily::http_api` | HTTP types, controller macros and root DI API |
 | `websocket` | `lily::websocket` | WebSocket types, controller macros and root DI API |
+| `websocket-redis` | `lily::websocket_redis` | Redis backplane adapter; no additional facade feature |
 | `clickhouse` | `lily::clickhouse` | `single` |
 | `mongodb` | `lily::mongodb` | `single` |
 | `postgresql` | `lily::postgresql` | `single` |
@@ -34,6 +35,7 @@ component dependency takes precedence if both forms are present.
 | `http-client` | `lily::http_client` | No additional feature |
 | `error` | `lily::error` | No additional feature |
 | `background-service` | `lily::background_service` | No additional feature |
+| `cancellation` | `lily::cancellation` | Shared read-only `ExecutionCancellation` |
 
 Framework users can keep imports such as `lily::http_api::{Injectable, ServiceTrait}`.
 A service-only package enables `injection` and imports `lily::injection` instead.
@@ -93,6 +95,30 @@ they expose the database module and adapter without selecting DI registration.
 Their `-factory` variants expose the database factory API only. Select a database
 mode explicitly if your application needs DI registration. Configuration-only
 features likewise do not activate database adapters.
+
+### Cancellation and the Redis WebSocket backplane
+
+```toml
+lily = { version = "0.1", features = ["cancellation", "websocket", "websocket-redis"] }
+```
+
+`lily::cancellation::ExecutionCancellation` exposes the existing read-only
+cancellation view for application callbacks. `websocket-redis` exposes only the
+adapter module. Enable `websocket` separately to access `lily::websocket` and
+select the adapter on the builder:
+
+```rust,ignore
+use lily::websocket::{BackplaneRequirement, WsAppBuilder};
+use lily::websocket_redis::RedisWebSocketBackplane;
+
+let builder = WsAppBuilder::new("127.0.0.1:8081")
+    .backplane::<RedisWebSocketBackplane>(BackplaneRequirement::Required);
+```
+
+The adapter uses `[websocket.backplane]` configuration and dedicated Redis
+connections, independently of the `redis` cache component. See the
+[adapter documentation](../integrations/lily_websocket_redis/README.md) for its
+configuration and delivery contract.
 
 ## Macro ownership
 

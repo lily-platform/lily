@@ -6,7 +6,7 @@ publish = false
 
 [dependencies]
 # The only direct Lily dependency, deliberately excluding implementation crates.
-platform = { package = "lily", path = "../../../../crates/lily", default-features = false, features = ["config", "http-client", "error", "background-service", "trace", "queue"] }
+platform = { package = "lily", path = "../../../../crates/lily", default-features = false, features = ["config", "http-client", "error", "background-service", "trace", "queue", "cancellation", "websocket", "websocket-redis"] }
 serde = { version = "1", features = ["derive"] }
 
 tokio = { version = "1", features = ["macros", "rt", "time"] }

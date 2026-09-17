@@ -16,6 +16,14 @@ include!("../../trace.rs");
 
 #[test]
 fn public_component_modules_preserve_their_types() {
+    assert_eq!(
+        std::any::TypeId::of::<lily::cancellation::ExecutionCancellation>(),
+        std::any::TypeId::of::<lily::background_service::ExecutionCancellation>(),
+    );
+    let _ = lily::websocket::WsAppBuilder::new("127.0.0.1:0")
+        .backplane::<lily::websocket_redis::RedisWebSocketBackplane>(
+        lily::websocket::BackplaneRequirement::Required,
+    );
     let _ = std::any::TypeId::of::<lily::config::ConfigService>();
     let _ = std::any::TypeId::of::<lily::http_client::HttpClient>();
     let _ = std::any::TypeId::of::<lily::background_service::BackgroundServices>();

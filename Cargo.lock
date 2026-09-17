@@ -2204,6 +2204,7 @@ name = "lily"
 version = "0.1.0"
 dependencies = [
  "lily_background_service",
+ "lily_cancellation",
  "lily_clickhouse",
  "lily_config",
  "lily_consumer",
@@ -2219,6 +2220,7 @@ dependencies = [
  "lily_trace",
  "lily_websocket",
  "lily_websocket_client",
+ "lily_websocket_redis",
 ]
 
 [[package]]

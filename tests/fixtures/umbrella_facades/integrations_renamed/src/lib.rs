@@ -16,6 +16,14 @@ include!("../../trace.rs");
 
 #[test]
 fn public_component_modules_preserve_their_types() {
+    assert_eq!(
+        std::any::TypeId::of::<platform::cancellation::ExecutionCancellation>(),
+        std::any::TypeId::of::<platform::background_service::ExecutionCancellation>(),
+    );
+    let _ = platform::websocket::WsAppBuilder::new("127.0.0.1:0")
+        .backplane::<platform::websocket_redis::RedisWebSocketBackplane>(
+        platform::websocket::BackplaneRequirement::Required,
+    );
     let _ = std::any::TypeId::of::<platform::config::ConfigService>();
     let _ = std::any::TypeId::of::<platform::http_client::HttpClient>();
     let _ = std::any::TypeId::of::<platform::background_service::BackgroundServices>();
