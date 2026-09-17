@@ -246,3 +246,20 @@ The SQL file is applied once when PostgreSQL initializes a new volume. Existing
 volumes are retained across restarts; changing the schema file is not a migration
 of existing data. Either apply an explicit migration or deliberately reset only
 the example volumes using the documented cleanup command.
+
+## Final facade qualification
+
+From the repository root, run `python3 tests/qualification/facade.py --live` to
+combine the feature/macro contracts, direct dependency regressions, workspace and
+example tests, documentation builds and live example verification. See the
+[qualification guide](../tests/qualification/FACADE.md) for individual stages and
+coverage limits.
+
+The qualification runner uses a new random Compose project with dynamic loopback
+ports and its own data/trace volumes. It verifies and removes only that project's
+resources. Normal `docker compose` use keeps the default ports above. The
+`EXAMPLE_HTTP_PORT`, `EXAMPLE_WS_PORT`, `EXAMPLE_POSTGRES_PORT`,
+`EXAMPLE_MONGO_PORT`, `EXAMPLE_REDIS_PORT`, `EXAMPLE_AMQP_PORT` and
+`EXAMPLE_RABBIT_MANAGEMENT_PORT` variables can override published host ports;
+`0` lets Docker allocate an available port. `EXAMPLE_IMAGE` selects the app image
+tag. These settings do not change the ports used between containers.
