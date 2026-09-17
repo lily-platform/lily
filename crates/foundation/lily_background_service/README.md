@@ -2,7 +2,8 @@
 
 `lily_background_service` provides host-owned asynchronous workers. It depends
 on Lily DI and cancellation, not on HTTP. The first host adapter is
-`lily_http_api::AppBuilder`:
+`lily_http_api::AppBuilder`; `lily_websocket::WsAppBuilder` supports the same
+registration method and worker trait:
 
 ```rust,ignore
 let app = AppBuilder::default()
@@ -11,6 +12,11 @@ let app = AppBuilder::default()
     .await?;
 app.start().await?;
 ```
+
+The WebSocket adapter waits for listener bind and required backplane readiness
+before execution. Its root re-exports the shared signal as
+`BackgroundCancellation`, preserving the separate WebSocket message
+`ExecutionCancellation` API. See the [WebSocket worker guide](../../framework/lily_websocket/README.md#background-services).
 
 The same concrete worker type is registered once, even if it is added twice.
 Different types have independent worker instances. This is one instance per

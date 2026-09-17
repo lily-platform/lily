@@ -1,6 +1,7 @@
 //! Background services whose execution and scope cleanup belong to their host.
 //!
-//! Register services with `lily_http_api::AppBuilder::add_background_service`.
+//! Register services with `lily_http_api::AppBuilder::add_background_service`
+//! or `lily_websocket::WsAppBuilder::add_background_service`.
 //! Other hosts can use [`BackgroundServices`] and [`BackgroundServiceRuntime`]
 //! directly, projecting their own absolute shutdown deadlines.
 //! Import DI scope types from `lily_injection` or the host's DI re-exports.
