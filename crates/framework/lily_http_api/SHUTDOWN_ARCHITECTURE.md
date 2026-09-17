@@ -131,6 +131,13 @@ failure: a later join can be observed without overwriting an already frozen
 timeout. The root never attempts to join itself; the lifecycle waiter observes
 that final receipt.
 
+A successful listener join reconciles the durable initial shutdown signal before
+being classified as an unexpected stop. A different lifecycle observer can close
+admission after the trigger branch was polled, allowing the listener to join
+before the root observes its notification. Signal-driven completion follows the
+normal cleanup path; a join without a recorded signal or a returned listener
+error remains a failure.
+
 Once a start future has been polled and installed its root, dropping that waiter
 requests shutdown and leaves the root running. `App::close().await` starts the
 same root for a built but unstarted App without binding, or observes the existing

@@ -3056,20 +3056,30 @@ impl App {
                     }
                 },
                 result = async { server.lock().await.wait().await } => {
-                    let error = match result {
+                    let stopped = match result {
                         Ok(report) => {
                             HttpServer::log_drain_report(&report);
-                            io::Error::other(format!(
-                                "HTTP listener stopped before a lifecycle trigger: {report:?}"
-                            ))
+                            // Another lifecycle observer can stop admission after the
+                            // trigger branch was polled but before this listener joins.
+                            // Reconcile the durable signal before calling this a failure.
+                            shutdown_state.initial_signal().ok_or_else(|| {
+                                io::Error::other(format!(
+                                    "HTTP listener stopped before a lifecycle trigger: {report:?}"
+                                ))
+                            })
                         }
-                        Err(error) => error,
+                        Err(error) => Err(error),
                     };
-                    if let Err(health_error) = lifecycle.health.record_listener_failure() {
-                        health_failure = Some(health_error.to_string());
+                    match stopped {
+                        Ok(signal) => (signal, Ok(())),
+                        Err(error) => {
+                            if let Err(health_error) = lifecycle.health.record_listener_failure() {
+                                health_failure = Some(health_error.to_string());
+                            }
+                            let _ = shutdown_state.initiate_shutdown(ShutdownSignal::Manual);
+                            (ShutdownSignal::Manual, Err(error))
+                        }
                     }
-                    let _ = shutdown_state.initiate_shutdown(ShutdownSignal::Manual);
-                    (ShutdownSignal::Manual, Err(error))
                 }
             }
         };
