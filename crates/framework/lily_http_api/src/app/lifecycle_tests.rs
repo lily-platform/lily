@@ -1035,3 +1035,88 @@ async fn a_first_late_health_observation_cannot_claim_a_join_within_the_deadline
     );
     assert_eq!(app.shutdown_report().unwrap(), report);
 }
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+async fn listener_join_racing_with_a_durable_shutdown_signal_is_clean() {
+    // Publish the same durable state as the native signal monitor. The outer
+    // start waiter and retained root may observe it on different worker threads.
+    for attempt in 0..128 {
+        let app = AppBuilder::new("127.0.0.1:0").build().await.unwrap();
+        let runtime = app.clone();
+        let waiter = tokio::spawn(async move {
+            runtime
+                .start_with_cancellation(CancellationToken::new())
+                .await
+        });
+        wait_ready(&app).await;
+        app.lifecycle
+            .shutdown_state
+            .initiate_shutdown(ShutdownSignal::Terminate)
+            .unwrap();
+        let result = tokio::time::timeout(Duration::from_secs(5), waiter)
+            .await
+            .unwrap()
+            .unwrap();
+        assert_joined(&app);
+        assert!(result.is_ok(), "shutdown attempt {attempt}: {result:?}");
+        app.close().await.unwrap();
+    }
+}
+
+#[tokio::test]
+async fn listener_join_without_a_shutdown_signal_remains_a_failure() {
+    let app = AppBuilder::new("127.0.0.1:0").build().await.unwrap();
+    let runtime = app.clone();
+    let waiter = tokio::spawn(async move {
+        runtime
+            .start_with_cancellation(CancellationToken::new())
+            .await
+    });
+    wait_ready(&app).await;
+    // Stop the listener without publishing any lifecycle shutdown request.
+    app.transport_shutdown().cancel();
+    let error = tokio::time::timeout(Duration::from_secs(5), waiter)
+        .await
+        .unwrap()
+        .unwrap()
+        .unwrap_err();
+    assert!(
+        error
+            .to_string()
+            .contains("HTTP listener stopped before a lifecycle trigger")
+    );
+    assert_eq!(
+        app.close().await.unwrap_err().to_string(),
+        error.to_string()
+    );
+    assert_joined(&app);
+}
+
+#[tokio::test]
+async fn listener_join_observes_a_signal_before_trigger_notification_is_polled() {
+    let app = AppBuilder::new("127.0.0.1:0").build().await.unwrap();
+    let runtime = app.clone();
+    let mut trigger = HttpLifecycleTrigger::passive(&app.lifecycle);
+    // Hold notification delivery pending to reproduce the select interleaving:
+    // another observer has published shutdown and stopped admission, but the
+    // root observes the listener join before polling the signal again.
+    trigger.state = Arc::new(ShutdownState::new());
+    let root = app.lifecycle.root_tasks.spawn(async move {
+        HttpLifecycleOutcome::from_result(runtime.run_http_lifecycle(trigger).await)
+    });
+    *app.lifecycle.root.lock().unwrap() = Some(root.clone());
+    wait_ready(&app).await;
+    app.lifecycle
+        .shutdown_state
+        .initiate_shutdown(ShutdownSignal::Terminate)
+        .unwrap();
+    let result = tokio::time::timeout(Duration::from_secs(5), app.await_root(root))
+        .await
+        .unwrap();
+    assert_joined(&app);
+    assert!(
+        result.is_ok(),
+        "recorded shutdown must remain clean: {result:?}"
+    );
+    app.close().await.unwrap();
+}

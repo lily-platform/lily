@@ -80,6 +80,9 @@ are exact suffixes; the source links identify the owning test modules.
 | `concurrent_close_without_start_uses_one_root_and_never_binds` | Sixteen close callers share one root and owned DI close; occupied listener address is never bound. |
 | `dropped_start_waiter_requests_shutdown_and_preserves_all_root_joins` | Real running listener survives caller drop long enough to close; host token is not mutated; root/transport/monitor joins remain observable. |
 | `dropped_close_waiter_keeps_pending_work_owned_and_preserves_caller_di` | An injected pending listener receipt survives close-waiter loss; caller DI remains open. |
+| `listener_join_observes_a_signal_before_trigger_notification_is_polled` | A real listener joins after a durable signal while a controlled notification remains pending; root cleanup succeeds instead of reporting an unexpected listener stop. |
+| `listener_join_racing_with_a_durable_shutdown_signal_is_clean` | 128 start/shutdown cycles on two runtime workers reconcile the durable signal and actual joins; this publishes shutdown state directly, not OS signals. |
+| `listener_join_without_a_shutdown_signal_remains_a_failure` | Stopping listener admission without a lifecycle signal preserves the unexpected-stop error and its replay. |
 | `failed_bind_result_is_replayed_after_confirmed_root_join` | Real bind failure keeps its I/O kind/message after root cleanup and repeated close. |
 | `simultaneous_starts_share_one_claim_without_cancelling_the_winner` | Only one start wins; losing callers do not cancel the shared root. |
 | `late_root_join_cannot_rewrite_an_already_frozen_timeout` | Late actual completion cannot replace the original deadline failure. |
