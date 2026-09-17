@@ -45,13 +45,13 @@
 //! ```
 //!
 //! Use [`tracing`] spans and events for application instrumentation. Function
-//! arguments are **not** recorded by [`lily_trace`] unless explicitly named in
+//! arguments are **not** recorded by [`lily_trace`](macro@lily_trace) unless explicitly named in
 //! `fields(...)`; never record secrets, credentials, request bodies, or other
 //! unbounded user input. [`spawn`] and its variants preserve the currently
 //! entered span across a new Tokio task.
 //!
 //! [`TraceConfig::environment`] is an OpenTelemetry resource attribute. The
-//! `env = ...` option of [`lily_trace`] instead reads Lily's process-level
+//! `env = ...` option of [`lily_trace`](macro@lily_trace) instead reads Lily's process-level
 //! `LILY_ENV` classification.
 
 #![doc = include_str!("../METHOD_TRACING.md")]

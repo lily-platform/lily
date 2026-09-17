@@ -11,6 +11,8 @@ and integrations.
 See individual crate READMEs and API documentation for available functionality.
 The [connected examples](examples/README.md) run HTTP, WebSocket and Consumer
 applications with shared DI services, real databases, messaging and facade clients.
+The [facade qualification guide](tests/qualification/FACADE.md) describes the
+compatibility, regression and live example checks.
 
 ## License
 
