@@ -117,3 +117,8 @@ python3 tests/qualification/release_packages.py --docs --package lily_consumer
 `--package` is repeatable. Source snapshots require a complete workspace and
 therefore cannot be combined with that filter. No lockfiles or registry state are
 modified by the checker.
+
+For builds from real normalized `.crate` archives, run
+`python3 tests/qualification/release_archives.py` as described in the
+[release validation guide](RELEASE_VALIDATION.md). This is a separate gate from
+the file-list audit and source snapshot above.

@@ -2,7 +2,9 @@
 
 This is the final compatibility and example gate for `lilyrs` and its component
 facades. The [2026-09-17 qualification results](FACADE_RESULTS.md) record the
-completed checks and remaining limits. Run from the repository root with
+completed facade checks and remaining limits. The later
+[2026-09-18 release results](RELEASE_RESULTS.md) include the actual archive and
+host qualification. Run from the repository root with
 Python 3.11+ and Rust 1.96.1:
 
 ```sh
@@ -116,3 +118,7 @@ transactional-inbox profile.
 Current path-dependency fixtures validate the current version. They do not
 establish compatibility with an unpublished previous release, nor do these
 commands publish any crate.
+
+For the release candidate, also run the [actual archive verification and host
+checks](RELEASE_VALIDATION.md). They complement these source-workspace fixtures
+with compilation of Cargo-normalized release archives.
