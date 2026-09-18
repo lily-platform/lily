@@ -4,6 +4,14 @@
 monitor, in-flight work guards, and ordered shutdown coordinator used by Lily
 adapters.
 
+```toml
+[dependencies]
+lily_shutdown = "0.1.0"
+```
+
+This crate has no optional Cargo features. Use a direct dependency when
+implementing a host or integrating resources into a shutdown coordinator.
+
 ## Canonical use
 
 Most Lily HTTP, WebSocket, consumer, and telemetry builders install their own
@@ -31,7 +39,10 @@ shutdown.register(ShutdownAction::new(
     "application.client",
     FrameworkShutdownPhase::DisposeDependencies,
     Duration::from_secs(5),
-    || async { Ok(()) },
+    || async {
+        // Replace this example action with the owned resource's async close.
+        Ok(())
+    },
 ));
 
 state.publish_ready().expect("startup still owns readiness");
@@ -48,3 +59,10 @@ panic. Do not mutate lifecycle atomics or counters directly.
 initiates graceful shutdown, a second signal requests the bounded force path,
 and `SIGQUIT` enters that path immediately. The library never terminates the
 process from a background task.
+
+## Documentation and license
+
+Full documentation and canonical application examples: [lilyrs.com](https://lilyrs.com).
+Published API reference: [docs.rs/lily_shutdown](https://docs.rs/lily_shutdown).
+
+Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.

@@ -1,16 +1,16 @@
 [package]
 name = "lily_consumer"
 version = "0.1.0"
-edition = "2021"
-description.workspace = true
+edition = "2024"
+description = "RabbitMQ consumer application framework with dependency injection and graceful shutdown"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme = "README.md"
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "rabbitmq", "amqp", "consumer", "async"]
+categories = ["network-programming", "asynchronous"]
 rust-version.workspace = true
-exclude = ["fuzz/**"]
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [features]
 default = []
@@ -71,3 +71,9 @@ uuid = { version = "1.11", features = ["v4"] }
 reqwest = { version = "0.12.28", default-features = false, features = ["json", "rustls-tls"] }
 urlencoding = { workspace = true }
 tokio-postgres = "0.7.13"
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = ["asyncapi", "transactional-inbox-mongodb-factory", "transactional-inbox-postgresql-factory"]

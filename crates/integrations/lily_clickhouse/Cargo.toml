@@ -2,14 +2,15 @@
 name = "lily_clickhouse"
 version = "0.1.0"
 edition = "2024"
-description.workspace = true
+description = "Experimental asynchronous ClickHouse integration with typed adapters and migrations"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
-readme.workspace = true
-keywords.workspace = true
-categories.workspace = true
+readme = "README.md"
+keywords = ["lilyrs", "clickhouse", "database", "async", "migrations"]
+categories = ["database", "asynchronous"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [features]
 default = ["single"]
@@ -44,3 +45,9 @@ sha2 = "0.10"
 
 [dev-dependencies]
 trybuild = "1.0"
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = ["factory"]

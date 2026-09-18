@@ -1,0 +1,31 @@
+error[E0277]: the trait bound `ApplicationError: TraceResultError` is not satisfied
+ --> tests/ui/fail_result_missing_trait.rs:6:1
+  |
+6 | #[lily_trace(result)]
+  | ^^^^^^^^^^^^^^^^^^^^^ unsatisfied trait bound
+  |
+help: the trait `TraceResultError` is not implemented for `ApplicationError`
+ --> tests/ui/fail_result_missing_trait.rs:4:1
+  |
+4 | struct ApplicationError;
+  | ^^^^^^^^^^^^^^^^^^^^^^^
+help: the following other types implement trait `TraceResultError`
+ --> $TRACE_RUNTIME/src/result.rs
+  |
+  | impl<E: TraceResultError + ?Sized> TraceResultError for &E {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `&E`
+...
+  | impl<E: TraceResultError + ?Sized> TraceResultError for Box<E> {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `Box<E>`
+...
+  | impl<E: TraceResultError + ?Sized> TraceResultError for std::sync::Arc<E> {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `Arc<E>`
+...
+  | impl TraceResultError for std::convert::Infallible {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `Infallible`
+note: required by a bound in `lily_trace::__private::OperationGuard::<Emit>::finish_result`
+ --> $TRACE_RUNTIME/src/instrumentation.rs
+  |
+  |     pub fn finish_result<T, E: TraceResultError>(mut self, result: &Result<T, E>) {
+  |                                ^^^^^^^^^^^^^^^^ required by this bound in `OperationGuard::<Emit>::finish_result`
+  = note: this error originates in the attribute macro `lily_trace` (in Nightly builds, run with -Z macro-backtrace for more info)

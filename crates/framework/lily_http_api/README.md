@@ -18,8 +18,9 @@ operations still belong to their respective repository/provider crates.
 
 ```toml
 [dependencies]
-lily_http_api = "0.1"
+lily_http_api = "0.1.0"
 serde = { version = "1", features = ["derive"] }
+serde_json = "1"
 ```
 
 All production HTTP capabilities are available in the default build. The only
@@ -111,6 +112,25 @@ from Lily configuration. `AppBuilder::new("host:port")` overrides only the
 listener address. Use `transport_config`, `rustls_config`, or `tls_disabled`
 when the composition root must override those other sources explicitly.
 
+The minimal application still loads configuration during DI initialization.
+Create `lily.toml` with:
+
+```toml
+[server]
+host = "127.0.0.1"
+port = 8080
+```
+
+Then run with the bootstrap pair (replace the path with your file):
+
+```bash
+LILY_CONFIG_PATH=./lily.toml LILY_CONFIG_MODE=development cargo run
+```
+
+Use `production` with deployment configuration. A custom DI container can seed
+its own `ConfigService` instead. The facade alternative is `lilyrs` with
+feature `http-api`, imported through `lilyrs::http_api`.
+
 ## Controller and action attributes
 
 A controller consists of exactly three pieces:
@@ -154,6 +174,7 @@ optional raw request or response capability permitted by the response mode.
 | `TypedHeader<T>` | Required `headers::Header` value | missing or invalid rejection |
 | `Option<TypedHeader<T>>` | Optional typed header | `None` only when absent; malformed rejects |
 | `RequestCookies` | Parsed, immutable request cookie jar | malformed header rejects |
+| `ExecutionCancellation` | Read-only cancellation for this accepted execution | supplied by the HTTP owner |
 | `Principal` | Verified principal previously attached by application policy | missing rejects |
 | `Option<Principal>` | Optional verified principal | absent becomes `None` |
 | `Local<T>` | Clone a typed request-local value | missing is an internal-state rejection |
@@ -1097,3 +1118,10 @@ The HTTP background tests include real listener bind failure, worker faults,
 cancelled observers, external-container isolation and blocked destructors.
 `tests/background_telemetry.rs` verifies cooperative/forced shutdown, disposer
 error/timeout, actual job/cleanup trace identities and file-exporter flush order.
+
+## Documentation and license
+
+Full documentation and canonical application examples: [lilyrs.com](https://lilyrs.com).
+Published API reference: [docs.rs/lily_http_api](https://docs.rs/lily_http_api).
+
+Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.

@@ -19,7 +19,7 @@ import uuid
 
 ROOT = Path(__file__).resolve().parents[2]
 CARGO = ["cargo", "+1.96.1"]
-STAGES = ("umbrella", "components", "di", "downstream", "workspace", "examples", "docs")
+STAGES = ("umbrella", "components", "di", "macros", "downstream", "workspace", "examples", "docs")
 EXAMPLE_PACKAGES = ("lily-example-models", "lily-example-shared", "lily-example-http",
                     "lily-example-websocket", "lily-example-consumer")
 
@@ -110,6 +110,22 @@ class Qualification:
             name = package["package"]["name"]
             self.cargo(name, "test", "--manifest-path", workspace, "-p", name)
 
+    def macros(self):
+        self.run("package-dependencies", [sys.executable, str(ROOT / "tests/qualification/package_dependencies.py")])
+        workspace = "tests/fixtures/macro_contracts/Cargo.toml"
+        for package in fixture_members(workspace):
+            name = package["package"]["name"]
+            base = ["test", "--manifest-path", workspace, "-p", name]
+            self.cargo(name, *base)
+            if "factory" in package.get("features", {}):
+                self.cargo(name + "-factory", *base, "--no-default-features", "--features", "factory")
+        # Default proc-macro unit tests remain in the workspace stage. These
+        # feature-specific unit tests exercise their additional code paths.
+        self.cargo("macro-mongodb-factory", "test", "-p", "lily_mongodb_derive", "--no-default-features", "--features", "factory")
+        self.cargo("macro-queue-asyncapi", "test", "-p", "lily_queue_derive", "--features", "asyncapi")
+        self.cargo("macro-injection-example", "run", "--manifest-path", workspace,
+                   "-p", "lily-macro-contracts-injection", "--example", "simple_centralized_api")
+
     def downstream(self):
         for fixture in ("downstream_injectable", "downstream_http", "downstream_struct_controller",
                         "downstream_consumer", "downstream_websocket_client", "mongodb_derive_contract",
@@ -160,7 +176,7 @@ class Qualification:
         self.run("client-format", [*CARGO, "fmt", "--manifest-path", client, "--check"])
 
     def docs(self):
-        self.cargo("workspace-docs", "doc", "--workspace", "--no-deps")
+        self.run("release-package-docs", [sys.executable, str(ROOT / "tests/qualification/release_packages.py"), "--docs"])
         # Root-workspace defaults do not enable any public umbrella component.
         for mode in ("single", "factory"):
             features = ["consumer-asyncapi", "http-api", "websocket", "trace", "config", "injection",

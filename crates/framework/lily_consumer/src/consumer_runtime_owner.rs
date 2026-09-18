@@ -1,15 +1,15 @@
 use super::owned_tasks::OwnedTask;
 use futures_util::FutureExt;
 use lily_error::application::{
+    MessageBrokerError,
     consumer::{ConsumerError, ConsumerSignalFailureStage},
     message_broker::{
         RabbitMQError, RabbitMqConsumerTaskFailure, RabbitMqConsumerTaskFailureKind,
         RabbitMqConsumerTaskRole,
     },
-    MessageBrokerError,
 };
 use lily_injection::{ApplicationContainer, ProcessContext};
-use lily_queue::__private::{register_queue_lifecycle, QueueRuntimeHandle, QueueShutdownDeadlines};
+use lily_queue::__private::{QueueRuntimeHandle, QueueShutdownDeadlines, register_queue_lifecycle};
 use lily_shutdown::{
     FrameworkShutdownCoordinator, FrameworkShutdownPhase, ShutdownAction, ShutdownSignal,
     ShutdownState, SignalHandler, SignalMonitor,
@@ -17,19 +17,19 @@ use lily_shutdown::{
 use lily_trace::TracingRuntimeOwner;
 use std::{
     future::Future,
-    panic::{catch_unwind, AssertUnwindSafe},
+    panic::{AssertUnwindSafe, catch_unwind},
     pin::Pin,
     sync::{Arc, Mutex},
     time::Duration,
 };
 use tokio::runtime::Handle;
 use tokio_util::sync::CancellationToken;
-use tracing::{info, warn, Instrument};
+use tracing::{Instrument, info, warn};
 
 use super::{
-    shutdown_failure, shutdown_report_has_primary_failure, shutdown_report_reconciled,
-    shutdown_report_requires_aggregate, Consumer, ConsumerLifecycleTrigger, ConsumerStartup,
-    ManagedConsumerStartup,
+    Consumer, ConsumerLifecycleTrigger, ConsumerStartup, ManagedConsumerStartup, shutdown_failure,
+    shutdown_report_has_primary_failure, shutdown_report_reconciled,
+    shutdown_report_requires_aggregate,
 };
 
 const CONSUMER_RUNTIME_SUPERVISOR: &str = "consumer-runtime";
@@ -737,7 +737,7 @@ pub(crate) async fn exercise_runtime_ownership_for_fuzz(
 ) -> RuntimeOwnershipFuzzEvidence {
     use lily_config::ConfigService;
     use lily_queue::__private::{
-        queue_runtime, queue_service_test_seed, QueueServiceTestLifecycleCall as Call,
+        QueueServiceTestLifecycleCall as Call, queue_runtime, queue_service_test_seed,
     };
 
     let (queue_service, probe) = queue_service_test_seed(Arc::new(ConfigService::development(

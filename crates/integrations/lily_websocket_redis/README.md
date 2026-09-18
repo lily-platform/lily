@@ -5,6 +5,17 @@ Redis Pub/Sub adapter for Lily's transport-neutral WebSocket backplane SPI.
 The crate is optional. Applications that do not depend on it carry no Redis
 client or runtime cost.
 
+```toml
+[dependencies]
+lily_websocket = "0.1.0"
+lily_websocket_redis = "0.1.0"
+```
+
+With the facade, select both `websocket` and `websocket-redis` and import
+`lilyrs::websocket` / `lilyrs::websocket_redis`. The `websocket-redis` feature
+does not enable the facade's `websocket` feature automatically. The adapter
+itself has no optional Cargo features.
+
 ```rust,ignore
 use lily_websocket::{BackplaneRequirement, WsAppBuilder};
 use lily_websocket_redis::RedisWebSocketBackplane;
@@ -14,6 +25,10 @@ let app = WsAppBuilder::new("127.0.0.1:8081")
     .build()
     .await?;
 ```
+
+The [WebSocket host setup](../../framework/lily_websocket/README.md) also
+applies here, including the `LILY_CONFIG_PATH` / `LILY_CONFIG_MODE` bootstrap
+pair. Supply Redis and its ACL configuration before building the app.
 
 The adapter reads its only configuration authority from the application
 `ConfigService`:
@@ -101,3 +116,10 @@ Redis Pub/Sub is online and non-durable. The adapter does not provide offline
 delivery, history, replay, global recipient acknowledgements, exact global
 ordering or exactly-once delivery. A publish acknowledgement means only that
 Redis accepted the `PUBLISH` command.
+
+## Documentation and license
+
+Full documentation and canonical application examples: [lilyrs.com](https://lilyrs.com).
+Published API reference: [docs.rs/lily_websocket_redis](https://docs.rs/lily_websocket_redis).
+
+Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.

@@ -3,10 +3,10 @@
 //! Helper functions for parsing, validation, and code generation.
 
 use proc_macro2::{Ident, Span, TokenStream};
-use quote::{format_ident, quote, ToTokens};
+use quote::{ToTokens, format_ident, quote};
 use syn::{
-    ext::IdentExt, FnArg, GenericArgument, ImplItem, ItemImpl, PathArguments, ReturnType,
-    Signature, Type,
+    FnArg, GenericArgument, ImplItem, ItemImpl, PathArguments, ReturnType, Signature, Type,
+    ext::IdentExt,
 };
 
 #[cfg(feature = "asyncapi")]

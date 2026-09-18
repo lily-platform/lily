@@ -8,11 +8,20 @@ and integrations.
 - `crates/integrations`: database, messaging, and other integrations.
 - `crates/lilyrs`: the application-facing facade.
 
-See individual crate READMEs and API documentation for available functionality.
+Full documentation and canonical usage are available at [lilyrs.com](https://lilyrs.com).
+Each published crate includes its own README and both license texts; see its
+README and API reference for the supported public surface.
 The [connected examples](examples/README.md) run HTTP, WebSocket and Consumer
 applications with shared DI services, real databases, messaging and facade clients.
 The [facade qualification guide](tests/qualification/FACADE.md) describes the
 compatibility, regression and live example checks.
+
+## Rust toolchain
+
+Rust 1.96.1 is the currently supported and tested toolchain, pinned in
+`rust-toolchain.toml`. All published crates use edition 2024 and inherit
+`rust-version = "1.96.1"` from the workspace. Cargo treats this value as a
+minimum compiler version; newer toolchains are not currently validated.
 
 ## License
 

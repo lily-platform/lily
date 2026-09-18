@@ -22,6 +22,23 @@ The same concrete worker type is registered once, even if it is added twice.
 Different types have independent worker instances. This is one instance per
 application, not distributed scheduling or a cross-process singleton.
 
+## Dependencies
+
+HTTP and WebSocket hosts re-export the worker and scope contracts. A reusable
+worker library can instead declare these dependencies:
+
+```toml
+[dependencies]
+lily_background_service = "0.1.0"
+lily_injection = "0.1.0"
+async-trait = "0.1"
+tokio = { version = "1", features = ["macros", "time"] }
+```
+
+The `lilyrs` facade exposes the worker API through `background-service` and
+`lilyrs::background_service`; add `injection` when using the scope API without
+a framework facade. This crate has no optional Cargo features.
+
 ## Worker contract
 
 ```rust,ignore
@@ -81,7 +98,7 @@ uses a cancellation error, handle that specific variant in the worker.
 
 `new` runs asynchronously during build, in registration order. Each constructor
 and prepared worker already has a retained task owner. Build does not execute
-the jobs. Successful listener bind releases prepared workers once, before HTTP
+the jobs. Successful listener bind releases prepared workers once, before host
 readiness is published. Readiness does not promise their first iteration has
 completed. Failed bind, close-before-start and abandoned build/App paths stop
 prepared tasks without invoking `execute_async`.
@@ -89,7 +106,7 @@ prepared tasks without invoking `execute_async`.
 `execute_async` is invoked once for each started worker. The application owns
 its loop, retry policy, recovery gates and polling delay. `Ok(())` is a normal
 completion, including an intentionally disabled worker. An unhandled `Err` or
-panic initiates HTTP host shutdown. No automatic restart or retry is performed.
+panic initiates host shutdown. No automatic restart or retry is performed.
 An error returned during cancellation is still an error: handle expected
 shutdown cancellation explicitly and return `Ok(())` when appropriate.
 
@@ -125,7 +142,7 @@ The execution token is read-only and is cancelled only by host shutdown. HTTP
 requests, request timeouts, client disconnection and polling timers do not
 cancel it. Worker failure may itself be the reason the host begins shutdown.
 
-The HTTP adapter projects its existing absolute shutdown cutoffs into the
+The HTTP and WebSocket adapters project their absolute shutdown cutoffs into the
 background runtime. All workers receive cancellation together. They share the
 root cooperative window (not the short per-request cooperative cap), followed by
 execution abort/join, exact scope cleanup, DI disposal and telemetry flush. A
@@ -180,3 +197,10 @@ Executed commands and coverage are recorded in [QUALIFICATION.md](QUALIFICATION.
 The lifecycle follows the separation in [.NET BackgroundService](https://github.com/dotnet/runtime/blob/v10.0.0/src/libraries/Microsoft.Extensions.Hosting.Abstractions/src/BackgroundService.cs)
 and the host's default [StopHost failure behavior](https://github.com/dotnet/runtime/blob/v10.0.0/src/libraries/Microsoft.Extensions.Hosting/src/HostOptions.cs),
 with Lily's explicit task/scope joins and existing shutdown budget.
+
+## Documentation and license
+
+Full documentation and canonical application examples: [lilyrs.com](https://lilyrs.com).
+Published API reference: [docs.rs/lily_background_service](https://docs.rs/lily_background_service).
+
+Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.

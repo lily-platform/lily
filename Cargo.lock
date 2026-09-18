@@ -570,9 +570,9 @@ checksum = "f079e83a288787bcd14a6aea84cee5c87a67c5a3e660c30f557a3d24761b3527"
 
 [[package]]
 name = "chacha20"
-version = "0.10.1"
+version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d524456ba66e72eb8b115ff89e01e497f8e6d11d78b70b1aa13c0fbd97540a81"
+checksum = "65c35e4b699c7e15ccbe7ee35c005e4fc0a278d22238a2857e6ce2dadeda1b06"
 dependencies = [
  "cfg-if",
  "cpufeatures 0.3.0",
@@ -2447,16 +2447,10 @@ dependencies = [
 name = "lily_injectable_derive"
 version = "0.1.0"
 dependencies = [
- "lily_error",
- "lily_injection",
- "lily_injection_registry",
- "linkme",
  "proc-macro-crate",
  "proc-macro2",
  "quote",
  "syn 2.0.118",
- "tokio",
- "trybuild",
 ]
 
 [[package]]
@@ -2603,16 +2597,10 @@ dependencies = [
 name = "lily_mongodb_derive"
 version = "0.1.0"
 dependencies = [
- "async-trait",
- "lily_injection",
- "lily_mongodb",
  "proc-macro-crate",
  "proc-macro2",
  "quote",
- "serde",
  "syn 2.0.118",
- "tokio",
- "trybuild",
 ]
 
 [[package]]
@@ -2751,17 +2739,11 @@ dependencies = [
 name = "lily_queue_derive"
 version = "0.1.0"
 dependencies = [
- "lily_error",
- "lily_injection",
- "lily_queue",
  "proc-macro-crate",
  "proc-macro2",
  "quote",
- "serde",
  "serde_json",
  "syn 2.0.118",
- "tokio",
- "trybuild",
 ]
 
 [[package]]
@@ -2842,14 +2824,10 @@ dependencies = [
 name = "lily_trace_macros"
 version = "0.1.0"
 dependencies = [
- "async-trait",
- "lily_trace",
  "proc-macro-crate",
  "proc-macro2",
  "quote",
  "syn 2.0.118",
- "tracing",
- "trybuild",
 ]
 
 [[package]]
@@ -2968,7 +2946,6 @@ dependencies = [
  "async-trait",
  "lily_error",
  "lily_injection",
- "lily_websocket",
  "lily_websocket_client",
  "proc-macro-crate",
  "proc-macro2",
@@ -2976,7 +2953,6 @@ dependencies = [
  "serde",
  "syn 2.0.118",
  "tokio-util",
- "trybuild",
  "url",
 ]
 

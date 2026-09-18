@@ -1,0 +1,19 @@
+error[E0277]: the trait bound `NotMessageMiddleware: WsMessageMiddleware` is not satisfied
+  --> tests/ui/fail_controller_message_middleware_trait.rs:12:22
+   |
+12 | #[message_middleware(NotMessageMiddleware)]
+   |                      ^^^^^^^^^^^^^^^^^^^^ unsatisfied trait bound
+   |
+help: the trait `WsMessageMiddleware` is not implemented for `NotMessageMiddleware`
+  --> tests/ui/fail_controller_message_middleware_trait.rs:8:1
+   |
+ 8 | struct NotMessageMiddleware;
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: required by a bound in `lily_websocket::__private::WebSocketMessageMiddlewareRegistration::of`
+  --> $LILY_WEBSOCKET/src/controller/registry.rs
+   |
+   |     pub fn of<M>() -> Self
+   |            -- required by a bound in this associated function
+   |     where
+   |         M: WsMessageMiddleware,
+   |            ^^^^^^^^^^^^^^^^^^^ required by this bound in `WebSocketMessageMiddlewareRegistration::of`

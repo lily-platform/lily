@@ -2,28 +2,29 @@
 name = "lily_injectable_derive"
 version = "0.1.0"
 edition = "2024"
-description.workspace = true
+description = "Constructor injection and service registration derives for Lilyrs dependency injection"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
-readme.workspace = true
-keywords.workspace = true
-categories.workspace = true
+readme = "README.md"
+keywords = ["lilyrs", "dependency-injection", "derive", "proc-macro", "services"]
+categories = ["rust-patterns", "development-tools"]
 rust-version.workspace = true
-exclude = ["examples/**", "tests/**"]
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [lib]
 proc-macro = true
+# Runtime-dependent rustdoc examples are tested by macro_contracts/injection.
+doctest = false
 
 [dependencies]
 proc-macro2 = "1.0"
 proc-macro-crate = "3"
 quote = "1.0"
 syn = { version = "2.0", features = ["full"] }
-[dev-dependencies]
-lily_error = { version = "0.1.0", path = "../lily_error" }
-lily_injection_registry = { version = "0.1.0", path = "../lily_injection_registry" }
-lily_injection = { path = "../lily_injection" }
-tokio = { version = "1.0", features = ["full"] }
-linkme = { workspace = true }
-trybuild = "1.0"
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = []

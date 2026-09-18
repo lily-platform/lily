@@ -1,0 +1,25 @@
+error[E0277]: the trait bound `(Payload<String>, BinaryPayload): lily_websocket::ExtractWebSocketMessageArguments<_>` is not satisfied
+  --> tests/ui/fail_controller_two_payload_consumers.rs:16:1
+   |
+16 | #[websocket_controller]
+   | ^^^^^^^^^^^^^^^^^^^^^^^ the trait `lily_websocket::ExtractWebSocketMessageArguments<_>` is not implemented for `(Payload<String>, BinaryPayload)`
+   |
+   = help: the following other types implement trait `lily_websocket::ExtractWebSocketMessageArguments<Plan>`:
+             `()` implements `lily_websocket::ExtractWebSocketMessageArguments<()>`
+             `(A, B)` implements `lily_websocket::ExtractWebSocketMessageArguments<(lily_websocket::MessagePartsMode, lily_websocket::MessagePartsMode)>`
+             `(A, B)` implements `lily_websocket::ExtractWebSocketMessageArguments<(lily_websocket::MessagePartsMode, lily_websocket::MessagePayloadMode)>`
+             `(A, B)` implements `lily_websocket::ExtractWebSocketMessageArguments<(lily_websocket::MessagePayloadMode, lily_websocket::MessagePartsMode)>`
+             `(A, B, C)` implements `lily_websocket::ExtractWebSocketMessageArguments<(lily_websocket::MessagePartsMode, lily_websocket::MessagePartsMode, lily_websocket::MessagePartsMode)>`
+             `(A, B, C)` implements `lily_websocket::ExtractWebSocketMessageArguments<(lily_websocket::MessagePartsMode, lily_websocket::MessagePartsMode, lily_websocket::MessagePayloadMode)>`
+             `(A, B, C)` implements `lily_websocket::ExtractWebSocketMessageArguments<(lily_websocket::MessagePartsMode, lily_websocket::MessagePayloadMode, lily_websocket::MessagePartsMode)>`
+             `(A, B, C)` implements `lily_websocket::ExtractWebSocketMessageArguments<(lily_websocket::MessagePayloadMode, lily_websocket::MessagePartsMode, lily_websocket::MessagePartsMode)>`
+           and $N others
+note: required by a bound in `lily_websocket::extract_message_arguments`
+  --> $LILY_WEBSOCKET/src/extractor/mod.rs
+   |
+   | pub fn extract_message_arguments<'a, Arguments, Plan>(
+   |        ------------------------- required by a bound in this function
+...
+   |     Arguments: ExtractWebSocketMessageArguments<Plan> + 'a,
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `extract_message_arguments`
+   = note: this error originates in the attribute macro `websocket_controller` (in Nightly builds, run with -Z macro-backtrace for more info)

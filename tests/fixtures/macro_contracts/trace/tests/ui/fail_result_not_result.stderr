@@ -1,0 +1,17 @@
+error[E0308]: mismatched types
+ --> tests/ui/fail_result_not_result.rs:4:1
+  |
+4 | #[lily_trace(result)]
+  | ^^^^^^^^^^^^^^^^^^^^^
+  | |
+  | expected `&Result<_, _>`, found `&u64`
+  | arguments to this method are incorrect
+  |
+  = note: expected reference `&Result<_, _>`
+             found reference `&u64`
+note: method defined here
+ --> $TRACE_RUNTIME/src/instrumentation.rs
+  |
+  |     pub fn finish_result<T, E: TraceResultError>(mut self, result: &Result<T, E>) {
+  |            ^^^^^^^^^^^^^
+  = note: this error originates in the attribute macro `lily_trace` (in Nightly builds, run with -Z macro-backtrace for more info)

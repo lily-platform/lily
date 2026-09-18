@@ -5,7 +5,7 @@ There are no default features. Enable only the components your package uses:
 
 ```toml
 [dependencies]
-lilyrs = { version = "0.1", features = ["http-api", "postgresql", "trace"] }
+lilyrs = { version = "0.1.0", features = ["http-api", "postgresql", "trace"] }
 ```
 
 Import through component modules, for example `lilyrs::http_api::AppBuilder`,
@@ -41,6 +41,9 @@ Framework users can keep imports such as `lilyrs::http_api::{Injectable, Service
 A service-only package enables `injection` and imports `lilyrs::injection` instead.
 There is no separate `di` namespace. `config` does not re-export DI.
 
+The ClickHouse component remains experimental. The connected application
+examples use PostgreSQL for persisted message events.
+
 ## Feature forwarding
 
 Child features use a component prefix, for example `consumer-asyncapi` and
@@ -74,7 +77,7 @@ expansion; they are implementation details, not application configuration.
 `<component>-factory` **instead of** the base feature to choose factory mode:
 
 ```toml
-lilyrs = { version = "0.1", features = ["http-api", "postgresql-factory", "redis-factory"] }
+lilyrs = { version = "0.1.0", features = ["http-api", "postgresql-factory", "redis-factory"] }
 ```
 
 Features are additive across the entire dependency graph. Combining a base/single
@@ -99,7 +102,7 @@ features likewise do not activate database adapters.
 ### Cancellation and the Redis WebSocket backplane
 
 ```toml
-lilyrs = { version = "0.1", features = ["cancellation", "websocket", "websocket-redis"] }
+lilyrs = { version = "0.1.0", features = ["cancellation", "websocket", "websocket-redis"] }
 ```
 
 `lilyrs::cancellation::ExecutionCancellation` exposes the existing read-only
@@ -144,3 +147,10 @@ contract only.
 The [connected examples](../../examples/README.md) use only the `lilyrs` facade
 as their direct Lily dependency. They include shared services, HTTP/WebSocket/Consumer
 hosts, real clients, Docker Compose and end-to-end verification.
+
+## Documentation and license
+
+Full documentation and canonical application examples: [lilyrs.com](https://lilyrs.com).
+Published API reference: [docs.rs/lilyrs](https://docs.rs/lilyrs).
+
+Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.

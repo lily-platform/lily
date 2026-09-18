@@ -3,8 +3,8 @@
 //! Handles parsing of #[queue(...)] attributes for queue handler methods.
 
 use syn::{
-    parse::{Parse, ParseStream},
     Ident, LitInt, LitStr, Result, Token,
+    parse::{Parse, ParseStream},
 };
 
 const MAX_QUEUE_TRANSPORT_IDENTITY_BYTES: usize = 200;
@@ -199,17 +199,21 @@ mod tests {
             DeliveryGuaranteeArg::TransactionalInbox
         );
 
-        assert!(parse2::<QueueArgs>(quote! {
-            "user.created", version = 1, content = "json",
-            delivery_guarantee = "exactly_once"
-        })
-        .is_err());
-        assert!(parse2::<QueueArgs>(quote! {
-            "user.created", version = 1, content = "json",
-            delivery_guarantee = "at_least_once",
-            delivery_guarantee = "transactional_inbox"
-        })
-        .is_err());
+        assert!(
+            parse2::<QueueArgs>(quote! {
+                "user.created", version = 1, content = "json",
+                delivery_guarantee = "exactly_once"
+            })
+            .is_err()
+        );
+        assert!(
+            parse2::<QueueArgs>(quote! {
+                "user.created", version = 1, content = "json",
+                delivery_guarantee = "at_least_once",
+                delivery_guarantee = "transactional_inbox"
+            })
+            .is_err()
+        );
     }
 
     #[test]

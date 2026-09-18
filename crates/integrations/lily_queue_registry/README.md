@@ -16,3 +16,13 @@ This is not an application extension point. Applications import
 `queue_service` and `queue` from `lily_queue`, configure queues in Lily config,
 and let `lily_consumer` perform discovery. Public Rust visibility here exists
 only because generated code is compiled in the downstream application crate.
+
+The optional `asyncapi` feature carries document metadata in this shared ABI.
+Enable it through `lily_queue` or `lily_consumer`; default builds do not enable it.
+
+## Documentation and license
+
+Full documentation and canonical application examples: [lilyrs.com](https://lilyrs.com).
+Published API reference: [docs.rs/lily_queue_registry](https://docs.rs/lily_queue_registry).
+
+Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.

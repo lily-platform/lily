@@ -2,14 +2,15 @@
 name = "lily_monitoring"
 version = "0.1.0"
 edition = "2024"
-description.workspace = true
+description = "Application-owned health, readiness, and resource observations"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme = "README.md"
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "monitoring", "health", "readiness", "shutdown"]
+categories = ["development-tools::debugging"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [dependencies]
 lily_shutdown = { version = "0.1.0", path = "../lily_shutdown" }
@@ -18,3 +19,9 @@ thiserror = { workspace = true }
 
 [dev-dependencies]
 serde_json = { workspace = true }
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = []

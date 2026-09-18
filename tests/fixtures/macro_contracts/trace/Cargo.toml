@@ -1,0 +1,15 @@
+[package]
+name = "lily-macro-contracts-trace"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.96.1"
+publish = false
+
+[dependencies]
+lily_trace_macros = { path = "../../../../crates/integrations/lily_trace_macros" }
+tracing = { version = "0.1" }
+async-trait = { version = "0.1" }
+trace_runtime = { package = "lily_trace", version = "0.1.0", path = "../../../../crates/integrations/lily_trace" }
+
+[dev-dependencies]
+trybuild = "1.0"

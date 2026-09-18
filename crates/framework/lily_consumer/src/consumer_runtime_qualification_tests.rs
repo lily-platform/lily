@@ -1,20 +1,20 @@
 use super::runtime_owner::{
-    owned_tracing_shutdown_reports_for_test, ConsumerRuntimeOwner, ConsumerRuntimeWaiterGuard,
+    ConsumerRuntimeOwner, ConsumerRuntimeWaiterGuard, owned_tracing_shutdown_reports_for_test,
 };
 use super::*;
 use lily_error::application::{
-    message_broker::{RabbitMQError, RabbitMqConsumerTaskFailureKind, RabbitMqConsumerTaskRole},
     MessageBrokerError,
+    message_broker::{RabbitMQError, RabbitMqConsumerTaskFailureKind, RabbitMqConsumerTaskRole},
 };
 use lily_queue::__private::{
     QueueRuntimeHandle, QueueServiceTestLifecycleCall as LifecycleCall, QueueServiceTestProbe,
 };
-use lily_trace::{tracing_runtime_status, TraceConfig, TracingRuntimeStatus};
+use lily_trace::{TraceConfig, TracingRuntimeStatus, tracing_runtime_status};
 use std::{
     process::Command,
     sync::{
-        atomic::{AtomicBool, Ordering},
         Mutex as StdMutex,
+        atomic::{AtomicBool, Ordering},
     },
 };
 use tempfile::NamedTempFile;
@@ -1942,10 +1942,12 @@ async fn stage6_report_waits_for_real_close_and_survives_cancelled_public_observ
         3,
         "only queue admission, drain and close were registered"
     );
-    assert!(report
-        .actions
-        .iter()
-        .all(|a| a.graceful == Outcome::Completed && a.forced == Outcome::NotAttempted));
+    assert!(
+        report
+            .actions
+            .iter()
+            .all(|a| a.graceful == Outcome::Completed && a.forced == Outcome::NotAttempted)
+    );
     assert!(!lily_injection::__private::container_shutdown_started(
         &fixture.container
     ));
@@ -2061,9 +2063,11 @@ async fn stage6_joined_cleanup_panic_remains_failed_after_successful_force() {
         .unwrap();
     assert_eq!(drain.graceful, Outcome::Panicked);
     assert_eq!(drain.forced, Outcome::Completed);
-    assert!(!serde_json::to_string(&report)
-        .unwrap()
-        .contains("test-support injected"));
+    assert!(
+        !serde_json::to_string(&report)
+            .unwrap()
+            .contains("test-support injected")
+    );
     close_caller_container(&fixture.container, &fixture.probe, 1).await;
 }
 

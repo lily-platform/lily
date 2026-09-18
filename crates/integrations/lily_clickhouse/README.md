@@ -1,6 +1,20 @@
 # lily_clickhouse
 
-Application-owned ClickHouse integration for Lily Framework.
+Experimental, application-owned ClickHouse integration for Lilyrs.
+
+```toml
+[dependencies]
+lily_clickhouse = "0.1.0"
+```
+
+The default feature is `single`. For named database cells, select
+`default-features = false, features = ["factory"]` instead; the two profiles
+cannot be combined. The facade alternatives are `lilyrs` features `clickhouse`
+or `clickhouse-factory`, both imported through `lilyrs::clickhouse`.
+
+`ClickhouseSchema`, `ClickhouseTable` and `ClickhouseRepository` are re-exported
+here; a separate `lily_clickhouse_derive` dependency is not required. User-owned
+Serde and `clickhouse::Row` derives still require their own dependencies.
 
 The crate provides:
 
@@ -56,4 +70,13 @@ runner.apply(&deployment_operation).await?;
 
 ClickHouse DDL is not transactional. The runner detects migration history/checksum divergence but does not claim automatic rollback; use a reviewed forward-fix or restore procedure.
 
-See `docs/data/clickhouse.md` for the full usage and qualification contract.
+Configure the `[clickhouse]` section in the host's Lily configuration file.
+The integration remains experimental and is not part of the connected
+HTTP/WebSocket/Consumer examples.
+
+## Documentation and license
+
+Full documentation and canonical application examples: [lilyrs.com](https://lilyrs.com).
+Published API reference: [docs.rs/lily_clickhouse](https://docs.rs/lily_clickhouse).
+
+Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.

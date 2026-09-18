@@ -1299,13 +1299,17 @@ mod tests {
     #[tokio::test]
     async fn backplane_adapter_exercises_valid_production_ingress_seeds() {
         let seeds: &[&[u8]] = &[
-            include_bytes!("../fuzz/corpus/websocket_backplane_envelope/valid-namespace-text.json"),
-            include_bytes!("../fuzz/corpus/websocket_backplane_envelope/valid-principal-text.json"),
             include_bytes!(
-                "../fuzz/corpus/websocket_backplane_envelope/valid-namespace-connections.json"
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/valid-namespace-text.json"
             ),
             include_bytes!(
-                "../fuzz/corpus/websocket_backplane_envelope/valid-rooms-binary-trace.json"
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/valid-principal-text.json"
+            ),
+            include_bytes!(
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/valid-namespace-connections.json"
+            ),
+            include_bytes!(
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/valid-rooms-binary-trace.json"
             ),
         ];
 
@@ -1320,38 +1324,56 @@ mod tests {
     #[tokio::test]
     async fn backplane_adapter_observes_one_bounded_rejection_for_each_invalid_seed() {
         let seeds: &[&[u8]] = &[
-            include_bytes!("../fuzz/corpus/websocket_backplane_envelope/duplicate-exclusion.json"),
-            include_bytes!("../fuzz/corpus/websocket_backplane_envelope/duplicate-room.json"),
             include_bytes!(
-                "../fuzz/corpus/websocket_backplane_envelope/invalid-namespace-connections.json"
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/duplicate-exclusion.json"
             ),
             include_bytes!(
-                "../fuzz/corpus/websocket_backplane_envelope/invalid-embedded-message.json"
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/duplicate-room.json"
             ),
             include_bytes!(
-                "../fuzz/corpus/websocket_backplane_envelope/invalid-principal-empty.json"
-            ),
-            include_bytes!("../fuzz/corpus/websocket_backplane_envelope/invalid-traceparent.json"),
-            include_bytes!("../fuzz/corpus/websocket_backplane_envelope/invalid-wire-format.json"),
-            include_bytes!("../fuzz/corpus/websocket_backplane_envelope/malformed-json.seed"),
-            include_bytes!("../fuzz/corpus/websocket_backplane_envelope/nil-identifiers.json"),
-            include_bytes!("../fuzz/corpus/websocket_backplane_envelope/unknown-field.json"),
-            include_bytes!(
-                "../fuzz/corpus/websocket_backplane_envelope/unsupported-version-v3.json"
-            ),
-            include_bytes!("../fuzz/corpus/websocket_backplane_envelope/invalid-unscoped-all.json"),
-            include_bytes!(
-                "../fuzz/corpus/websocket_backplane_envelope/invalid-unscoped-connections.json"
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/invalid-namespace-connections.json"
             ),
             include_bytes!(
-                "../fuzz/corpus/websocket_backplane_envelope/invalid-unknown-target-field.json"
-            ),
-            include_bytes!("../fuzz/corpus/websocket_backplane_envelope/unsupported-version.json"),
-            include_bytes!(
-                "../fuzz/corpus/websocket_backplane_envelope/unsupported-version-v1.json"
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/invalid-embedded-message.json"
             ),
             include_bytes!(
-                "../fuzz/corpus/websocket_backplane_envelope/unsupported-version-v2.json"
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/invalid-principal-empty.json"
+            ),
+            include_bytes!(
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/invalid-traceparent.json"
+            ),
+            include_bytes!(
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/invalid-wire-format.json"
+            ),
+            include_bytes!(
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/malformed-json.seed"
+            ),
+            include_bytes!(
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/nil-identifiers.json"
+            ),
+            include_bytes!(
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/unknown-field.json"
+            ),
+            include_bytes!(
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/unsupported-version-v3.json"
+            ),
+            include_bytes!(
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/invalid-unscoped-all.json"
+            ),
+            include_bytes!(
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/invalid-unscoped-connections.json"
+            ),
+            include_bytes!(
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/invalid-unknown-target-field.json"
+            ),
+            include_bytes!(
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/unsupported-version.json"
+            ),
+            include_bytes!(
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/unsupported-version-v1.json"
+            ),
+            include_bytes!(
+                "../tests/fixtures/fuzz_corpus/websocket_backplane_envelope/unsupported-version-v2.json"
             ),
         ];
 

@@ -211,9 +211,9 @@ pub use asyncapi::{ConsumerAsyncApiService, ConsumerDocument};
 pub use consumer::{Consumer, ConsumerBuilder, ManagedConsumer};
 #[cfg(feature = "asyncapi")]
 pub use lily_asyncapi::{
-    schemars, AsyncApiApiKeyLocation, AsyncApiBuildError, AsyncApiConfig,
-    AsyncApiHttpApiKeyLocation, AsyncApiOAuthFlow, AsyncApiOAuthFlows, AsyncApiSecurityScheme,
-    AsyncApiServer, AsyncApiServerProtocol, AsyncApiServiceError, AsyncApiSnapshot, AsyncApiTag,
+    AsyncApiApiKeyLocation, AsyncApiBuildError, AsyncApiConfig, AsyncApiHttpApiKeyLocation,
+    AsyncApiOAuthFlow, AsyncApiOAuthFlows, AsyncApiSecurityScheme, AsyncApiServer,
+    AsyncApiServerProtocol, AsyncApiServiceError, AsyncApiSnapshot, AsyncApiTag, schemars,
 };
 pub use lily_error::application::consumer::{
     ConsumerAsyncApiFailureStage, ConsumerConfigurationFailure, ConsumerError,
@@ -224,10 +224,9 @@ pub use lily_error::application::consumer::{
 pub use lily_injection::async_trait;
 pub use lily_injection::{
     ApplicationContainer, ApplicationContainerBuilder, ApplicationScope, ApplicationScopeFactory,
-    ContainerShutdownReport, Extensions, Injectable, InjectionError, ProcessContext,
-    ServiceLifetime, ServiceScope, ServiceTrait, ShutdownOutcome, ShutdownOutcomeStatus,
-    ShutdownRemainingWork, BUILD_ROLLBACK_TIMEOUT_ENV, DEFAULT_SHUTDOWN_TIMEOUT,
-    MAX_BUILD_ROLLBACK_TIMEOUT_SECS,
+    BUILD_ROLLBACK_TIMEOUT_ENV, ContainerShutdownReport, DEFAULT_SHUTDOWN_TIMEOUT, Extensions,
+    Injectable, InjectionError, MAX_BUILD_ROLLBACK_TIMEOUT_SECS, ProcessContext, ServiceLifetime,
+    ServiceScope, ServiceTrait, ShutdownOutcome, ShutdownOutcomeStatus, ShutdownRemainingWork,
 };
 pub use operational::{
     ConsumerAdmissionState, ConsumerBrokerState, ConsumerLifecycleState,

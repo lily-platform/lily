@@ -2,14 +2,15 @@
 name = "lily_websocket_redis"
 version = "0.1.0"
 edition = "2024"
-description.workspace = true
+description = "Redis Pub/Sub backplane adapter for Lilyrs WebSocket applications"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme = "README.md"
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "websocket", "redis", "pubsub", "backplane"]
+categories = ["web-programming::websocket", "asynchronous"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [dependencies]
 async-trait = { workspace = true }
@@ -31,3 +32,9 @@ serde_json = { workspace = true }
 tempfile = { workspace = true }
 tokio-tungstenite = "0.23.1"
 uuid = { version = "1.3", features = ["v4", "serde"] }
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = []

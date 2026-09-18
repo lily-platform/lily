@@ -2,14 +2,15 @@
 name = "lily_trace_macros"
 version = "0.1.0"
 edition = "2024"
-description.workspace = true
+description = "Attribute macros for Lilyrs method tracing and result classification"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
-readme.workspace = true
-keywords.workspace = true
-categories.workspace = true
+readme = "README.md"
+keywords = ["lilyrs", "tracing", "instrumentation", "proc-macro", "async"]
+categories = ["development-tools::debugging", "development-tools"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [lib]
 proc-macro = true
@@ -20,8 +21,8 @@ syn = { version = "2.0", features = ["full", "extra-traits", "visit-mut"] }
 quote = "1.0"
 proc-macro2 = "1.0"
 
-[dev-dependencies]
-trybuild = "1.0"
-tracing = { workspace = true }
-async-trait = { workspace = true }
-trace_runtime = { package = "lily_trace", version = "0.1.0", path = "../lily_trace" }
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = []

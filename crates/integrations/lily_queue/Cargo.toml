@@ -2,14 +2,15 @@
 name = "lily_queue"
 version = "0.1.0"
 edition = "2024"
-description.workspace = true
+description = "RabbitMQ consumer runtime with typed handlers and optional transactional inbox support"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme = "README.md"
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "rabbitmq", "amqp", "messaging", "consumer"]
+categories = ["network-programming", "asynchronous"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [features]
 default = []
@@ -95,3 +96,9 @@ once_cell = { workspace = true } # statics, cert cache
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["test-util"] }
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = ["asyncapi", "transactional-inbox-mongodb-factory", "transactional-inbox-postgresql-factory"]

@@ -2,14 +2,15 @@
 name = "lily_cancellation"
 version = "0.1.0"
 edition = "2024"
-description = "Shared read-only execution cancellation for Lily framework components"
+description = "Shared read-only execution cancellation for Lilyrs framework components"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme = "README.md"
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "cancellation", "async", "tokio", "concurrency"]
+categories = ["asynchronous", "concurrency"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [dependencies]
 tokio = { version = "1", default-features = false, features = ["sync"] }
@@ -17,3 +18,9 @@ tokio = { version = "1", default-features = false, features = ["sync"] }
 [dev-dependencies]
 futures = { workspace = true }
 tokio = { version = "1", features = ["macros", "rt"] }
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = []

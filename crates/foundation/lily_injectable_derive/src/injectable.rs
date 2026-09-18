@@ -6,9 +6,9 @@
 use proc_macro::TokenStream;
 use proc_macro2::Span;
 use quote::quote;
-use syn::{parse_macro_input, Attribute, DeriveInput, Ident};
+use syn::{Attribute, DeriveInput, Ident, parse_macro_input};
 
-use crate::service_args::{parse_lifetime, ServiceArgs};
+use crate::service_args::{ServiceArgs, parse_lifetime};
 use crate::utils::{
     extract_injectable_fields_from_data, generate_concrete_projection,
     generate_dependencies_vector, generate_dependency_resolution, generate_disposer_function,

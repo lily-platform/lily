@@ -334,8 +334,10 @@ mod tests {
         .after_runtime_join(Some("INJECTION_SERVICE_DISPOSAL_FAILED"));
         assert_eq!(report.completion, ConsumerShutdownCompletion::Failed);
         assert!(!report.is_success());
-        assert!(!serde_json::to_string(&report)
-            .unwrap()
-            .contains("private disposal data"));
+        assert!(
+            !serde_json::to_string(&report)
+                .unwrap()
+                .contains("private disposal data")
+        );
     }
 }

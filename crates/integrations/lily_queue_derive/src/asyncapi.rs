@@ -484,7 +484,9 @@ fn validate_description_literal(name: &str, literal: &LitStr, maximum: usize) ->
     {
         return Err(syn::Error::new_spanned(
             literal,
-            format!("{name} must contain 1..={maximum} trimmed UTF-8 bytes and no forbidden control characters"),
+            format!(
+                "{name} must contain 1..={maximum} trimmed UTF-8 bytes and no forbidden control characters"
+            ),
         ));
     }
     Ok(())
@@ -602,21 +604,25 @@ mod tests {
     #[cfg(feature = "asyncapi")]
     #[test]
     fn payload_authorities_are_mutually_exclusive_and_bounded() {
-        assert!(parse(
-            &parse_quote!(#[asyncapi(
-                documented,
-                schema = Event,
-                opaque,
-                content_type = "application/json"
-            )]),
-            Scope::Handler,
-        )
-        .is_err());
-        assert!(parse(
-            &parse_quote!(#[asyncapi(documented, opaque)]),
-            Scope::Handler,
-        )
-        .is_err());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(
+                    documented,
+                    schema = Event,
+                    opaque,
+                    content_type = "application/json"
+                )]),
+                Scope::Handler,
+            )
+            .is_err()
+        );
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(documented, opaque)]),
+                Scope::Handler,
+            )
+            .is_err()
+        );
     }
 
     #[cfg(feature = "asyncapi")]
@@ -632,17 +638,21 @@ mod tests {
         );
 
         assert_eq!(exact.value().len(), MAX_CONTENT_TYPE_BYTES);
-        assert!(parse(
-            &parse_quote!(#[asyncapi(documented, opaque, content_type = #exact)]),
-            Scope::Handler,
-        )
-        .is_ok());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(documented, opaque, content_type = #exact)]),
+                Scope::Handler,
+            )
+            .is_ok()
+        );
         assert_eq!(plus_one.value().len(), MAX_CONTENT_TYPE_BYTES + 1);
-        assert!(parse(
-            &parse_quote!(#[asyncapi(documented, opaque, content_type = #plus_one)]),
-            Scope::Handler,
-        )
-        .is_err());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(documented, opaque, content_type = #plus_one)]),
+                Scope::Handler,
+            )
+            .is_err()
+        );
     }
 
     #[cfg(feature = "asyncapi")]
@@ -651,43 +661,55 @@ mod tests {
         let literal = |length| LitStr::new(&"a".repeat(length), proc_macro2::Span::call_site());
 
         let summary = literal(MAX_SUMMARY_BYTES);
-        assert!(parse(
-            &parse_quote!(#[asyncapi(summary = #summary)]),
-            Scope::Handler
-        )
-        .is_ok());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(summary = #summary)]),
+                Scope::Handler
+            )
+            .is_ok()
+        );
         let summary = literal(MAX_SUMMARY_BYTES + 1);
-        assert!(parse(
-            &parse_quote!(#[asyncapi(summary = #summary)]),
-            Scope::Handler
-        )
-        .is_err());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(summary = #summary)]),
+                Scope::Handler
+            )
+            .is_err()
+        );
 
         let description = literal(MAX_DESCRIPTION_BYTES);
-        assert!(parse(
-            &parse_quote!(#[asyncapi(description = #description)]),
-            Scope::Handler,
-        )
-        .is_ok());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(description = #description)]),
+                Scope::Handler,
+            )
+            .is_ok()
+        );
         let description = literal(MAX_DESCRIPTION_BYTES + 1);
-        assert!(parse(
-            &parse_quote!(#[asyncapi(description = #description)]),
-            Scope::Handler,
-        )
-        .is_err());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(description = #description)]),
+                Scope::Handler,
+            )
+            .is_err()
+        );
 
         let operation_id = literal(MAX_OPERATION_ID_BYTES);
-        assert!(parse(
-            &parse_quote!(#[asyncapi(operation_id = #operation_id)]),
-            Scope::Handler,
-        )
-        .is_ok());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(operation_id = #operation_id)]),
+                Scope::Handler,
+            )
+            .is_ok()
+        );
         let operation_id = literal(MAX_OPERATION_ID_BYTES + 1);
-        assert!(parse(
-            &parse_quote!(#[asyncapi(operation_id = #operation_id)]),
-            Scope::Handler,
-        )
-        .is_err());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(operation_id = #operation_id)]),
+                Scope::Handler,
+            )
+            .is_err()
+        );
 
         let tag = literal(MAX_TAG_OR_SECURITY_BYTES);
         assert!(parse(&parse_quote!(#[asyncapi(tag = #tag)]), Scope::Handler).is_ok());
@@ -695,17 +717,21 @@ mod tests {
         assert!(parse(&parse_quote!(#[asyncapi(tag = #tag)]), Scope::Handler).is_err());
 
         let security = literal(MAX_TAG_OR_SECURITY_BYTES);
-        assert!(parse(
-            &parse_quote!(#[asyncapi(security = #security)]),
-            Scope::Handler
-        )
-        .is_ok());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(security = #security)]),
+                Scope::Handler
+            )
+            .is_ok()
+        );
         let security = literal(MAX_TAG_OR_SECURITY_BYTES + 1);
-        assert!(parse(
-            &parse_quote!(#[asyncapi(security = #security)]),
-            Scope::Handler,
-        )
-        .is_err());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(security = #security)]),
+                Scope::Handler,
+            )
+            .is_err()
+        );
     }
 
     #[cfg(feature = "asyncapi")]
@@ -717,46 +743,56 @@ mod tests {
         assert!(parse(&parse_quote!(#[asyncapi(#(tag = #tags),*)]), Scope::Handler,).is_ok());
         let mut too_many_tags = tags;
         too_many_tags.push(LitStr::new("tag-overflow", proc_macro2::Span::call_site()));
-        assert!(parse(
-            &parse_quote!(#[asyncapi(#(tag = #too_many_tags),*)]),
-            Scope::Handler,
-        )
-        .is_err());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(#(tag = #too_many_tags),*)]),
+                Scope::Handler,
+            )
+            .is_err()
+        );
 
         let security = (0..MAX_SECURITY_PER_LEVEL)
             .map(|index| LitStr::new(&format!("security-{index}"), proc_macro2::Span::call_site()))
             .collect::<Vec<_>>();
-        assert!(parse(
-            &parse_quote!(#[asyncapi(#(security = #security),*)]),
-            Scope::Handler,
-        )
-        .is_ok());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(#(security = #security),*)]),
+                Scope::Handler,
+            )
+            .is_ok()
+        );
         let mut too_many_security = security;
         too_many_security.push(LitStr::new(
             "security-overflow",
             proc_macro2::Span::call_site(),
         ));
-        assert!(parse(
-            &parse_quote!(#[asyncapi(#(security = #too_many_security),*)]),
-            Scope::Handler,
-        )
-        .is_err());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(#(security = #too_many_security),*)]),
+                Scope::Handler,
+            )
+            .is_err()
+        );
 
         let examples = (0..MAX_EXAMPLES)
             .map(|index| LitStr::new(&index.to_string(), proc_macro2::Span::call_site()))
             .collect::<Vec<_>>();
-        assert!(parse(
-            &parse_quote!(#[asyncapi(#(example = #examples),*)]),
-            Scope::Handler,
-        )
-        .is_ok());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(#(example = #examples),*)]),
+                Scope::Handler,
+            )
+            .is_ok()
+        );
         let mut too_many_examples = examples;
         too_many_examples.push(LitStr::new("9", proc_macro2::Span::call_site()));
-        assert!(parse(
-            &parse_quote!(#[asyncapi(#(example = #too_many_examples),*)]),
-            Scope::Handler,
-        )
-        .is_err());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(#(example = #too_many_examples),*)]),
+                Scope::Handler,
+            )
+            .is_err()
+        );
     }
 
     #[cfg(feature = "asyncapi")]
@@ -768,39 +804,49 @@ mod tests {
 
         let plus_one_json = format!("\"{}\"", "a".repeat(MAX_EXAMPLE_BYTES - 1));
         let plus_one = LitStr::new(&plus_one_json, proc_macro2::Span::call_site());
-        assert!(parse(
-            &parse_quote!(#[asyncapi(example = #plus_one)]),
-            Scope::Handler
-        )
-        .is_err());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(example = #plus_one)]),
+                Scope::Handler
+            )
+            .is_err()
+        );
 
         let exact_total = (0..4).map(|_| exact.clone()).collect::<Vec<_>>();
-        assert!(parse(
-            &parse_quote!(#[asyncapi(#(example = #exact_total),*)]),
-            Scope::Handler,
-        )
-        .is_ok());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(#(example = #exact_total),*)]),
+                Scope::Handler,
+            )
+            .is_ok()
+        );
         let one_byte = LitStr::new("0", proc_macro2::Span::call_site());
-        assert!(parse(
-            &parse_quote!(#[asyncapi(#(example = #exact_total),*, example = #one_byte)]),
-            Scope::Handler,
-        )
-        .is_err());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(#(example = #exact_total),*, example = #one_byte)]),
+                Scope::Handler,
+            )
+            .is_err()
+        );
     }
 
     #[cfg(feature = "asyncapi")]
     #[test]
     fn duplicate_same_level_semantic_sets_are_rejected() {
-        assert!(parse(
-            &parse_quote!(#[asyncapi(tag = "orders", tag = "orders")]),
-            Scope::Handler,
-        )
-        .is_err());
-        assert!(parse(
-            &parse_quote!(#[asyncapi(security = "oauth", security = "oauth")]),
-            Scope::Handler,
-        )
-        .is_err());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(tag = "orders", tag = "orders")]),
+                Scope::Handler,
+            )
+            .is_err()
+        );
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(security = "oauth", security = "oauth")]),
+                Scope::Handler,
+            )
+            .is_err()
+        );
     }
 
     #[cfg(feature = "asyncapi")]
@@ -816,10 +862,12 @@ mod tests {
             metadata.summary.as_ref().map(LitStr::value).as_deref(),
             Some("Consumes an order event")
         );
-        assert!(parse(
-            &parse_quote!(#[asyncapi(summary = "First", summary = "Second")]),
-            Scope::Handler,
-        )
-        .is_err());
+        assert!(
+            parse(
+                &parse_quote!(#[asyncapi(summary = "First", summary = "Second")]),
+                Scope::Handler,
+            )
+            .is_err()
+        );
     }
 }

@@ -1,8 +1,8 @@
 //! Dependency barriers and retained receipts shared by normal and fallback shutdown.
 
 use futures_util::{
-    future::{BoxFuture, Shared},
     FutureExt,
+    future::{BoxFuture, Shared},
 };
 use lily_error::{
     application::consumer::{ConsumerError, ConsumerSignalFailureStage},
@@ -12,8 +12,8 @@ use lily_injection::{ApplicationContainer, ContainerShutdownReport};
 use lily_queue::__private::{QueueRuntimeHandle, QueueShutdownDeadlines};
 use lily_shutdown::{FrameworkShutdownComponent, ShutdownError, SignalMonitor};
 use lily_trace::{
-    lifecycle::{TracingShutdownEvidence, TracingShutdownHandle},
     TracingRuntimeOwner,
+    lifecycle::{TracingShutdownEvidence, TracingShutdownHandle},
 };
 use std::{
     sync::{Arc, Mutex, OnceLock},
@@ -227,7 +227,7 @@ impl ConsumerDependencies {
                 _ => {
                     return Err(failure(
                         "Consumer signal monitor termination unconfirmed or failed",
-                    ))
+                    ));
                 }
             }
         }
@@ -446,8 +446,10 @@ mod tests {
             assert!(
                 String::from_utf8_lossy(&output.stdout).contains("STAGE5_TRACE_RECEIPTS_CONFIRMED")
             );
-            assert!(!String::from_utf8_lossy(&output.stderr)
-                .contains("tracing runtime owner dropped without awaited shutdown"));
+            assert!(
+                !String::from_utf8_lossy(&output.stderr)
+                    .contains("tracing runtime owner dropped without awaited shutdown")
+            );
             return;
         }
         tokio::runtime::Runtime::new().unwrap().block_on(async {
@@ -493,10 +495,12 @@ mod tests {
                 provider.clone(),
                 Duration::from_secs(3),
             );
-            assert!(coordinator
-                .execute_report(lily_shutdown::ShutdownSignal::Manual)
-                .await
-                .is_terminal_complete());
+            assert!(
+                coordinator
+                    .execute_report(lily_shutdown::ShutdownSignal::Manual)
+                    .await
+                    .is_terminal_complete()
+            );
             assert!(provider.close_reconciled());
             owner.close_trace().await.unwrap();
             assert!(owner.reconcile().await);

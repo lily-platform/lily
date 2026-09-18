@@ -81,3 +81,14 @@ For transactional handlers, the generated
 Moving or renaming the module, service or method starts a new deduplication
 namespace. Treat such a refactor, and reducing the configured inbox retention
 horizon, as a data-compatibility change.
+
+Optional AsyncAPI metadata is enabled through `lily_queue`'s `asyncapi` feature.
+That facade keeps macro and registry features consistent; applications should
+not select a separate implementation-crate feature set.
+
+## Documentation and license
+
+Full documentation and canonical application examples: [lilyrs.com](https://lilyrs.com).
+Published API reference: [docs.rs/lily_queue_derive](https://docs.rs/lily_queue_derive).
+
+Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.
