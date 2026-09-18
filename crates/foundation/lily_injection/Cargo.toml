@@ -10,7 +10,7 @@ readme = "README.md"
 keywords = ["lilyrs", "dependency-injection", "scoped", "singleton", "async"]
 categories = ["rust-patterns", "asynchronous"]
 rust-version.workspace = true
-exclude = ["examples/**", "tests/**"]
+exclude = ["examples/**", "tests/**", "/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [dependencies]
 async-trait = { workspace = true }
@@ -34,3 +34,9 @@ tracing-opentelemetry = "0.31"
 linkme = { workspace = true }
 tokio = { workspace = true, features = ["test-util"] }
 tracing-subscriber = { workspace = true }
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = []

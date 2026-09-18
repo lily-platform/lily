@@ -42,7 +42,7 @@ artifact'ları da yalnız aynı geçici dizine yazılır:
 ```bash
 cd crates/framework/lily_websocket/fuzz
 websocket_fuzz_tmp="$(mktemp -d)"
-cp -R corpus "$websocket_fuzz_tmp/corpus"
+cp -R ../tests/fixtures/fuzz_corpus "$websocket_fuzz_tmp/corpus"
 mkdir -p "$websocket_fuzz_tmp/artifacts/websocket_envelope"
 mkdir -p "$websocket_fuzz_tmp/artifacts/websocket_handshake_policy"
 mkdir -p "$websocket_fuzz_tmp/artifacts/websocket_message_chain"
@@ -55,6 +55,10 @@ cargo +nightly-2026-08-15 fuzz run websocket_lifecycle "$websocket_fuzz_tmp/corp
 cargo +nightly-2026-08-15 fuzz run websocket_backplane_envelope "$websocket_fuzz_tmp/corpus/websocket_backplane_envelope" -- -runs=10000 -max_len=524288 -timeout=2 -artifact_prefix="$websocket_fuzz_tmp/artifacts/websocket_backplane_envelope/"
 printf '%s\n' "Qualification output: $websocket_fuzz_tmp"
 ```
+
+Tracked corpus `../tests/fixtures/fuzz_corpus` altında tutulur. Bu tek kaynak
+hem paketlenen regression testleri hem de fuzz koşuları tarafından kullanılır.
+Cargo alt workspace olan `fuzz/` dizinini yayın arşivine dahil etmez.
 
 Tracked corpus küçük, deterministik ve sentetiktir. V2 backplane corpus'u
 namespace-scoped principal target'ın valid ve fail-closed örneklerini de taşır.

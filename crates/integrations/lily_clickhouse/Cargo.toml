@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["lilyrs", "clickhouse", "database", "async", "migrations"]
 categories = ["database", "asynchronous"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [features]
 default = ["single"]
@@ -44,3 +45,9 @@ sha2 = "0.10"
 
 [dev-dependencies]
 trybuild = "1.0"
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = ["factory"]

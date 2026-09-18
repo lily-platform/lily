@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["lilyrs", "mongodb", "repository", "crud", "database"]
 categories = ["database", "rust-patterns"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [dependencies]
 async-trait = "0.1"
@@ -21,3 +22,9 @@ lily_error = { version = "0.1.0", path = "../../foundation/lily_error", features
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["test-util"] }
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = []

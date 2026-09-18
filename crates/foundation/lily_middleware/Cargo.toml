@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["lilyrs", "http", "middleware", "cors", "csrf"]
 categories = ["web-programming::http-server"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [dependencies]
 async-trait = { workspace = true }
@@ -33,3 +34,9 @@ zeroize = { workspace = true }
 
 [dev-dependencies]
 lily_core = { version = "0.1.0", path = "../lily_core" }
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = []

@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["lilyrs", "websocket", "realtime", "framework", "async"]
 categories = ["web-programming::websocket", "asynchronous"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [features]
 default = []
@@ -59,3 +60,9 @@ rcgen = { workspace = true }
 rustls = { workspace = true }
 tokio = { workspace = true, features = ["test-util"] }
 lily_error = { version = "0.1.0", path = "../../foundation/lily_error" }
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = []

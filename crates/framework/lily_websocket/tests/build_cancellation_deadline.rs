@@ -11,7 +11,7 @@ use lily_websocket::{ServerConfig, WsAppBuilder};
 use opentelemetry::trace::TraceContextExt;
 use tokio::sync::Semaphore;
 
-#[path = "../../../integrations/lily_trace/tests/support/collector.rs"]
+#[path = "support/collector.rs"]
 mod collector;
 
 static EAGER_INITIALIZER_ENTERED: Semaphore = Semaphore::const_new(0);

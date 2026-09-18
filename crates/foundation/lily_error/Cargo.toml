@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["lilyrs", "error", "error-handling", "framework", "localization"]
 categories = ["rust-patterns"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [features]
 default = []
@@ -24,3 +25,9 @@ tokio = { workspace = true, features = ["fs"] }
 [dev-dependencies]
 tempfile = { workspace = true }
 proptest = { workspace = true }
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = ["mongodb-driver"]

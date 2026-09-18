@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["lilyrs", "graceful-shutdown", "cancellation", "async", "lifecycle"]
 categories = ["asynchronous", "concurrency"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [dependencies]
 tokio = { workspace = true }
@@ -20,3 +21,9 @@ tokio-util = { workspace = true }
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["test-util"] }
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = []

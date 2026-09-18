@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["lilyrs", "websocket", "client", "async", "tls"]
 categories = ["web-programming::websocket", "asynchronous"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [dependencies]
 # Async runtime
@@ -80,5 +81,7 @@ name = "factory_example"
 required-features = ["factory"]
 
 [package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
 no-default-features = true
-features = ["single"]
+features = ["factory"]

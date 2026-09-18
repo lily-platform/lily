@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["lilyrs", "mongodb", "derive", "proc-macro", "crud"]
 categories = ["database", "development-tools"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [lib]
 proc-macro = true
@@ -24,3 +25,9 @@ syn = { version = "2.0", features = ["full"] }
 quote = "1.0"
 proc-macro2 = "1.0"
 proc-macro-crate = "3"
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = ["factory"]

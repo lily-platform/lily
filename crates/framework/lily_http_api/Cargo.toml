@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["lilyrs", "http", "web", "framework", "openapi"]
 categories = ["web-programming::http-server", "asynchronous"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [dependencies]
 lily_background_service.workspace = true
@@ -67,3 +68,9 @@ rcgen = { workspace = true }
 tempfile = { workspace = true }
 trybuild = "1.0"
 uuid = { version = "1.23.5", features = ["serde"] }
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = []

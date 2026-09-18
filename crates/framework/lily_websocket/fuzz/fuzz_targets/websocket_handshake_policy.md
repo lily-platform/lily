@@ -12,7 +12,7 @@
 
 ```bash
 websocket_fuzz_tmp="$(mktemp -d)"
-cp -R corpus/websocket_handshake_policy "$websocket_fuzz_tmp/corpus"
+cp -R ../tests/fixtures/fuzz_corpus/websocket_handshake_policy "$websocket_fuzz_tmp/corpus"
 mkdir -p "$websocket_fuzz_tmp/artifacts"
 cargo +nightly-2026-08-15 fuzz run websocket_handshake_policy "$websocket_fuzz_tmp/corpus" -- \
   -runs=10000 -max_len=65536 -timeout=2 \

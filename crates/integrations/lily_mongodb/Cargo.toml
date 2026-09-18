@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["lilyrs", "mongodb", "database", "async", "migrations"]
 categories = ["database", "asynchronous"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [features]
 default = ["single"]
@@ -51,3 +52,9 @@ lily_mongo_repository = { version = "0.1.0", path = "../lily_mongo_repository" }
 [dev-dependencies]
 tokio = { workspace = true, features = ["test-util"] }
 trybuild = "1.0"
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = ["factory"]

@@ -38,7 +38,7 @@ Build images/cache are retained for subsequent runs.
 | `downstream` | Existing external-consumer and derive ABI fixtures, database modes, standalone DI execution, individually compiled golden HTTP/WS/Consumer applications |
 | `workspace` | Every root workspace member's unit, integration, UI and documentation tests, selected individually with its own defaults |
 | `examples` | Example unit tests, per-package checks, independent client workspace, direct Lily dependency boundary and example-only formatting checks |
-| `docs` | Workspace API documentation and facade docs with the supported combined single and factory profiles |
+| `docs` | Package contents and each crate's docs.rs profile, plus facade docs with the supported combined single and factory profiles |
 | `--live` | Real HTTP/WS clients, queue confirmation/ACK, duplicate delivery, PostgreSQL records, Redis TTL, MongoDB CRUD, lifecycle/duration/trace propagation, rejection classification and graceful shutdown |
 
 Select stages without repeating the complete run:
@@ -59,6 +59,10 @@ exclusive. Standalone packages and the two combined modes cover those branches
 without accidentally relying on Cargo workspace feature unification. Likewise,
 the client example has a separate workspace so its optional client DI
 registration cannot become a server startup requirement.
+
+The `docs` stage runs the [release package checks](RELEASE_PACKAGES.md) with
+`--docs`. Each package is documented independently using its manifest-selected
+features; no workspace-wide default-feature union is used.
 
 The `macros` stage runs the [macro contract fixtures](../fixtures/macro_contracts/README.md).
 The five runtime-dependent suites live in a separate, unpublished workspace so

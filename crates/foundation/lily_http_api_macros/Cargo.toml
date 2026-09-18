@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["lilyrs", "http", "controller", "openapi", "proc-macro"]
 categories = ["web-programming::http-server", "development-tools"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [lib]
 proc-macro = true
@@ -19,3 +20,9 @@ proc-macro2 = { workspace = true }
 quote = { workspace = true }
 syn.workspace = true
 proc-macro-crate = "3"
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = []

@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["lilyrs", "tracing", "opentelemetry", "telemetry", "otlp"]
 categories = ["development-tools::debugging", "development-tools::profiling"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [dependencies]
 pin-project-lite = { workspace = true }
@@ -51,3 +52,9 @@ lily_monitoring = { version = "0.1.0", path = "../../foundation/lily_monitoring"
 [features]
 default = ["console"]
 console = []
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = ["console"]

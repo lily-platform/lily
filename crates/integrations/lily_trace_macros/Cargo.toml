@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["lilyrs", "tracing", "instrumentation", "proc-macro", "async"]
 categories = ["development-tools::debugging", "development-tools"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [lib]
 proc-macro = true
@@ -19,3 +20,9 @@ proc-macro-crate = "3"
 syn = { version = "2.0", features = ["full", "extra-traits", "visit-mut"] }
 quote = "1.0"
 proc-macro2 = "1.0"
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = []

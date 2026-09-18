@@ -1,5 +1,5 @@
 //! Explicit qualification against the pinned live Collector, plus JSONL IDs.
-#[path = "../../../integrations/lily_trace/tests/support/collector.rs"]
+#[path = "support/collector.rs"]
 mod collector;
 #[path = "support/telemetry_fixture.rs"]
 mod fixture;

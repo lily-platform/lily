@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["lilyrs", "framework", "backend", "async", "web"]
 categories = ["web-programming", "asynchronous"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [features]
 # No component is enabled implicitly. Base component features preserve defaults.
@@ -97,5 +98,27 @@ lily_cancellation = { version = "0.1.0", path = "../foundation/lily_cancellation
 lily_websocket_redis = { version = "0.1.0", path = "../integrations/lily_websocket_redis", optional = true, default-features = false }
 
 [package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
 no-default-features = true
-features = ["consumer-asyncapi", "http-api", "websocket", "clickhouse", "mongodb", "postgresql", "queue-client", "redis", "trace", "config", "websocket-client", "injection", "http-client", "error", "background-service", "cancellation", "websocket-redis"]
+features = [
+    "consumer-asyncapi",
+    "consumer-transactional-inbox-mongodb-factory",
+    "consumer-transactional-inbox-postgresql-factory",
+    "http-api",
+    "websocket",
+    "websocket-redis",
+    "clickhouse-factory",
+    "mongodb-factory",
+    "postgresql-factory",
+    "queue-client-factory",
+    "redis-factory",
+    "trace",
+    "config",
+    "websocket-client-factory",
+    "injection",
+    "http-client",
+    "error-mongodb-driver",
+    "background-service",
+    "cancellation",
+]

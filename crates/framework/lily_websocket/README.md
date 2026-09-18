@@ -1115,7 +1115,7 @@ cargo test -p lily_websocket --test telemetry_collector -- --ignored --nocapture
 ```
 
 The second command requires Docker and the preinstalled image specified in
-`lily_trace/tests/support/collector.rs`. It owns and removes its container.
+`tests/support/collector.rs`. It owns and removes its container.
 `build_cancellation_deadline` additionally checks actual exporter/provider joins
 after a cancelled eager initializer and a disposer that reaches the rollback
 deadline. `TracingRuntimeStatus::Shutdown` alone is not completion evidence.

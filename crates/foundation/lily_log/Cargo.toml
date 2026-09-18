@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["lilyrs", "opentelemetry", "clickhouse", "logs", "metrics"]
 categories = ["database", "development-tools::debugging"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [dependencies]
 # Core dependencies
@@ -34,3 +35,9 @@ lily_trace = { version = "0.1.0", path = "../../integrations/lily_trace" }
 
 # Utilities
 linkme = { workspace = true }
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = []

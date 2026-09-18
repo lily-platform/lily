@@ -176,7 +176,7 @@ class Qualification:
         self.run("client-format", [*CARGO, "fmt", "--manifest-path", client, "--check"])
 
     def docs(self):
-        self.cargo("workspace-docs", "doc", "--workspace", "--no-deps")
+        self.run("release-package-docs", [sys.executable, str(ROOT / "tests/qualification/release_packages.py"), "--docs"])
         # Root-workspace defaults do not enable any public umbrella component.
         for mode in ("single", "factory"):
             features = ["consumer-asyncapi", "http-api", "websocket", "trace", "config", "injection",

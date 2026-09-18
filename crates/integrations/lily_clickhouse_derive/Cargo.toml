@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["lilyrs", "clickhouse", "derive", "proc-macro", "database"]
 categories = ["database", "development-tools"]
 rust-version.workspace = true
+exclude = ["/.vscode/**", "/wip/**", "/fuzz/**"]
 
 [lib]
 proc-macro = true
@@ -27,3 +28,9 @@ proc-macro2 = { workspace = true }
 
 [dev-dependencies]
 trybuild = "1.0"
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+no-default-features = true
+features = ["factory"]
