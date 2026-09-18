@@ -4,6 +4,11 @@
 supervised task owns the socket, application writes use a bounded queue, and a
 successful send means the socket writer accepted and flushed the frame.
 
+The facade path is `lilyrs::websocket_client`. Use feature `websocket-client`
+for the default single profile or `websocket-client-factory` for named clients.
+Direct ownership without DI is available through the component dependency
+shown below.
+
 ## Choose one ownership mode
 
 - `default-features = false`: application-owned `TokioWsClient` only.
@@ -179,3 +184,10 @@ cargo test -p lily_websocket_client
 ```
 
 License: MIT OR Apache-2.0.
+
+## Documentation and license
+
+Full documentation and canonical application examples: [lilyrs.com](https://lilyrs.com).
+Published API reference: [docs.rs/lily_websocket_client](https://docs.rs/lily_websocket_client).
+
+Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.

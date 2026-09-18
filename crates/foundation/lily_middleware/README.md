@@ -7,7 +7,7 @@ a standalone application dependency.
 HTTP applications should depend on `lily_http_api` and import the re-exported
 types from there:
 
-```rust,ignore
+```rust
 use lily_http_api::{
     CorsPolicy, CsrfPolicy, HttpMiddleware, HttpMiddlewareRejection,
 };
@@ -44,3 +44,13 @@ The `__private` module is a cross-crate transport SPI used by
 `lily_http_api`. Its types may change without becoming part of the application
 contract. Applications must not construct Tower adapters or compiled CSRF
 runtimes directly.
+
+This crate has no optional Cargo features. Host adapters own execution and
+policy configuration; the contracts alone do not start a middleware pipeline.
+
+## Documentation and license
+
+Full documentation and canonical application examples: [lilyrs.com](https://lilyrs.com).
+Published API reference: [docs.rs/lily_middleware](https://docs.rs/lily_middleware).
+
+Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.

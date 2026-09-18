@@ -7,7 +7,7 @@ depend only on `lily_http_api` and import `Controller`, `controller`, and
 
 ```toml
 [dependencies]
-lily_http_api = "0.1"
+lily_http_api = "0.1.0"
 ```
 
 Do not add `lily_http_api_macros` directly. Generated code locates the
@@ -24,7 +24,7 @@ A controller has three parts:
 2. `ControllerTrait::new` creates the single app-scoped controller instance.
 3. `#[controller]` turns one inherent impl into typed HTTP actions.
 
-```rust,ignore
+```rust
 use std::sync::Arc;
 
 use lily_http_api::{
@@ -84,7 +84,7 @@ It also distinguishes framework-managed typed responses, manual
 `MultipartForm` creates both strict runtime decoding and the corresponding
 OpenAPI schema from one named-field DTO.
 
-```rust,ignore
+```rust
 use lily_http_api::{FormFile, MultipartForm};
 
 #[derive(MultipartForm)]
@@ -112,3 +112,10 @@ points required by the compiler. Parser plans, generated adapter builders,
 runtime path resolution, and OpenAPI metadata parsers are private
 implementation details. Application-facing traits, extractors, errors, and
 registration behavior belong to `lily_http_api`.
+
+## Documentation and license
+
+Full documentation and canonical application examples: [lilyrs.com](https://lilyrs.com).
+Published API reference: [docs.rs/lily_http_api_macros](https://docs.rs/lily_http_api_macros).
+
+Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.

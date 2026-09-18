@@ -2,6 +2,15 @@
 
 `lily_http_client` is Lily's bounded asynchronous HTTP/1.1 and HTTP/2 client. Hyper/h2 owns protocol framing, pooling, multiplexing and flow control; Rustls owns HTTPS certificate/hostname verification and ALPN.
 
+```toml
+[dependencies]
+lily_http_client = "0.1.0"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+```
+
+The facade alternative is feature `http-client`, imported through
+`lilyrs::http_client`. This component has no optional Cargo features.
+
 ```rust,no_run
 use lily_http_client::{HttpClientBuilder, ProtocolPreference};
 
@@ -59,4 +68,12 @@ framing. Public CA/hostname/ALPN interoperability, independent wire conformance
 and long-running load/fault tests remain release qualification gates;
 implementation alone is not a production approval.
 
-See the [HTTP client guide](../../../docs/http/http-client.md) and [transport ADR](../../../docs/adr/ADR-HTTP-001-http1-http2-edge-transport.md).
+Use `HttpClientBuilder` for direct ownership or `LilyHttpClientFactory` for named,
+DI-managed clients. Their API reference documents each configuration limit.
+
+## Documentation and license
+
+Full documentation and canonical application examples: [lilyrs.com](https://lilyrs.com).
+Published API reference: [docs.rs/lily_http_client](https://docs.rs/lily_http_client).
+
+Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.

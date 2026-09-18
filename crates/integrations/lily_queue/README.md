@@ -152,8 +152,8 @@ termination before publishing a fresh subscription under the registration gate.
 Unproven joins prevent parent disposal; unproven channel close is reported and
 retained for parent connection cleanup. Confirmed handoff plus incomplete ACK
 remains unresolved, never successful or replayed. Transaction/outbox dependency
-reconciliation remains the next stage of the
-[Consumer lifecycle work](../../framework/lily_consumer/LIFECYCLE.md).
+reconciliation follows the ownership and completion rules in the
+[Consumer lifecycle contract](../../framework/lily_consumer/LIFECYCLE.md).
 
 Retry delay jitter is opt-in through `retry_jitter_ratio` and defaults to
 `0.0`. Lily keeps RabbitMQ queue-level TTL buckets: a non-zero finite ratio up
@@ -185,18 +185,18 @@ event-ID generation.
 Single-database applications use:
 
 ```toml
-lily_consumer = { version = "0.1", features = ["transactional-inbox-postgresql"] }
-lily_queue = { version = "0.1", features = ["transactional-inbox-postgresql"] }
-lily_postgresql = { version = "0.1" }
+lily_consumer = { version = "0.1.0", features = ["transactional-inbox-postgresql"] }
+lily_queue = { version = "0.1.0", features = ["transactional-inbox-postgresql"] }
+lily_postgresql = { version = "0.1.0" }
 uuid = { version = "1", features = ["v4"] }
 ```
 
 Applications that already own named PostgreSQL cells use:
 
 ```toml
-lily_consumer = { version = "0.1", features = ["transactional-inbox-postgresql-factory"] }
-lily_queue = { version = "0.1", features = ["transactional-inbox-postgresql-factory"] }
-lily_postgresql = { version = "0.1", default-features = false, features = ["factory"] }
+lily_consumer = { version = "0.1.0", features = ["transactional-inbox-postgresql-factory"] }
+lily_queue = { version = "0.1.0", features = ["transactional-inbox-postgresql-factory"] }
+lily_postgresql = { version = "0.1.0", default-features = false, features = ["factory"] }
 uuid = { version = "1", features = ["v4"] }
 ```
 
@@ -209,6 +209,11 @@ the selected `lily_postgresql` single/factory DI mode. A standalone
 `QueueService` composition root must enable and own that mode explicitly.
 
 Mark only handlers whose database work must share Lily's inbox transaction:
+
+For direct use, depend on `lily_queue = "0.1.0"`; the facade path is
+`lilyrs::queue` with feature `queue` (also exposed by `consumer`). Handler
+macros and their registry support are re-exported, so no separate derive or
+registry dependency is needed.
 
 ```rust,ignore
 use lily_queue::{
@@ -375,17 +380,17 @@ Consumer application selects exactly one mode:
 
 ```toml
 # Single MongoDB service
-lily_consumer = { version = "0.1", features = ["transactional-inbox-mongodb"] }
-lily_queue = { version = "0.1", features = ["transactional-inbox-mongodb"] }
-lily_mongodb = { version = "0.1" }
+lily_consumer = { version = "0.1.0", features = ["transactional-inbox-mongodb"] }
+lily_queue = { version = "0.1.0", features = ["transactional-inbox-mongodb"] }
+lily_mongodb = { version = "0.1.0" }
 tokio-util = "0.7"
 ```
 
 ```toml
 # Named MongoDB cells
-lily_consumer = { version = "0.1", features = ["transactional-inbox-mongodb-factory"] }
-lily_queue = { version = "0.1", features = ["transactional-inbox-mongodb-factory"] }
-lily_mongodb = { version = "0.1", default-features = false, features = ["factory"] }
+lily_consumer = { version = "0.1.0", features = ["transactional-inbox-mongodb-factory"] }
+lily_queue = { version = "0.1.0", features = ["transactional-inbox-mongodb-factory"] }
+lily_mongodb = { version = "0.1.0", default-features = false, features = ["factory"] }
 tokio-util = "0.7"
 ```
 
@@ -552,3 +557,10 @@ as incomplete, not as a successful commit/rollback. A confirmed outbox publish
 whose delivered mark is interrupted remains `uncertain_after_publish` and is
 left for claim expiry. Cancelling shutdown observers cannot detach these owners
 or allow DI disposal before their real joins and delivery-scope receipts.
+
+## Documentation and license
+
+Full documentation and canonical application examples: [lilyrs.com](https://lilyrs.com).
+Published API reference: [docs.rs/lily_queue](https://docs.rs/lily_queue).
+
+Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.

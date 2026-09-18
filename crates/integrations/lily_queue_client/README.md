@@ -19,6 +19,9 @@ attempts retain every non-terminal handle, including Lapin `Closing` and
 `Reconnecting`; only observed `Closed` or `Error` state releases ownership. No
 low-level pool handle is exposed to application code.
 
+The facade path is `lilyrs::queue_client`: choose `queue-client` for the default
+single profile or `queue-client-factory` for factory mode.
+
 ## Choose exactly one composition mode
 
 - `single` is the default. It registers one injectable `QueueClientService`.
@@ -29,10 +32,14 @@ These Cargo features are mutually exclusive. “Factory” means multiple
 RabbitMQ connections, not multiple broker providers:
 
 ```toml
-# Default single mode
+[dependencies]
 lily_queue_client = "0.1.0"
+```
 
-# Factory mode
+For factory mode, use this declaration instead:
+
+```toml
+[dependencies]
 lily_queue_client = { version = "0.1.0", default-features = false, features = ["factory"] }
 ```
 
@@ -55,14 +62,13 @@ persistence_enabled = true
 ```
 
 `QueueClientService` is registered by its `Injectable` derive and is normally
-injected into an application service:
+injected into an application service. Add `lily_injection = "0.1.0"` for this
+service-only layer; separate derive, registry and error dependencies are not needed:
 
-```rust,ignore
+```rust
 use std::sync::Arc;
-use async_trait::async_trait;
-use lily_error::injection::InjectionError;
-use lily_injectable_derive::Injectable;
-use lily_injection::ServiceTrait;
+use lily_injection::{Injectable, InjectionError, ServiceTrait};
+use lily_injection::async_trait::async_trait;
 use lily_queue_client::QueueClientService;
 
 #[derive(Injectable, Default)]
@@ -213,3 +219,10 @@ cross-crate ABI used by `lily_queue` and qualification fixtures.
 Broker-independent regression tests run locally. The ignored
 `tests/live_rabbitmq.rs` suite requires a disposable broker selected with
 `LILY_TEST_RABBITMQ_URL`.
+
+## Documentation and license
+
+Full documentation and canonical application examples: [lilyrs.com](https://lilyrs.com).
+Published API reference: [docs.rs/lily_queue_client](https://docs.rs/lily_queue_client).
+
+Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.

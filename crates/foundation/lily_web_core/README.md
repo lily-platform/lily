@@ -19,6 +19,11 @@ for Lily's internal crate boundaries:
 - `lily_http_client` reuses the standards-based `FormData` representation.
 - `lily_websocket` reuses the validated Rustls server configuration.
 
+This crate has no optional Cargo features. Its response types include
+`Json<T>`, `NoContent`, `Created<T>` and `Accepted<T>`; use their HTTP facade
+exports in actions so response construction and request lifecycle share the
+same owner.
+
 ## Ownership boundaries
 
 - A request body is either buffered or transferred into terminal streaming
@@ -45,3 +50,10 @@ for Lily's internal crate boundaries:
 
 Implementation modules are private. Stable contracts are exported from the
 crate root and, for application code, from `lily_http_api`.
+
+## Documentation and license
+
+Full documentation and canonical application examples: [lilyrs.com](https://lilyrs.com).
+Published API reference: [docs.rs/lily_web_core](https://docs.rs/lily_web_core).
+
+Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.

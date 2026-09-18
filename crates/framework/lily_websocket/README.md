@@ -4,6 +4,17 @@
 Upgrade endpoint and routes strict Lily v2 envelopes to struct controller
 methods through an immutable, application-local action table.
 
+```toml
+[dependencies]
+lily_websocket = "0.1.0"
+serde = { version = "1", features = ["derive"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }
+```
+
+The facade alternative is feature `websocket`, imported through
+`lilyrs::websocket`. The component has no default features. Its only optional
+feature, `fuzzing`, is for repository-owned harnesses.
+
 ## Canonical application model
 
 - `WsAppBuilder` is the composition root and `WsApp` owns the listener.
@@ -80,19 +91,45 @@ impl ChatController {
     }
 }
 
-# async fn run() -> Result<(), Box<dyn std::error::Error>> {
-let app = WsAppBuilder::new("127.0.0.1:8080")
-    .config(ServerConfig {
-        endpoint_path: "/ws".into(),
-        allowed_origins: vec!["https://app.example".into()],
-        ..ServerConfig::default()
-    })
-    .build()
-    .await?;
-app.start().await?;
-# Ok(())
-# }
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let app = WsAppBuilder::new("127.0.0.1:8080")
+        .config(ServerConfig {
+            endpoint_path: "/ws".into(),
+            allowed_origins: vec!["https://app.example".into()],
+            ..ServerConfig::default()
+        })
+        .build()
+        .await?;
+    app.start().await?;
+    Ok(())
+}
 ```
+
+The builder loads Lily configuration through DI even when listener options are
+supplied in Rust. For this local example, create `lily.toml`:
+
+```toml
+[server]
+host = "127.0.0.1"
+port = 8080
+```
+
+```bash
+LILY_CONFIG_PATH=./lily.toml LILY_CONFIG_MODE=development cargo run
+```
+
+`WsAppBuilder::new` supplies the listener address and `.config(...)` overrides
+the WebSocket settings. Adapt the origin allowlist to your client. See the
+[connected examples](../../../examples/README.md) for a complete client/server
+scenario and deployment configuration.
+
+### AsyncAPI metadata boundary
+
+Controller macros accept and retain `#[asyncapi(...)]` metadata. The current
+`WsAppBuilder` does not expose an AsyncAPI document builder, snapshot service or
+publication endpoint. There is no `asyncapi` Cargo feature on this crate;
+the RabbitMQ Consumer's optional document support is a separate API.
 
 ## Background services
 
@@ -588,7 +625,7 @@ instead of creating a second identity authority.
 
 `WsGuard` is application-defined message admission. `new(Arc<Extensions>)` runs once
 per concrete guard type during app build. `can_activate(&mut
-WsMessageExchange)` runs after message middleware and before payload extraction;
+WsMessageExchange, ExecutionCancellation)` runs after message middleware and before payload extraction;
 it can inspect the verified principal and connection-local state, resolve a
 message-scoped service, publish a message-local value, or return a typed
 ACK/error/close rejection. Guards do not authenticate the HTTP Upgrade.
@@ -1116,6 +1153,13 @@ bounded `lily.error_category`: `identity_lifecycle_unavailable` for a missing
 identity lifecycle, or `other` for another typed local dispatch error. Partial
 per-recipient results remain delivery counters, including `channel_closed` and
 `backpressured`. These diagnostics do not change dedupe insertion or retry policy.
-The ready-to-use Redis implementation is a
-separate adapter checkpoint. For outbound reconnecting clients use
-`lily_websocket_client`.
+The Redis implementation is available in
+[`lily_websocket_redis`](../../integrations/lily_websocket_redis/README.md).
+For outbound reconnecting clients use `lily_websocket_client`.
+
+## Documentation and license
+
+Full documentation and canonical application examples: [lilyrs.com](https://lilyrs.com).
+Published API reference: [docs.rs/lily_websocket](https://docs.rs/lily_websocket).
+
+Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.

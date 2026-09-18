@@ -6,6 +6,7 @@ description = "Supervised background services with scoped dependency injection a
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
+readme = "README.md"
 keywords = ["lilyrs", "background-service", "async", "tokio", "shutdown"]
 categories = ["asynchronous", "concurrency"]
 rust-version.workspace = true

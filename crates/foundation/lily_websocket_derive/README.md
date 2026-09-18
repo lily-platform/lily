@@ -10,9 +10,10 @@ this implementation crate directly.
 ```toml
 [dependencies]
 lily_websocket = "0.1.0"
+serde = { version = "1", features = ["derive"] }
 ```
 
-```rust,ignore
+```rust
 use std::sync::Arc;
 
 use lily_websocket::{
@@ -21,7 +22,9 @@ use lily_websocket::{
     WebSocketLifecycleError, async_trait, websocket_controller,
 };
 
+#[derive(serde::Deserialize)]
 struct SendMessage;
+#[derive(serde::Serialize)]
 struct SendReceipt;
 trait AuditService: Send + Sync {}
 
@@ -55,7 +58,7 @@ impl ChatController {
         Payload(_input): Payload<SendMessage>,
         _audit: Service<dyn AuditService>,
     ) -> Result<Ack<SendReceipt>, WebSocketActionError> {
-        unimplemented!()
+        Ok(Ack::new(SendReceipt))
     }
 
     #[disconnected]
@@ -67,6 +70,9 @@ impl ChatController {
     }
 }
 ```
+
+Register an implementation of `AuditService` in the application's DI container
+before serving this action. The example defines its extraction contract only.
 
 The derive registers immutable controller metadata. `WsAppBuilder::build`
 constructs each registered controller once from the app DI container and binds
@@ -184,4 +190,9 @@ DI initialization registers lifecycle callbacks before connecting. Disposal awai
 
 Public deployments normally terminate WSS at an edge and use HTTP/1.1 Upgrade to the Lily server. The client can also connect directly to public-CA `wss://` endpoints with Rustls/WebPKI certificate, hostname, and SNI validation. RFC 8441 is not implied.
 
-License: MIT OR Apache-2.0.
+## Documentation and license
+
+Full documentation and canonical application examples: [lilyrs.com](https://lilyrs.com).
+Published API reference: [docs.rs/lily_websocket_derive](https://docs.rs/lily_websocket_derive).
+
+Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.
