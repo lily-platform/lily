@@ -3,7 +3,7 @@
 //! Helper functions for code generation and type analysis.
 
 use proc_macro2::{Ident, Span, TokenStream};
-use quote::{quote, ToTokens};
+use quote::{ToTokens, quote};
 use syn::Type;
 
 /// Generate a unique identifier for registration functions

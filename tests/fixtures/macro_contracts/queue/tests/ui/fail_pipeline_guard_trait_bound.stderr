@@ -10,7 +10,7 @@ help: the trait `QueueGuard` is not implemented for `NotGuard`
 4 | struct NotGuard;
   | ^^^^^^^^^^^^^^^
 note: required by a bound in `lily_queue::__private::queue_guard_registration`
- --> $WORKSPACE/crates/integrations/lily_queue/src/pipeline.rs
+ --> $QUEUE_RUNTIME/src/pipeline.rs
   |
   | pub fn queue_guard_registration<G>() -> QueueGuardRegistration
   |        ------------------------ required by a bound in this function

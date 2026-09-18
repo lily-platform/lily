@@ -19,6 +19,13 @@ pub(crate) fn derive(input: TokenStream) -> TokenStream {
 }
 
 fn expand(input: DeriveInput) -> syn::Result<TokenStream2> {
+    expand_with_runtime(input, runtime_path::lily_websocket)
+}
+
+fn expand_with_runtime(
+    input: DeriveInput,
+    resolve_runtime: impl FnOnce() -> syn::Result<TokenStream2>,
+) -> syn::Result<TokenStream2> {
     let controller = &input.ident;
 
     if !matches!(input.data, Data::Struct(_)) {
@@ -83,7 +90,7 @@ fn expand(input: DeriveInput) -> syn::Result<TokenStream2> {
         .first()
         .map(|attribute| asyncapi::parse(attribute))
         .transpose()?;
-    let runtime = runtime_path::lily_websocket()?;
+    let runtime = resolve_runtime()?;
     let asyncapi = asyncapi::generate(&runtime, asyncapi.as_ref());
     let frame_codec = frame_codec.map_or_else(
         || quote!(::std::option::Option::None),
@@ -245,7 +252,7 @@ mod tests {
             #[message_middleware(MessageTracing, TenantContext)]
             struct ChatController;
         };
-        let generated = expand(input)
+        let generated = expand_with_runtime(input, || Ok(quote!(::lily_websocket)))
             .expect("controller message middleware metadata must expand")
             .to_string();
 

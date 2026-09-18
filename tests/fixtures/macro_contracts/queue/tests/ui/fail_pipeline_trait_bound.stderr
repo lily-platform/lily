@@ -10,7 +10,7 @@ help: the trait `QueueMiddleware` is not implemented for `NotMiddleware`
 4 | struct NotMiddleware;
   | ^^^^^^^^^^^^^^^^^^^^
 note: required by a bound in `lily_queue::__private::queue_middleware_registration`
- --> $WORKSPACE/crates/integrations/lily_queue/src/pipeline.rs
+ --> $QUEUE_RUNTIME/src/pipeline.rs
   |
   | pub fn queue_middleware_registration<M>() -> QueueMiddlewareRegistration
   |        ----------------------------- required by a bound in this function

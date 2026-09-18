@@ -24,11 +24,3 @@ syn = { version = "2.0", features = ["full"] }
 quote = "1.0"
 proc-macro2 = "1.0"
 proc-macro-crate = "3"
-
-[dev-dependencies]
-lily_mongodb = { path = "../lily_mongodb", default-features = false }
-lily_injection = { path = "../../foundation/lily_injection" }
-async-trait = { workspace = true }
-serde = { workspace = true }
-tokio = { workspace = true }
-trybuild = "1.0"

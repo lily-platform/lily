@@ -10,20 +10,14 @@ readme.workspace = true
 keywords = ["lilyrs", "dependency-injection", "derive", "proc-macro", "services"]
 categories = ["rust-patterns", "development-tools"]
 rust-version.workspace = true
-exclude = ["examples/**", "tests/**"]
 
 [lib]
 proc-macro = true
+# Runtime-dependent rustdoc examples are tested by macro_contracts/injection.
+doctest = false
 
 [dependencies]
 proc-macro2 = "1.0"
 proc-macro-crate = "3"
 quote = "1.0"
 syn = { version = "2.0", features = ["full"] }
-[dev-dependencies]
-lily_error = { version = "0.1.0", path = "../lily_error" }
-lily_injection_registry = { version = "0.1.0", path = "../lily_injection_registry" }
-lily_injection = { path = "../lily_injection" }
-tokio = { version = "1.0", features = ["full"] }
-linkme = { workspace = true }
-trybuild = "1.0"

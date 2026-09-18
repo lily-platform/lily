@@ -21,9 +21,9 @@ lily_cancellation.workspace = true
 lily_injection.workspace = true
 
 [dev-dependencies]
-lily_process = { path = "../lily_process" }
-lily_injectable_derive = { path = "../lily_injectable_derive" }
-lily_injection_registry = { path = "../lily_injection_registry" }
+lily_process = { version = "0.1.0", path = "../lily_process" }
+lily_injectable_derive = { version = "0.1.0", path = "../lily_injectable_derive" }
+lily_injection_registry = { version = "0.1.0", path = "../lily_injection_registry" }
 lily_error.workspace = true
 linkme.workspace = true
 tokio = { workspace = true, features = ["test-util"] }

@@ -10,7 +10,7 @@ error[E0308]: mismatched types
   = note: expected reference `&Result<_, _>`
              found reference `&u64`
 note: method defined here
- --> $WORKSPACE/crates/integrations/lily_trace/src/instrumentation.rs
+ --> $TRACE_RUNTIME/src/instrumentation.rs
   |
   |     pub fn finish_result<T, E: TraceResultError>(mut self, result: &Result<T, E>) {
   |            ^^^^^^^^^^^^^

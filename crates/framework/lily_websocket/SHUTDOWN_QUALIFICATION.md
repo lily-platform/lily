@@ -89,7 +89,7 @@ source links identify their containing modules.
 | Root publication / concurrent close | [concurrent_close_callers_observe_an_installed_and_joined_root](src/app/reconciliation_tests.rs) | Sixteen callers cannot observe root completion without its installed and joined receipt. |
 | Owner panic replay | [a_joined_message_owner_panic_is_not_erased_by_reconciliation_retries](src/app/reconciliation_tests.rs) | Compact registry retirement cannot erase a failed task result. |
 | Diagnostic subscriber panic | [panicking_diagnostics_cannot_prevent_terminal_result_publication](src/app/reporting_tests.rs) | Reporting failure cannot strand terminal waiters or replace actual cleanup evidence. |
-| Callback migration / wrong-phase extractor | [derive contracts](../../foundation/lily_websocket_derive/tests/compile_contracts.rs), [UI cases](../../foundation/lily_websocket_derive/tests/ui), [downstream fixture](../../../tests/fixtures/downstream_websocket_client) | Read-only wrappers and execution/cleanup extractor restrictions compile for supported use and reject unsupported signatures. |
+| Callback migration / wrong-phase extractor | [derive contracts](../../../tests/fixtures/macro_contracts/websocket/tests/compile_contracts.rs), [UI cases](../../../tests/fixtures/macro_contracts/websocket/tests/ui), [downstream fixture](../../../tests/fixtures/downstream_websocket_client) | Read-only wrappers and execution/cleanup extractor restrictions compile for supported use and reject unsupported signatures. |
 
 ## Message deadline and cooperative result qualification
 
@@ -177,3 +177,13 @@ This matrix does not claim preemption of blocking application code, delivery of
 all outbound messages, cleanup of raw application-spawned tasks, or guaranteed
 completion/export of user cleanup/telemetry. Those boundaries are explicit in
 the [migration contract](SHUTDOWN_MIGRATION.md).
+
+## Macro contract location
+
+Runtime-dependent derive UI tests now run from the unpublished macro contract
+workspace. The `cargo test -p lily_websocket_derive` commands above cover the
+implementation unit tests and gateway doctests; also run:
+
+```sh
+python3 tests/qualification/facade.py --stage macros
+```

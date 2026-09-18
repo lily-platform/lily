@@ -34,6 +34,7 @@ Build images/cache are retained for subsequent runs.
 | `umbrella` | Empty facade, every native-to-public feature mapping, isolated `lilyrs`/renamed consumers, independent public feature builds, combined single/factory builds, expected compiler diagnostics for disabled APIs and conflicting modes |
 | `components` | Direct component facades and aliases, each package tested separately; MongoDB/PostgreSQL/ClickHouse single and factory, Queue AsyncAPI |
 | `di` | Standalone DI and framework-root re-exports, aliases, scoped identity/disposal, configuration composition, compile-fail public API boundaries |
+| `macros` | Internal dependency publication graph, isolated macro/runtime UI and integration contracts, shared DI rustdoc examples, MongoDB factory and Queue AsyncAPI macro tests |
 | `downstream` | Existing external-consumer and derive ABI fixtures, database modes, standalone DI execution, individually compiled golden HTTP/WS/Consumer applications |
 | `workspace` | Every root workspace member's unit, integration, UI and documentation tests, selected individually with its own defaults |
 | `examples` | Example unit tests, per-package checks, independent client workspace, direct Lily dependency boundary and example-only formatting checks |
@@ -47,7 +48,7 @@ python3 tests/qualification/facade.py --stage components --stage di
 python3 tests/qualification/facade.py --stage examples --live
 ```
 
-The default is all seven offline stages. `--stage` can be repeated; `--live` adds
+The default is all eight offline stages. `--stage` can be repeated; `--live` adds
 the live check after the selected stages. A failed command stops the run with a
 nonzero exit code. Negative checks pass only when their intended compiler
 diagnostic appears. Tests and fixtures are not weakened to accommodate missing
@@ -58,6 +59,16 @@ exclusive. Standalone packages and the two combined modes cover those branches
 without accidentally relying on Cargo workspace feature unification. Likewise,
 the client example has a separate workspace so its optional client DI
 registration cannot become a server startup requirement.
+
+The `macros` stage runs the [macro contract fixtures](../fixtures/macro_contracts/README.md).
+The five runtime-dependent suites live in a separate, unpublished workspace so
+macro packages do not depend on the runtime that re-exports them. Their unit
+tests still belong to the root packages. DI doctests share the same Markdown
+with the published API documentation and execute in the injection fixture.
+
+`python3 tests/qualification/package_dependencies.py` also checks the publication
+graph independently. It includes optional features, all target tables and
+versioned development dependencies, and reports a dependency-first order.
 
 The `workspace` stage likewise runs `cargo test -p PACKAGE` for every member,
 rather than `cargo test --workspace`. The latter enables other members' defaults

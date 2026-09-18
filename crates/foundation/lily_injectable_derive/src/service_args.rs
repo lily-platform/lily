@@ -3,8 +3,8 @@
 //! Handles parsing of #[service(...)] attributes for the Injectable derive macro.
 
 use syn::{
-    parse::{Parse, ParseStream},
     Ident, LitBool, LitStr, Result, Token, Type,
+    parse::{Parse, ParseStream},
 };
 
 /// Arguments for the #[service(...)] attribute

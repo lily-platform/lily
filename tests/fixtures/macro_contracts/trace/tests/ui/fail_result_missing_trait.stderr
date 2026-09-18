@@ -10,7 +10,7 @@ help: the trait `TraceResultError` is not implemented for `ApplicationError`
 4 | struct ApplicationError;
   | ^^^^^^^^^^^^^^^^^^^^^^^
 help: the following other types implement trait `TraceResultError`
- --> $WORKSPACE/crates/integrations/lily_trace/src/result.rs
+ --> $TRACE_RUNTIME/src/result.rs
   |
   | impl<E: TraceResultError + ?Sized> TraceResultError for &E {
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `&E`
@@ -24,7 +24,7 @@ help: the following other types implement trait `TraceResultError`
   | impl TraceResultError for std::convert::Infallible {
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `Infallible`
 note: required by a bound in `lily_trace::__private::OperationGuard::<Emit>::finish_result`
- --> $WORKSPACE/crates/integrations/lily_trace/src/instrumentation.rs
+ --> $TRACE_RUNTIME/src/instrumentation.rs
   |
   |     pub fn finish_result<T, E: TraceResultError>(mut self, result: &Result<T, E>) {
   |                                ^^^^^^^^^^^^^^^^ required by this bound in `OperationGuard::<Emit>::finish_result`

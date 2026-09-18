@@ -22,11 +22,9 @@ quote = "1.0"
 url = "2"
 
 [dev-dependencies]
-trybuild = "1.0"
 async-trait = { workspace = true }
 tokio-util = { workspace = true }
 lily_error = { version = "0.1.0", path = "../lily_error" }
 lily_injection = { version = "0.1.0", path = "../lily_injection" }
 lily_websocket_client = { version = "0.1.0", path = "../lily_websocket_client" }
-lily_websocket = { version = "0.1.0", path = "../../framework/lily_websocket" }
 serde = { workspace = true }

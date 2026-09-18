@@ -53,8 +53,8 @@ rolling-file = "0.2.0"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json", "chrono"] }
 base64 = "0.22.1"
 hmac = "0.12.1"
-lily_error = { path = "crates/foundation/lily_error" }
-lily_injection = { path = "crates/foundation/lily_injection" }
+lily_error = { version = "0.1.0", path = "crates/foundation/lily_error" }
+lily_injection = { version = "0.1.0", path = "crates/foundation/lily_injection" }
 rand = "0.8"
 sha2 = "0.10.9"
 subtle = "2.6.1"
