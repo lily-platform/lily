@@ -1,6 +1,6 @@
 # Umbrella facade contracts
 
-Every consumer has `lily` as its **only** direct Lily dependency. Each contract
+Every consumer has `lilyrs` as its **only** direct Lily dependency. Each contract
 also runs under the renamed dependency `platform`. These are compile/runtime
 contracts. The [connected examples](../../../examples/README.md) provide runnable
 HTTP, WebSocket and Consumer applications. The [final qualification command](../../qualification/FACADE.md)

@@ -7,7 +7,7 @@ pub(crate) fn lily_trace() -> syn::Path {
     if let Some(identifier) = dependency("lily_trace") {
         return syn::parse_quote!(::#identifier);
     }
-    if let Some(identifier) = dependency("lily") {
+    if let Some(identifier) = dependency("lilyrs") {
         return syn::parse_quote!(::#identifier::trace);
     }
     // Standalone derive contracts may supply the runtime self alias themselves.

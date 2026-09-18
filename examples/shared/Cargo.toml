@@ -6,7 +6,7 @@ publish.workspace = true
 rust-version.workspace = true
 
 [dependencies]
-lily = { workspace = true, features = ["injection", "config", "trace", "error", "background-service", "postgresql", "mongodb", "redis", "queue-client"] }
+lilyrs = { workspace = true, features = ["injection", "config", "trace", "error", "background-service", "postgresql", "mongodb", "redis", "queue-client"] }
 lily-example-models.workspace = true
 serde.workspace = true
 tokio.workspace = true

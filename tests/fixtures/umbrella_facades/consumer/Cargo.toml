@@ -6,11 +6,11 @@ publish = false
 
 [dependencies]
 # The only direct Lily dependency, deliberately excluding implementation crates.
-lily = { package = "lily", path = "../../../../crates/lily", default-features = false, features = ["consumer"] }
+lilyrs = { package = "lilyrs", path = "../../../../crates/lilyrs", default-features = false, features = ["consumer"] }
 serde = { version = "1", features = ["derive"] }
 
 [dev-dependencies]
 tokio = { version = "1", features = ["macros", "rt", "time"] }
 
 [features]
-asyncapi = ["lily/consumer-asyncapi"]
+asyncapi = ["lilyrs/consumer-asyncapi"]

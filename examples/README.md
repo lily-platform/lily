@@ -1,7 +1,7 @@
 # Connected Lily examples
 
 Three small applications share one application/service package. Every example
-package has **only `lily` as its direct Lily dependency**; Serde, Tokio, Diesel,
+package has **only `lilyrs` as its direct Lily dependency**; Serde, Tokio, Diesel,
 UUID and other third-party dependencies are declared where used. This is a
 separate Cargo workspace with its own lockfile, so these applications are not
 published with the framework crates. The clients have another, isolated workspace:
@@ -140,7 +140,7 @@ configure example listeners/clients. `custom.worker_interval_ms` is read through
 | [clients](clients/src/main.rs) | HTTP requests and correlated WebSocket requests, bounded waits and disconnect | `http-client`, `websocket-client` |
 
 The framework roots continue to expose `Injectable` and `ServiceTrait`; a
-service-only package uses `lily::injection`. No `lily_*_derive` or registry package
+service-only package uses `lilyrs::injection`. No `lily_*_derive` or registry package
 needs to be added. Feature declarations are explicit in each package manifest.
 Do not use `--all-features`: factory and single modes are mutually exclusive.
 Factory and transactional-inbox forwarding contracts have separate isolated

@@ -1,7 +1,7 @@
 #![doc = include_str!("../README.md")]
 
 // Absolute paths work in generated code, integration tests and doctests alike.
-extern crate self as lily;
+extern crate self as lilyrs;
 
 #[cfg(feature = "consumer")]
 pub use lily_consumer as consumer;

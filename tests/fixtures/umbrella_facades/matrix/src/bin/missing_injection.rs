@@ -1,2 +1,2 @@
-use lily::injection::Injectable;
+use lilyrs::injection::Injectable;
 fn main() {}

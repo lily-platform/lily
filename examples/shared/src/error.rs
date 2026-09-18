@@ -1,9 +1,9 @@
-use lily::{
+use lily_example_models::SubmitJob;
+use lilyrs::{
     injection::InjectionError,
     postgresql::PgError,
     trace::{TraceFailure, TraceResultError},
 };
-use lily_example_models::SubmitJob;
 
 /// Public messages and trace codes are stable; infrastructure details are not exposed.
 #[derive(Debug, thiserror::Error)]
@@ -65,10 +65,10 @@ impl From<InjectionError> for DemoError {
     }
 }
 
-impl From<lily::mongodb::BaseServiceError> for DemoError {
-    fn from(error: lily::mongodb::BaseServiceError) -> Self {
+impl From<lilyrs::mongodb::BaseServiceError> for DemoError {
+    fn from(error: lilyrs::mongodb::BaseServiceError) -> Self {
         match error {
-            lily::mongodb::BaseServiceError::NotFound { .. } => Self::NotFound,
+            lilyrs::mongodb::BaseServiceError::NotFound { .. } => Self::NotFound,
             _ => Self::Unavailable,
         }
     }

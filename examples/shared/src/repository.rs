@@ -3,12 +3,12 @@ use diesel::{
     OptionalExtension,
     sql_types::{BigInt, Text},
 };
-use lily::{
+use lily_example_models::{JobRequested, JobView};
+use lilyrs::{
     injection::{Injectable, ServiceTrait},
     postgresql::{ExecutionCancellation, PgDbContext, PgError, diesel, diesel_async::RunQueryDsl},
     trace::lily_trace,
 };
-use lily_example_models::{JobRequested, JobView};
 use std::sync::Arc;
 
 #[derive(Default, Injectable)]

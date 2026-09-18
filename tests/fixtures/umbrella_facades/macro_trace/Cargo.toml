@@ -6,7 +6,7 @@ publish = false
 
 [dependencies]
 # Only this component is enabled; no other facade feature may mask macro paths.
-lily = { package = "lily", path = "../../../../crates/lily", default-features = false, features = ["trace"] }
+lilyrs = { package = "lilyrs", path = "../../../../crates/lilyrs", default-features = false, features = ["trace"] }
 
 [dev-dependencies]
 tokio = { version = "1", features = ["macros", "rt"] }

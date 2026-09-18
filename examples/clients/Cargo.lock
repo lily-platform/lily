@@ -988,19 +988,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "68ab91017fe16c622486840e4c83c9a37afeff978bd239b5293d61ece587de66"
 
 [[package]]
-name = "lily"
-version = "0.1.0"
-dependencies = [
- "lily_http_client",
- "lily_websocket_client",
-]
-
-[[package]]
 name = "lily-example-client"
 version = "0.1.0"
 dependencies = [
- "lily",
  "lily-example-models",
+ "lilyrs",
  "serde_json",
  "tokio",
  "tokio-util",
@@ -1243,6 +1235,14 @@ dependencies = [
  "tracing",
  "url",
  "webpki-roots 0.26.11",
+]
+
+[[package]]
+name = "lilyrs"
+version = "0.1.0"
+dependencies = [
+ "lily_http_client",
+ "lily_websocket_client",
 ]
 
 [[package]]

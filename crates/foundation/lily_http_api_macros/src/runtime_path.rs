@@ -8,12 +8,12 @@ pub(crate) fn lily_http_api() -> syn::Result<TokenStream> {
     if let Some(identifier) = dependency("lily_http_api") {
         return Ok(quote!(::#identifier));
     }
-    if let Some(identifier) = dependency("lily") {
+    if let Some(identifier) = dependency("lilyrs") {
         return Ok(quote!(::#identifier::http_api));
     }
     Err(syn::Error::new(
         Span::call_site(),
-        "Lily http_api macros require `lily_http_api` or `lily` with its `http-api` feature",
+        "Lily http_api macros require `lily_http_api` or `lilyrs` with its `http-api` feature",
     ))
 }
 

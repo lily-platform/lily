@@ -2115,30 +2115,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "lily"
-version = "0.1.0"
-dependencies = [
- "lily_background_service",
- "lily_cancellation",
- "lily_clickhouse",
- "lily_config",
- "lily_consumer",
- "lily_error",
- "lily_http_api",
- "lily_http_client",
- "lily_injection",
- "lily_mongodb",
- "lily_postgresql",
- "lily_queue",
- "lily_queue_client",
- "lily_redis",
- "lily_trace",
- "lily_websocket",
- "lily_websocket_client",
- "lily_websocket_redis",
-]
-
-[[package]]
 name = "lily_asyncapi"
 version = "0.1.0"
 dependencies = [
@@ -2820,6 +2796,30 @@ dependencies = [
  "rustls-pki-types",
  "tokio",
  "tokio-util",
+]
+
+[[package]]
+name = "lilyrs"
+version = "0.1.0"
+dependencies = [
+ "lily_background_service",
+ "lily_cancellation",
+ "lily_clickhouse",
+ "lily_config",
+ "lily_consumer",
+ "lily_error",
+ "lily_http_api",
+ "lily_http_client",
+ "lily_injection",
+ "lily_mongodb",
+ "lily_postgresql",
+ "lily_queue",
+ "lily_queue_client",
+ "lily_redis",
+ "lily_trace",
+ "lily_websocket",
+ "lily_websocket_client",
+ "lily_websocket_redis",
 ]
 
 [[package]]
@@ -5268,7 +5268,7 @@ checksum = "b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20"
 name = "umbrella-feature-matrix"
 version = "0.0.0"
 dependencies = [
- "lily",
+ "lilyrs",
 ]
 
 [[package]]

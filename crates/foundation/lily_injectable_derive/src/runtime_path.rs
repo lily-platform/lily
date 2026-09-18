@@ -17,13 +17,13 @@ pub(crate) fn lily_injection() -> syn::Result<TokenStream> {
         }
     }
 
-    if let Some(runtime) = dependency("lily") {
+    if let Some(runtime) = dependency("lilyrs") {
         return Ok(quote!(#runtime::__private::lily_injection));
     }
 
     Err(syn::Error::new(
         Span::call_site(),
-        "Injectable requires a direct dependency on `lily_injection` or a Lily DI facade (`lily_http_api`, `lily_websocket`, `lily_consumer`, or `lily` with `injection` or a framework feature)",
+        "Injectable requires a direct dependency on `lily_injection` or a Lily DI facade (`lily_http_api`, `lily_websocket`, `lily_consumer`, or `lilyrs` with `injection` or a framework feature)",
     ))
 }
 

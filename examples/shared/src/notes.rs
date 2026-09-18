@@ -1,5 +1,6 @@
 use crate::{DemoError, validate_text};
-use lily::{
+use lily_example_models::{NoteInput, NoteView};
+use lilyrs::{
     injection::{Injectable, ServiceTrait},
     mongodb::{
         BaseService, Collection, CrudService, DatabaseService, MongoCollection, Repository,
@@ -7,7 +8,6 @@ use lily::{
     },
     trace::lily_trace,
 };
-use lily_example_models::{NoteInput, NoteView};
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 

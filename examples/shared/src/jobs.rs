@@ -1,12 +1,12 @@
 use crate::{DemoError, JobRepository, error::validate_id, validate_job};
-use lily::{
+use lily_example_models::{JobRequested, JobTicket, JobView, SubmitJob};
+use lilyrs::{
     injection::{Injectable, ServiceTrait, async_trait::async_trait},
     postgresql::{ExecutionCancellation, PgDbContext},
     queue_client::{PublishMetadata, PublishSchemaVersion, QueueClientService},
     redis::{CacheService, ICache},
     trace::{lily_trace, tracing},
 };
-use lily_example_models::{JobRequested, JobTicket, JobView, SubmitJob};
 use std::sync::Arc;
 
 #[async_trait]

@@ -6,7 +6,7 @@ publish = false
 
 [dependencies]
 # Only this component is enabled; no other facade feature may mask macro paths.
-platform = { package = "lily", path = "../../../../crates/lily", default-features = false }
+platform = { package = "lilyrs", path = "../../../../crates/lilyrs", default-features = false }
 serde = { version = "1", features = ["derive"] }
 
 [dev-dependencies]

@@ -6,7 +6,7 @@ publish = false
 
 [dependencies]
 # Only this component is enabled; no other facade feature may mask macro paths.
-lily = { package = "lily", path = "../../../../crates/lily", default-features = false }
+lilyrs = { package = "lilyrs", path = "../../../../crates/lilyrs", default-features = false }
 serde = { version = "1", features = ["derive"] }
 clickhouse = "0.13.3"
 
@@ -15,5 +15,5 @@ tokio = { version = "1", features = ["macros", "rt"] }
 
 [features]
 default = ["single"]
-single = ["lily/clickhouse"]
-factory = ["lily/clickhouse-factory"]
+single = ["lilyrs/clickhouse"]
+factory = ["lilyrs/clickhouse-factory"]

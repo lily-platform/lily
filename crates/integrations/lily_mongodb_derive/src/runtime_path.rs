@@ -7,7 +7,7 @@ pub(crate) fn lily_mongodb() -> syn::Path {
     if let Some(identifier) = dependency("lily_mongodb") {
         return syn::parse_quote!(::#identifier);
     }
-    if let Some(identifier) = dependency("lily") {
+    if let Some(identifier) = dependency("lilyrs") {
         return syn::parse_quote!(::#identifier::mongodb);
     }
     // Standalone derive contracts may supply the runtime self alias themselves.
