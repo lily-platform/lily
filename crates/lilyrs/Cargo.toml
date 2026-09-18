@@ -1,5 +1,5 @@
 [package]
-name = "lily"
+name = "lilyrs"
 version = "0.1.0"
 edition = "2024"
 description = "Optional, feature-selected facade for Lily application components"

@@ -1,5 +1,5 @@
 use crate::{DemoError, JobRepository};
-use lily::{
+use lilyrs::{
     background_service::{BackgroundServiceTrait, ExecutionCancellation},
     config::ConfigService,
     injection::{ApplicationScopeFactory, ProcessContext, async_trait::async_trait},

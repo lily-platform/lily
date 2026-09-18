@@ -2057,31 +2057,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "lily"
-version = "0.1.0"
-dependencies = [
- "lily_background_service",
- "lily_config",
- "lily_consumer",
- "lily_error",
- "lily_http_api",
- "lily_injection",
- "lily_mongodb",
- "lily_postgresql",
- "lily_queue",
- "lily_queue_client",
- "lily_redis",
- "lily_trace",
- "lily_websocket",
-]
-
-[[package]]
 name = "lily-example-consumer"
 version = "0.1.0"
 dependencies = [
- "lily",
  "lily-example-models",
  "lily-example-shared",
+ "lilyrs",
  "tokio",
 ]
 
@@ -2089,9 +2070,9 @@ dependencies = [
 name = "lily-example-http"
 version = "0.1.0"
 dependencies = [
- "lily",
  "lily-example-models",
  "lily-example-shared",
+ "lilyrs",
  "serde",
  "serde_json",
  "tokio",
@@ -2110,8 +2091,8 @@ name = "lily-example-shared"
 version = "0.1.0"
 dependencies = [
  "diesel",
- "lily",
  "lily-example-models",
+ "lilyrs",
  "serde",
  "thiserror 1.0.69",
  "tokio",
@@ -2122,9 +2103,9 @@ dependencies = [
 name = "lily-example-websocket"
 version = "0.1.0"
 dependencies = [
- "lily",
  "lily-example-models",
  "lily-example-shared",
+ "lilyrs",
  "tokio",
 ]
 
@@ -2682,6 +2663,25 @@ dependencies = [
  "quote",
  "syn 2.0.118",
  "url",
+]
+
+[[package]]
+name = "lilyrs"
+version = "0.1.0"
+dependencies = [
+ "lily_background_service",
+ "lily_config",
+ "lily_consumer",
+ "lily_error",
+ "lily_http_api",
+ "lily_injection",
+ "lily_mongodb",
+ "lily_postgresql",
+ "lily_queue",
+ "lily_queue_client",
+ "lily_redis",
+ "lily_trace",
+ "lily_websocket",
 ]
 
 [[package]]

@@ -1,10 +1,10 @@
-use lily::websocket::{
+use lily_example_models::{GetJob, JobView};
+use lily_example_shared::{DemoError, JobOperations, SummaryWorker, tracing_config};
+use lilyrs::websocket::{
     Ack, Extensions, Payload, ServerConfig, Service, WebSocketActionError, WebSocketController,
     WebSocketControllerInitError, WebSocketControllerTrait, WebSocketErrorCode, WsAppBuilder,
     async_trait, websocket_controller,
 };
-use lily_example_models::{GetJob, JobView};
-use lily_example_shared::{DemoError, JobOperations, SummaryWorker, tracing_config};
 use std::sync::Arc;
 
 fn action_error(error: DemoError) -> WebSocketActionError {

@@ -984,8 +984,8 @@ mod tests {
             ("ws", "ws::RawPayload", "RawPayload"),
             ("ws", "ws::RawEnvelope", "RawEnvelope"),
             (
-                "lily::websocket",
-                "lily::websocket::Payload<Input>",
+                "lilyrs::websocket",
+                "lilyrs::websocket::Payload<Input>",
                 "Payload",
             ),
             (

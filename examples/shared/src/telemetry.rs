@@ -1,4 +1,4 @@
-use lily::trace::{ExportConfig, FileExportConfig, FileRotation, TraceConfig};
+use lilyrs::trace::{ExportConfig, FileExportConfig, FileRotation, TraceConfig};
 
 /// Each process owns a distinct file and lets its host flush tracing on shutdown.
 pub fn tracing_config(service: &str) -> Result<TraceConfig, std::io::Error> {

@@ -1,4 +1,4 @@
-use lily::websocket::{
+use lilyrs::websocket::{
     Extensions, WebSocketControllerInitError, WebSocketControllerTrait, async_trait,
     websocket_controller,
 };
@@ -15,8 +15,8 @@ impl Controller {
     #[connected]
     async fn connected(
         &self,
-        _payload: lily::websocket::TextPayload,
-    ) -> Result<(), lily::websocket::WebSocketLifecycleError> {
+        _payload: lilyrs::websocket::TextPayload,
+    ) -> Result<(), lilyrs::websocket::WebSocketLifecycleError> {
         Ok(())
     }
 }

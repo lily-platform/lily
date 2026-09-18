@@ -1,10 +1,10 @@
-use lily::{
+use lily_example_models::JobRequested;
+use lily_example_shared::{DemoError, JobOperations, tracing_config};
+use lilyrs::{
     consumer::{Consumer, Injectable, ServiceTrait},
     error::application::QueueHandlerError,
     queue::{Json, Service, asyncapi, queue, queue_service},
 };
-use lily_example_models::JobRequested;
-use lily_example_shared::{DemoError, JobOperations, tracing_config};
 
 #[derive(Default, Injectable)]
 #[service(lifetime = "Singleton")]

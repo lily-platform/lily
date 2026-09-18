@@ -1,44 +1,44 @@
-# Lily
+# Lilyrs
 
 A feature-selected facade over Lily's application frameworks and reusable components.
 There are no default features. Enable only the components your package uses:
 
 ```toml
 [dependencies]
-lily = { version = "0.1", features = ["http-api", "postgresql", "trace"] }
+lilyrs = { version = "0.1", features = ["http-api", "postgresql", "trace"] }
 ```
 
-Import through component modules, for example `lily::http_api::AppBuilder`,
-`lily::postgresql::PgDbContext`, and `lily::trace::lily_trace`. The re-exports
+Import through component modules, for example `lilyrs::http_api::AppBuilder`,
+`lilyrs::postgresql::PgDbContext`, and `lilyrs::trace::lily_trace`. The re-exports
 preserve the component types; they do not create wrappers or another DI container.
-Macros discover both `lily` and Cargo-renamed dependencies automatically. A direct
+Macros discover both `lilyrs` and Cargo-renamed dependencies automatically. A direct
 component dependency takes precedence if both forms are present.
 
 ## Components
 
 | Feature | Import path | Component default |
 | --- | --- | --- |
-| `consumer` | `lily::consumer` | Queue handlers are also available at `lily::queue` |
-| `http-api` | `lily::http_api` | HTTP types, controller macros and root DI API |
-| `websocket` | `lily::websocket` | WebSocket types, controller macros and root DI API |
-| `websocket-redis` | `lily::websocket_redis` | Redis backplane adapter; no additional facade feature |
-| `clickhouse` | `lily::clickhouse` | `single` |
-| `mongodb` | `lily::mongodb` | `single` |
-| `postgresql` | `lily::postgresql` | `single` |
-| `queue` | `lily::queue` | No additional feature |
-| `queue-client` | `lily::queue_client` | `single` |
-| `redis` | `lily::redis` | `single` |
-| `trace` | `lily::trace` | `console` |
-| `config` | `lily::config` | No additional feature |
-| `websocket-client` | `lily::websocket_client` | `single` |
-| `injection` | `lily::injection` | DI types and `Injectable` |
-| `http-client` | `lily::http_client` | No additional feature |
-| `error` | `lily::error` | No additional feature |
-| `background-service` | `lily::background_service` | No additional feature |
-| `cancellation` | `lily::cancellation` | Shared read-only `ExecutionCancellation` |
+| `consumer` | `lilyrs::consumer` | Queue handlers are also available at `lilyrs::queue` |
+| `http-api` | `lilyrs::http_api` | HTTP types, controller macros and root DI API |
+| `websocket` | `lilyrs::websocket` | WebSocket types, controller macros and root DI API |
+| `websocket-redis` | `lilyrs::websocket_redis` | Redis backplane adapter; no additional facade feature |
+| `clickhouse` | `lilyrs::clickhouse` | `single` |
+| `mongodb` | `lilyrs::mongodb` | `single` |
+| `postgresql` | `lilyrs::postgresql` | `single` |
+| `queue` | `lilyrs::queue` | No additional feature |
+| `queue-client` | `lilyrs::queue_client` | `single` |
+| `redis` | `lilyrs::redis` | `single` |
+| `trace` | `lilyrs::trace` | `console` |
+| `config` | `lilyrs::config` | No additional feature |
+| `websocket-client` | `lilyrs::websocket_client` | `single` |
+| `injection` | `lilyrs::injection` | DI types and `Injectable` |
+| `http-client` | `lilyrs::http_client` | No additional feature |
+| `error` | `lilyrs::error` | No additional feature |
+| `background-service` | `lilyrs::background_service` | No additional feature |
+| `cancellation` | `lilyrs::cancellation` | Shared read-only `ExecutionCancellation` |
 
-Framework users can keep imports such as `lily::http_api::{Injectable, ServiceTrait}`.
-A service-only package enables `injection` and imports `lily::injection` instead.
+Framework users can keep imports such as `lilyrs::http_api::{Injectable, ServiceTrait}`.
+A service-only package enables `injection` and imports `lilyrs::injection` instead.
 There is no separate `di` namespace. `config` does not re-export DI.
 
 ## Feature forwarding
@@ -74,7 +74,7 @@ expansion; they are implementation details, not application configuration.
 `<component>-factory` **instead of** the base feature to choose factory mode:
 
 ```toml
-lily = { version = "0.1", features = ["http-api", "postgresql-factory", "redis-factory"] }
+lilyrs = { version = "0.1", features = ["http-api", "postgresql-factory", "redis-factory"] }
 ```
 
 Features are additive across the entire dependency graph. Combining a base/single
@@ -99,17 +99,17 @@ features likewise do not activate database adapters.
 ### Cancellation and the Redis WebSocket backplane
 
 ```toml
-lily = { version = "0.1", features = ["cancellation", "websocket", "websocket-redis"] }
+lilyrs = { version = "0.1", features = ["cancellation", "websocket", "websocket-redis"] }
 ```
 
-`lily::cancellation::ExecutionCancellation` exposes the existing read-only
+`lilyrs::cancellation::ExecutionCancellation` exposes the existing read-only
 cancellation view for application callbacks. `websocket-redis` exposes only the
-adapter module. Enable `websocket` separately to access `lily::websocket` and
+adapter module. Enable `websocket` separately to access `lilyrs::websocket` and
 select the adapter on the builder:
 
 ```rust,ignore
-use lily::websocket::{BackplaneRequirement, WsAppBuilder};
-use lily::websocket_redis::RedisWebSocketBackplane;
+use lilyrs::websocket::{BackplaneRequirement, WsAppBuilder};
+use lilyrs::websocket_redis::RedisWebSocketBackplane;
 
 let builder = WsAppBuilder::new("127.0.0.1:8081")
     .backplane::<RedisWebSocketBackplane>(BackplaneRequirement::Required);
@@ -141,6 +141,6 @@ contract only.
 
 ## Runnable examples
 
-The [connected examples](../../examples/README.md) use only the `lily` facade
+The [connected examples](../../examples/README.md) use only the `lilyrs` facade
 as their direct Lily dependency. They include shared services, HTTP/WebSocket/Consumer
 hosts, real clients, Docker Compose and end-to-end verification.

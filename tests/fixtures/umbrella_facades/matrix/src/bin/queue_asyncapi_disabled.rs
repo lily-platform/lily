@@ -1,12 +1,12 @@
 struct Handler;
-#[lily::queue::queue_service]
-#[lily::queue::asyncapi(documented)]
+#[lilyrs::queue::queue_service]
+#[lilyrs::queue::asyncapi(documented)]
 impl Handler {
-    #[lily::queue::queue("events", version = 1, content = "text")]
+    #[lilyrs::queue::queue("events", version = 1, content = "text")]
     async fn handle(
         &self,
-        _text: lily::queue::TextPayload,
-    ) -> Result<(), lily::queue::QueueHandlerError> {
+        _text: lilyrs::queue::TextPayload,
+    ) -> Result<(), lilyrs::queue::QueueHandlerError> {
         Ok(())
     }
 }

@@ -6,7 +6,7 @@ publish = false
 
 [dependencies]
 # The only direct Lily dependency, deliberately excluding implementation crates.
-platform = { package = "lily", path = "../../../../crates/lily", default-features = false, features = ["consumer"] }
+platform = { package = "lilyrs", path = "../../../../crates/lilyrs", default-features = false, features = ["consumer"] }
 serde = { version = "1", features = ["derive"] }
 
 [dev-dependencies]

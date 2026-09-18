@@ -1,11 +1,11 @@
 //! Real facade clients, also used by the bounded end-to-end smoke check.
-use lily::{
+use lily_example_models::{GetJob, JobTicket, JobView, NoteInput, NoteView, SubmitJob};
+use lilyrs::{
     http_client::{HttpClient, HttpClientBuilder},
     websocket_client::{
         DecodedPayload, TokioWsClient, WebSocketClientConfig, WebSocketReply, WsClient,
     },
 };
-use lily_example_models::{GetJob, JobTicket, JobView, NoteInput, NoteView, SubmitJob};
 use serde_json::{Value, json};
 use std::{error::Error, time::Duration};
 use tokio_util::sync::CancellationToken;

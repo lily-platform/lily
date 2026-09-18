@@ -6,7 +6,7 @@ publish = false
 
 [dependencies]
 # Only this component is enabled; no other facade feature may mask macro paths.
-lily = { package = "lily", path = "../../../../crates/lily", default-features = false }
+lilyrs = { package = "lilyrs", path = "../../../../crates/lilyrs", default-features = false }
 diesel = { version = "=2.3.11", default-features = false, features = ["postgres_backend", "uuid"] }
 
 [dev-dependencies]
@@ -14,5 +14,5 @@ tokio = { version = "1", features = ["macros", "rt"] }
 
 [features]
 default = ["single"]
-single = ["lily/postgresql"]
-factory = ["lily/postgresql-factory"]
+single = ["lilyrs/postgresql"]
+factory = ["lilyrs/postgresql-factory"]

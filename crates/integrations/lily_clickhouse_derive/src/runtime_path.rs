@@ -7,7 +7,7 @@ pub(crate) fn lily_clickhouse() -> syn::Path {
     if let Some(identifier) = dependency("lily_clickhouse") {
         return syn::parse_quote!(::#identifier);
     }
-    if let Some(identifier) = dependency("lily") {
+    if let Some(identifier) = dependency("lilyrs") {
         return syn::parse_quote!(::#identifier::clickhouse);
     }
     // Standalone derive contracts may supply the runtime self alias themselves.

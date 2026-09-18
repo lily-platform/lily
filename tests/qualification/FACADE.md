@@ -1,6 +1,6 @@
 # Facade qualification
 
-This is the final compatibility and example gate for `lily` and its component
+This is the final compatibility and example gate for `lilyrs` and its component
 facades. The [2026-09-17 qualification results](FACADE_RESULTS.md) record the
 completed checks and remaining limits. Run from the repository root with
 Python 3.11+ and Rust 1.96.1:
@@ -31,7 +31,7 @@ Build images/cache are retained for subsequent runs.
 
 | Stage | Checks |
 | --- | --- |
-| `umbrella` | Empty facade, every native-to-public feature mapping, isolated `lily`/renamed consumers, independent public feature builds, combined single/factory builds, expected compiler diagnostics for disabled APIs and conflicting modes |
+| `umbrella` | Empty facade, every native-to-public feature mapping, isolated `lilyrs`/renamed consumers, independent public feature builds, combined single/factory builds, expected compiler diagnostics for disabled APIs and conflicting modes |
 | `components` | Direct component facades and aliases, each package tested separately; MongoDB/PostgreSQL/ClickHouse single and factory, Queue AsyncAPI |
 | `di` | Standalone DI and framework-root re-exports, aliases, scoped identity/disposal, configuration composition, compile-fail public API boundaries |
 | `downstream` | Existing external-consumer and derive ABI fixtures, database modes, standalone DI execution, individually compiled golden HTTP/WS/Consumer applications |

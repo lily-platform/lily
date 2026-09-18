@@ -22,9 +22,9 @@ pub(crate) fn lily_queue() -> syn::Result<RuntimePath> {
         };
         paths.push((tokens, name));
     }
-    if let Ok(found) = crate_name("lily") {
+    if let Ok(found) = crate_name("lilyrs") {
         let name = match found {
-            FoundCrate::Itself => "lily".to_owned(),
+            FoundCrate::Itself => "lilyrs".to_owned(),
             FoundCrate::Name(name) => name.replace('-', "_"),
         };
         let identifier = Ident::new(&name, Span::call_site());
@@ -33,7 +33,7 @@ pub(crate) fn lily_queue() -> syn::Result<RuntimePath> {
     let Some((tokens, _)) = paths.first() else {
         return Err(syn::Error::new(
             Span::call_site(),
-            "queue macros require `lily_queue` or `lily` with its `queue` or `consumer` feature",
+            "queue macros require `lily_queue` or `lilyrs` with its `queue` or `consumer` feature",
         ));
     };
     let tokens = tokens.clone();

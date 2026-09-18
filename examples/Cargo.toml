@@ -10,7 +10,7 @@ publish = false
 rust-version = "1.96.1"
 
 [workspace.dependencies]
-lily = { path = "../crates/lily", default-features = false }
+lilyrs = { path = "../crates/lilyrs", default-features = false }
 lily-example-models = { path = "models" }
 lily-example-shared = { path = "shared" }
 serde = { version = "1", features = ["derive"] }

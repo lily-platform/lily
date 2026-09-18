@@ -45,14 +45,14 @@ def run(arguments, label, expected_error=None, metadata=False):
 
 
 def validate_graph():
-    facade = tomllib.loads((ROOT / "crates/lily/Cargo.toml").read_text())
+    facade = tomllib.loads((ROOT / "crates/lilyrs/Cargo.toml").read_text())
     public = {f for f in facade["features"] if f != "default" and not f.startswith("__")}
     # These expectations come from each component manifest, not from the forwarding
     # values being tested. A newly added child feature must get an umbrella mapping.
     expected = {}
     for package, dependency in facade["dependencies"].items():
         component = package.removeprefix("lily_").replace("_", "-")
-        native = tomllib.loads((ROOT / "crates/lily" / dependency["path"] / "Cargo.toml").read_text())
+        native = tomllib.loads((ROOT / "crates/lilyrs" / dependency["path"] / "Cargo.toml").read_text())
         defaults = set(native.get("features", {}).get("default", []))
         expected[component] = (package, defaults)
         for feature in native.get("features", {}):
@@ -69,14 +69,14 @@ def validate_graph():
         packages = {p["id"]: p for p in graph["packages"]}
         nodes = {packages[n["id"]]["name"]: n for n in graph["resolve"]["nodes"]}
         if feature is None:
-            assert nodes["lily"]["deps"] == [], "empty facade pulls optional dependencies"
-            assert set(nodes) == {"umbrella-feature-matrix", "lily"}
+            assert nodes["lilyrs"]["deps"] == [], "empty facade pulls optional dependencies"
+            assert set(nodes) == {"umbrella-feature-matrix", "lilyrs"}
             continue
         if feature == "cancellation":
             assert {name for name in nodes if name.startswith("lily_")} == {"lily_cancellation"}
         if feature == "websocket-redis":
-            assert set(nodes["lily"]["features"]) == {"websocket-redis"}
-            assert {dep["name"] for dep in nodes["lily"]["deps"]} == {"lily_websocket_redis"}
+            assert set(nodes["lilyrs"]["features"]) == {"websocket-redis"}
+            assert {dep["name"] for dep in nodes["lilyrs"]["deps"]} == {"lily_websocket_redis"}
             assert "lily_websocket" in nodes
             assert "lily_redis" not in nodes, "backplane must not activate cache DI"
         package, required = expected[feature]
@@ -107,7 +107,7 @@ def validate_consumers():
         package = tomllib.loads((HERE / member / "Cargo.toml").read_text())
         lily_dependencies = [(name, value) for name, value in package["dependencies"].items()
                              if name.startswith("lily") or isinstance(value, dict) and value.get("package", "").startswith("lily")]
-        assert len(lily_dependencies) == 1 and lily_dependencies[0][1]["package"] == "lily", member
+        assert len(lily_dependencies) == 1 and lily_dependencies[0][1]["package"] == "lilyrs", member
         command = ["test", "--lib", "--manifest-path", str(HERE / "Cargo.toml"), "-p", package["package"]["name"]]
         # Separate invocations are intentional. Building the whole workspace at
         # once could hide a missing feature behind another consumer's selection.
@@ -138,8 +138,8 @@ def validate_builds():
 
 def validate_rejections():
     base = ["check", "--manifest-path", str(HERE / "matrix/Cargo.toml"), "--no-default-features", "--message-format=json"]
-    run(base + ["--bin", "missing_injection"], "missing-feature", "unresolved import `lily::injection`")
-    run(base + ["--bin", "missing_injection", "--features", "config"], "config-does-not-export-di", "unresolved import `lily::injection`")
+    run(base + ["--bin", "missing_injection"], "missing-feature", "unresolved import `lilyrs::injection`")
+    run(base + ["--bin", "missing_injection", "--features", "config"], "config-does-not-export-di", "unresolved import `lilyrs::injection`")
     run(base + ["--bin", "ws_lifecycle_payload", "--features", "websocket"], "websocket-lifecycle-payload", "WebSocket message-only extractor `TextPayload` cannot be used")
     run(base + ["--bin", "queue_asyncapi_disabled", "--features", "queue"], "queue-asyncapi-disabled", "queue AsyncAPI metadata requires enabling")
     for component in ("mongodb", "postgresql", "clickhouse", "redis", "queue-client", "websocket-client"):

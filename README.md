@@ -1,12 +1,12 @@
-# Lily
+# Lilyrs
 
-Lily is a Rust workspace for application infrastructure, framework components,
+Lilyrs is a Rust workspace for application infrastructure, framework components,
 and integrations.
 
 - `crates/foundation`: shared infrastructure and application contracts.
 - `crates/framework`: HTTP, WebSocket, and consumer frameworks.
 - `crates/integrations`: database, messaging, and other integrations.
-- `crates/lily`: the application-facing facade.
+- `crates/lilyrs`: the application-facing facade.
 
 See individual crate READMEs and API documentation for available functionality.
 The [connected examples](examples/README.md) run HTTP, WebSocket and Consumer
