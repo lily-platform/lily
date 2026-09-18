@@ -2,13 +2,13 @@
 name = "lily_trace_macros"
 version = "0.1.0"
 edition = "2024"
-description.workspace = true
+description = "Attribute macros for Lilyrs method tracing and result classification"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme.workspace = true
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "tracing", "instrumentation", "proc-macro", "async"]
+categories = ["development-tools::debugging", "development-tools"]
 rust-version.workspace = true
 
 [lib]

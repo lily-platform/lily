@@ -2,13 +2,13 @@
 name = "lily_web_core"
 version = "0.1.0"
 edition = "2024"
-description = "Core HTTP request, response, buffer, and TLS types for Lily"
+description = "Shared HTTP request, response, streaming body, and TLS types for Lilyrs"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme = "README.md"
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "http", "request", "response", "tls"]
+categories = ["web-programming", "network-programming"]
 rust-version.workspace = true
 
 [dependencies]

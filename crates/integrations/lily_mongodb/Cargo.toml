@@ -2,13 +2,13 @@
 name = "lily_mongodb"
 version = "0.1.0"
 edition = "2024"
-description.workspace = true
+description = "Asynchronous MongoDB integration with typed collections, repositories, and migrations"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme.workspace = true
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "mongodb", "database", "async", "migrations"]
+categories = ["database", "asynchronous"]
 rust-version.workspace = true
 
 [features]

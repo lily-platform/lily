@@ -2,13 +2,13 @@
 name = "lily_mongodb_derive"
 version = "0.1.0"
 edition = "2024"
-description.workspace = true
+description = "Procedural derives for Lilyrs MongoDB collections, repositories, and CRUD services"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme.workspace = true
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "mongodb", "derive", "proc-macro", "crud"]
+categories = ["database", "development-tools"]
 rust-version.workspace = true
 
 [lib]

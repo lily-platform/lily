@@ -1,14 +1,14 @@
 [package]
 name = "lily_consumer"
 version = "0.1.0"
-edition = "2021"
-description.workspace = true
+edition = "2024"
+description = "RabbitMQ consumer application framework with dependency injection and graceful shutdown"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme = "README.md"
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "rabbitmq", "amqp", "consumer", "async"]
+categories = ["network-programming", "asynchronous"]
 rust-version.workspace = true
 exclude = ["fuzz/**"]
 

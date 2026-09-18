@@ -2,13 +2,13 @@
 name = "lily_injection_registry"
 version = "0.1.0"
 edition = "2024"
-description.workspace = true
+description = "Link-time service registration contracts for Lilyrs dependency injection"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme.workspace = true
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "dependency-injection", "registry", "linkme", "services"]
+categories = ["rust-patterns"]
 rust-version.workspace = true
 
 [dependencies]

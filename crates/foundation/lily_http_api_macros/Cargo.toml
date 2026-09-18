@@ -2,13 +2,13 @@
 name = "lily_http_api_macros"
 version = "0.1.0"
 edition = "2024"
-description = "Procedural macro implementation for Lily HTTP controllers and multipart DTOs"
+description = "Procedural macros for Lilyrs HTTP controllers and multipart DTOs"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme = "README.md"
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "http", "controller", "openapi", "proc-macro"]
+categories = ["web-programming::http-server", "development-tools"]
 rust-version.workspace = true
 
 [lib]

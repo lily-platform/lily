@@ -2,13 +2,13 @@
 name = "lily_http_client"
 version = "0.1.0"
 edition = "2024"
-description.workspace = true
+description = "Bounded asynchronous HTTP client with HTTP/2, TLS, and named client configuration"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme = "README.md"
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "http", "client", "async", "tls"]
+categories = ["web-programming::http-client", "asynchronous"]
 rust-version.workspace = true
 
 [dependencies]

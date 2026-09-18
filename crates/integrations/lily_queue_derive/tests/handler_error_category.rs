@@ -3,7 +3,7 @@
 use std::{any::Any, sync::Arc};
 
 use lily_error::application::{QueueHandlerError, QueueHandlerFailureClass};
-use queue_runtime::{queue, queue_service, Json, QueuePayloadKind};
+use queue_runtime::{Json, QueuePayloadKind, queue, queue_service};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -55,10 +55,11 @@ fn real_facade_collects_exact_generated_metadata() {
     assert_eq!(raw.schema_version, 1);
     assert_eq!(raw.content_kind, "json");
     assert_eq!(raw.input_contract.payload_kind, QueuePayloadKind::Json);
-    assert!(raw
-        .input_contract
-        .payload_type_name
-        .is_some_and(|name| name.contains("Json") && name.contains("AuditMessage")));
+    assert!(
+        raw.input_contract
+            .payload_type_name
+            .is_some_and(|name| name.contains("Json") && name.contains("AuditMessage"))
+    );
 }
 
 #[tokio::test]

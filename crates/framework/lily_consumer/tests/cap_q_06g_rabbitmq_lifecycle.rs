@@ -3,20 +3,20 @@
 use std::{
     collections::{HashMap, HashSet},
     sync::{
-        atomic::{AtomicUsize, Ordering},
         Arc, Mutex as StdMutex, OnceLock,
+        atomic::{AtomicUsize, Ordering},
     },
     time::Duration,
 };
 
 use async_trait::async_trait;
 use lapin::{
+    BasicProperties, Channel, Confirmation, Connection, ConnectionProperties,
     options::{
         BasicAckOptions, BasicGetOptions, BasicPublishOptions, ConfirmSelectOptions,
         ExchangeDeleteOptions, QueueDeleteOptions,
     },
     types::{AMQPValue, FieldTable},
-    BasicProperties, Channel, Confirmation, Connection, ConnectionProperties,
 };
 use lily_config::{
     ConfigService, LifecycleConfig, LilyConfig, QueueDefinition, QueueRetentionConfig,
@@ -29,8 +29,8 @@ use lily_consumer::{
 use lily_injection::Injectable;
 use lily_injection::{ApplicationContainer, ServiceTrait};
 use lily_queue::{
-    queue, queue_service, ConsumerRuntimeState, DeliveryCancellation, DeliveryCancellationReason,
-    DeliveryContext, Json, QueueHandlerError,
+    ConsumerRuntimeState, DeliveryCancellation, DeliveryCancellationReason, DeliveryContext, Json,
+    QueueHandlerError, queue, queue_service,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -794,10 +794,12 @@ async fn basic_cancel_retains_the_active_delivery_channel_until_settlement_finis
     // Cancellation of the public observer cannot discard the original drain
     // operation, its accepted delivery, or its channel-close obligation.
     shutdown.abort();
-    assert!(shutdown
-        .await
-        .expect_err("cancel observer only")
-        .is_cancelled());
+    assert!(
+        shutdown
+            .await
+            .expect_err("cancel observer only")
+            .is_cancelled()
+    );
     assert!(!managed.snapshot().shutdown.completed);
     assert!(managed.shutdown_report().is_none());
     probe.release();
@@ -833,11 +835,13 @@ async fn basic_cancel_retains_the_active_delivery_channel_until_settlement_finis
         "closed admission never received the late event"
     );
     assert!(late.ack(BasicAckOptions::default()).await.unwrap());
-    assert!(fixture_channel
-        .basic_get(FIRST_QUEUE.into(), BasicGetOptions::default())
-        .await
-        .unwrap()
-        .is_none());
+    assert!(
+        fixture_channel
+            .basic_get(FIRST_QUEUE.into(), BasicGetOptions::default())
+            .await
+            .unwrap()
+            .is_none()
+    );
 
     container
         .container
@@ -963,11 +967,7 @@ async fn qualify_execution_cancellation(mode: ExecutionMode, local_timeout: bool
     assert_eq!(
         terminal.deliveries.acked_handler_success,
         if cooperative {
-            if local_timeout {
-                2
-            } else {
-                1
-            }
+            if local_timeout { 2 } else { 1 }
         } else {
             0
         }

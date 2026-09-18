@@ -2,13 +2,13 @@
 name = "lily_cancellation"
 version = "0.1.0"
 edition = "2024"
-description = "Shared read-only execution cancellation for Lily framework components"
+description = "Shared read-only execution cancellation for Lilyrs framework components"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme = "README.md"
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "cancellation", "async", "tokio", "concurrency"]
+categories = ["asynchronous", "concurrency"]
 rust-version.workspace = true
 
 [dependencies]

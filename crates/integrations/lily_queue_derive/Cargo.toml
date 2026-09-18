@@ -1,14 +1,14 @@
 [package]
 name = "lily_queue_derive"
 version = "0.1.0"
-edition = "2021"
-description.workspace = true
+edition = "2024"
+description = "Procedural macros for Lilyrs RabbitMQ queue handlers"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme = "README.md"
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "rabbitmq", "queue", "proc-macro", "handler"]
+categories = ["network-programming", "development-tools"]
 rust-version.workspace = true
 
 [lib]

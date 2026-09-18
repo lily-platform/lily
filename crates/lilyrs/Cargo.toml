@@ -2,13 +2,13 @@
 name = "lilyrs"
 version = "0.1.0"
 edition = "2024"
-description = "Optional, feature-selected facade for Lily application components"
+description = "Feature-selected facade for Lilyrs application frameworks and integrations"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme = "README.md"
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "framework", "backend", "async", "web"]
+categories = ["web-programming", "asynchronous"]
 rust-version.workspace = true
 
 [features]

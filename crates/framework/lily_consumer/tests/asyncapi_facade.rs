@@ -1,7 +1,7 @@
 #![cfg(feature = "asyncapi")]
 
 use lily_consumer::schemars::{self, JsonSchema};
-use lily_queue::{asyncapi, queue, queue_service, Json, QueueHandlerError};
+use lily_queue::{Json, QueueHandlerError, asyncapi, queue, queue_service};
 use serde::Deserialize;
 
 #[allow(dead_code)]

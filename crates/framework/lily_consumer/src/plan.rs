@@ -2,9 +2,16 @@ use std::{collections::HashMap, fmt, sync::Arc};
 
 use lily_config::QueueDefinition;
 use lily_error::application::{
-    consumer::ConsumerPlanFailureKind, message_broker::RabbitMQError, MessageBrokerError,
+    MessageBrokerError, consumer::ConsumerPlanFailureKind, message_broker::RabbitMQError,
 };
 use lily_injection::ApplicationContainer;
+#[cfg(any(
+    feature = "transactional-inbox-postgresql",
+    feature = "transactional-inbox-postgresql-factory",
+    feature = "transactional-inbox-mongodb",
+    feature = "transactional-inbox-mongodb-factory"
+))]
+use lily_queue::__private::PreparedTransactionalRuntime;
 #[cfg(any(
     feature = "transactional-inbox-mongodb",
     feature = "transactional-inbox-mongodb-factory"
@@ -15,21 +22,15 @@ use lily_queue::__private::prepare_mongodb_transactional_runtime;
     feature = "transactional-inbox-postgresql-factory"
 ))]
 use lily_queue::__private::prepare_postgresql_transactional_runtime;
-#[cfg(any(
-    feature = "transactional-inbox-postgresql",
-    feature = "transactional-inbox-postgresql-factory",
-    feature = "transactional-inbox-mongodb",
-    feature = "transactional-inbox-mongodb-factory"
-))]
-use lily_queue::__private::PreparedTransactionalRuntime;
 use lily_queue::__private::{
-    compile_queue_handlers, validate_queue_definitions, CompiledQueueDispatch, DeliveryGuarantee,
+    CompiledQueueDispatch, DeliveryGuarantee, MAX_QUEUE_CONCURRENCY, MAX_QUEUE_PREFETCH,
     QueueGuardRegistration, QueueHandlerCompilationInput, QueueHandlerMetadata,
-    QueueMiddlewareRegistration, QueuePayloadKind, MAX_QUEUE_CONCURRENCY, MAX_QUEUE_PREFETCH,
+    QueueMiddlewareRegistration, QueuePayloadKind, compile_queue_handlers,
+    validate_queue_definitions,
 };
 use lily_trace::{
-    runtime::{TraceCellConfig, TraceConfig},
     ComponentIdentity,
+    runtime::{TraceCellConfig, TraceConfig},
 };
 
 pub(crate) const MAX_CONSUMER_QUEUES: usize = 256;
@@ -378,15 +379,13 @@ impl ConsumerExecutionPlan {
                             "validated consumer plan referenced an unavailable handler descriptor",
                         )
                     })?;
-                    let metadata =
-                        handlers
-                            .get(handler.handler_index)
-                            .copied()
-                            .ok_or_else(|| {
-                                invalid_materialized_plan(
+                    let metadata = handlers.get(handler.handler_index).copied().ok_or_else(
+                        || {
+                            invalid_materialized_plan(
                                 "validated consumer plan referenced unavailable handler metadata",
                             )
-                            })?;
+                        },
+                    )?;
                     if definition.name != metadata.queue_name
                         || !metadata_matches_descriptor(metadata, descriptor)
                     {
@@ -1669,11 +1668,10 @@ mod tests {
             payload_type_name: None,
             ..base
         };
-        assert!(ConsumerPlan::validate_handler_descriptors(&vec![
-            exact_budget;
-            MAX_CONSUMER_HANDLERS
-        ])
-        .is_ok());
+        assert!(
+            ConsumerPlan::validate_handler_descriptors(&vec![exact_budget; MAX_CONSUMER_HANDLERS])
+                .is_ok()
+        );
         let oversized_kind = padded("kind-", 109);
         let above_budget = HandlerDescriptor {
             component_kind: Some(&oversized_kind),

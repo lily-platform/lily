@@ -7,20 +7,20 @@
 use std::{
     collections::{HashMap, HashSet},
     sync::{
-        atomic::{AtomicUsize, Ordering},
         Arc, Mutex, OnceLock,
+        atomic::{AtomicUsize, Ordering},
     },
     time::{Duration, Instant},
 };
 
 use async_trait::async_trait;
 use lapin::{
+    BasicProperties, Channel, Confirmation, Connection, ConnectionProperties,
     options::{
         BasicAckOptions, BasicGetOptions, BasicPublishOptions, ConfirmSelectOptions,
         ExchangeDeleteOptions, QueueDeleteOptions,
     },
     types::{AMQPValue, FieldTable},
-    BasicProperties, Channel, Confirmation, Connection, ConnectionProperties,
 };
 use lily_config::{
     ConfigService, LifecycleConfig, LilyConfig, QueueDefinition, QueueRetentionConfig,
@@ -28,14 +28,14 @@ use lily_config::{
 };
 use lily_consumer::{Consumer, ManagedConsumer};
 use lily_error::{
-    application::{message_broker::RabbitMQError, MessageBrokerError},
+    application::{MessageBrokerError, message_broker::RabbitMQError},
     injection::InjectionError,
 };
 use lily_injection::Injectable;
 use lily_injection::{ApplicationContainer, ServiceTrait};
 use lily_queue::{
-    queue, queue_service, BinaryPayload, DeliveryContext, DeliveryTerminalOutcome, Json,
-    QueueHandlerError, QueueService, Service,
+    BinaryPayload, DeliveryContext, DeliveryTerminalOutcome, Json, QueueHandlerError, QueueService,
+    Service, queue, queue_service,
 };
 use serde::{Deserialize, Serialize};
 use tokio::sync::{Mutex as AsyncMutex, Notify};
@@ -894,9 +894,11 @@ async fn canonical_consumer_registry_typed_di_and_settlement_e2e() {
             .get(record.marker.as_str())
             .is_some_and(|event_id| record.event_id == event_id.to_string())
     }));
-    assert!(records
-        .iter()
-        .all(|record| record.queue.starts_with("capq01e.canonical.")));
+    assert!(
+        records
+            .iter()
+            .all(|record| record.queue.starts_with("capq01e.canonical."))
+    );
     assert_eq!(
         records
             .iter()
@@ -1062,11 +1064,13 @@ async fn canonical_consumer_registry_typed_di_and_settlement_e2e() {
             event_ids["poison-metadata"].to_string(),
         ])
     );
-    assert!(fixture_channel
-        .basic_get(dlq(POISON_QUEUE).into(), BasicGetOptions::default())
-        .await
-        .expect("inspect poison DLQ cardinality")
-        .is_none());
+    assert!(
+        fixture_channel
+            .basic_get(dlq(POISON_QUEUE).into(), BasicGetOptions::default())
+            .await
+            .expect("inspect poison DLQ cardinality")
+            .is_none()
+    );
     for queue in [SUCCESS_QUEUE, RETRY_EVENTUAL_QUEUE, POISON_QUEUE] {
         assert!(
             fixture_channel
@@ -1161,10 +1165,12 @@ async fn canonical_consumer_registry_typed_di_and_settlement_e2e() {
         requeued_shutdown.redelivered,
         "the same previously delivered original must be released by channel close"
     );
-    assert!(requeued_shutdown
-        .ack(BasicAckOptions::default())
-        .await
-        .expect("ack shutdown recovery evidence"));
+    assert!(
+        requeued_shutdown
+            .ack(BasicAckOptions::default())
+            .await
+            .expect("ack shutdown recovery evidence")
+    );
 
     container
         .close_with_timeout(Duration::from_secs(5))
@@ -1330,10 +1336,12 @@ async fn versioned_content_dispatch_uses_one_physical_receiver_and_fails_closed(
             long_string_header(headers, "x-lily-schema-version"),
             long_string_header(headers, "x-lily-content-kind"),
         ));
-        assert!(delivery
-            .ack(BasicAckOptions::default())
-            .await
-            .expect("ack inspected CAP-Q-04 DLQ delivery"));
+        assert!(
+            delivery
+                .ack(BasicAckOptions::default())
+                .await
+                .expect("ack inspected CAP-Q-04 DLQ delivery")
+        );
     }
     assert_eq!(
         dead_letter_identities,
@@ -1350,11 +1358,13 @@ async fn versioned_content_dispatch_uses_one_physical_receiver_and_fails_closed(
             ),
         ])
     );
-    assert!(fixture_channel
-        .basic_get(VERSIONED_QUEUE.into(), BasicGetOptions::default())
-        .await
-        .expect("inspect acknowledged versioned queue")
-        .is_none());
+    assert!(
+        fixture_channel
+            .basic_get(VERSIONED_QUEUE.into(), BasicGetOptions::default())
+            .await
+            .expect("inspect acknowledged versioned queue")
+            .is_none()
+    );
 
     managed
         .shutdown()
@@ -1545,14 +1555,16 @@ async fn failed_handoff_requeues_for_a_fresh_canonical_consumer() {
             .is_none(),
         "the recovered ACK must remove the redelivered message"
     );
-    assert!(fixture_channel
-        .basic_get(
-            dlq(HANDOFF_FAILURE_QUEUE).into(),
-            BasicGetOptions::default(),
-        )
-        .await
-        .expect("inspect recreated handoff DLQ")
-        .is_none());
+    assert!(
+        fixture_channel
+            .basic_get(
+                dlq(HANDOFF_FAILURE_QUEUE).into(),
+                BasicGetOptions::default(),
+            )
+            .await
+            .expect("inspect recreated handoff DLQ")
+            .is_none()
+    );
     delete_topology(&fixture_channel).await;
     fixture_connection
         .close(200, "CAP-Q-01E handoff qualification cleanup".into())

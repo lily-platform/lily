@@ -2,13 +2,13 @@
 name = "lily_middleware"
 version = "0.1.0"
 edition = "2024"
-description = "Internal typed middleware, CORS, and CSRF contracts for Lily HTTP"
+description = "Typed middleware, CORS, and CSRF contracts for Lilyrs HTTP and WebSocket runtimes"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme = "README.md"
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "http", "middleware", "cors", "csrf"]
+categories = ["web-programming::http-server"]
 rust-version.workspace = true
 
 [dependencies]

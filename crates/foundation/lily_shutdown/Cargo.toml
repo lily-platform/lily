@@ -2,13 +2,13 @@
 name = "lily_shutdown"
 version = "0.1.0"
 edition = "2024"
-description.workspace = true
+description = "Graceful shutdown coordination and in-flight work accounting"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme = "README.md"
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "graceful-shutdown", "cancellation", "async", "lifecycle"]
+categories = ["asynchronous", "concurrency"]
 rust-version.workspace = true
 
 [dependencies]

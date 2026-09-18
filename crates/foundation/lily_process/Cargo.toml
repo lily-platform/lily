@@ -2,13 +2,13 @@
 name = "lily_process"
 version = "0.1.0"
 edition = "2024"
-description = "Process context management for async multi-request systems" 
+description = "Task-local process context for asynchronous request and job execution"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme.workspace = true
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "context", "task-local", "async", "request"]
+categories = ["asynchronous", "rust-patterns"]
 rust-version.workspace = true
 
 [dependencies]

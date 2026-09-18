@@ -20,13 +20,13 @@ use std::{
 
 use async_trait::async_trait;
 use lapin::{
+    BasicProperties, Channel, Connection, ConnectionProperties, ExchangeKind,
     options::{
         BasicAckOptions, BasicGetOptions, BasicPublishOptions, ConfirmSelectOptions,
         ExchangeDeclareOptions, ExchangeDeleteOptions, QueueBindOptions, QueueDeclareOptions,
         QueueDeleteOptions,
     },
     types::{AMQPValue, FieldTable},
-    BasicProperties, Channel, Connection, ConnectionProperties, ExchangeKind,
 };
 use lily_config::{
     ConfigOptions, ConfigService, LifecycleConfig, LilyConfig, PgConfig, PgTlsConfig, PgTlsMode,
@@ -43,8 +43,8 @@ use lily_queue::__private::{
     prepare_postgresql_transactional_runtime,
 };
 use lily_queue::{
-    queue, queue_service, Json, PostgresInboxOutboxMigrator, PostgresReliabilityError,
-    PostgresTransaction, PublishContentKind, QueueHandlerError, TransactionalOutboxMessage,
+    Json, PostgresInboxOutboxMigrator, PostgresReliabilityError, PostgresTransaction,
+    PublishContentKind, QueueHandlerError, TransactionalOutboxMessage, queue, queue_service,
 };
 use serde::{Deserialize, Serialize};
 use tempfile::TempDir;
@@ -919,10 +919,12 @@ async fn postgresql_transactional_consumer_two_process_e2e() {
     );
     assert_eq!(long_string(headers, "x-lily-schema-version"), "1");
     assert_eq!(long_string(headers, "x-lily-content-kind"), "json");
-    assert!(output
-        .ack(BasicAckOptions::default())
-        .await
-        .expect("ACK output"));
+    assert!(
+        output
+            .ack(BasicAckOptions::default())
+            .await
+            .expect("ACK output")
+    );
 
     wait_for_pg_count(
         &postgres,
@@ -950,11 +952,13 @@ async fn postgresql_transactional_consumer_two_process_e2e() {
     // handler or creating another durable output.
     publish_input(&rabbit, incoming_event_id, &input).await;
     sleep(Duration::from_millis(500)).await;
-    assert!(rabbit
-        .basic_get(OUTPUT_QUEUE.into(), BasicGetOptions::default())
-        .await
-        .expect("inspect duplicate output")
-        .is_none());
+    assert!(
+        rabbit
+            .basic_get(OUTPUT_QUEUE.into(), BasicGetOptions::default())
+            .await
+            .expect("inspect duplicate output")
+            .is_none()
+    );
     let business_count: i64 = postgres
         .query_one(
             "SELECT COUNT(*)::BIGINT FROM lily_queue.cap08_qualification_effects",
@@ -1007,10 +1011,12 @@ async fn postgresql_transactional_consumer_two_process_e2e() {
             .map(|value| value.as_str()),
         Some(crash_outgoing.to_string().as_str())
     );
-    assert!(recovered_output
-        .ack(BasicAckOptions::default())
-        .await
-        .expect("ACK pre-commit crash recovery output"));
+    assert!(
+        recovered_output
+            .ack(BasicAckOptions::default())
+            .await
+            .expect("ACK pre-commit crash recovery output")
+    );
     wait_for_pg_count(
         &postgres,
         "SELECT COUNT(*)::BIGINT FROM lily_queue.cap08_qualification_effects",
@@ -1089,10 +1095,12 @@ async fn postgresql_transactional_consumer_two_process_e2e() {
             .map(|value| value.as_str()),
         Some(post_handler_outgoing.to_string().as_str())
     );
-    assert!(post_handler_output
-        .ack(BasicAckOptions::default())
-        .await
-        .expect("ACK post-handler crash output"));
+    assert!(
+        post_handler_output
+            .ack(BasicAckOptions::default())
+            .await
+            .expect("ACK post-handler crash output")
+    );
     sleep(Duration::from_millis(500)).await;
     assert_eq!(
         handler_invocation_count(&handler_invocations),
@@ -1184,10 +1192,12 @@ async fn postgresql_transactional_consumer_two_process_e2e() {
         "confirmed but unmarked durable outbox row",
     )
     .await;
-    assert!(first_confirmed_output
-        .ack(BasicAckOptions::default())
-        .await
-        .expect("ACK first post-confirm output"));
+    assert!(
+        first_confirmed_output
+            .ack(BasicAckOptions::default())
+            .await
+            .expect("ACK first post-confirm output")
+    );
     if child_a.process_id() == post_confirm_owner {
         child_a.kill_abruptly("post-confirm/pre-mark");
         child_b.stop().await;
@@ -1216,10 +1226,12 @@ async fn postgresql_transactional_consumer_two_process_e2e() {
         !downstream_dedupe.insert(duplicate_confirmed_id),
         "downstream dedupe must collapse the stable duplicate identity"
     );
-    assert!(duplicate_confirmed_output
-        .ack(BasicAckOptions::default())
-        .await
-        .expect("ACK duplicate post-confirm output"));
+    assert!(
+        duplicate_confirmed_output
+            .ack(BasicAckOptions::default())
+            .await
+            .expect("ACK duplicate post-confirm output")
+    );
     wait_for_pg_count(
         &postgres,
         &format!(
@@ -1311,10 +1323,12 @@ async fn postgresql_transactional_consumer_two_process_e2e() {
         long_string(restarted_headers, "x-lily-event-id"),
         restart_outgoing.to_string()
     );
-    assert!(restarted_output
-        .ack(BasicAckOptions::default())
-        .await
-        .expect("ACK restarted outbox output"));
+    assert!(
+        restarted_output
+            .ack(BasicAckOptions::default())
+            .await
+            .expect("ACK restarted outbox output")
+    );
     wait_for_pg_count(
         &postgres,
         "SELECT COUNT(*)::BIGINT FROM lily_queue.outbox WHERE delivered_at IS NOT NULL",

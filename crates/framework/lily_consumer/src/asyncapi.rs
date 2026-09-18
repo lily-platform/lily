@@ -8,12 +8,12 @@
 ))]
 use lily_asyncapi::__private::TransactionalInboxBackend;
 use lily_asyncapi::__private::{
-    amqp_server_names, prepare_document, Action, AmqpQueueBinding, ChannelBinding,
-    ChannelDescriptor, DeliveryGuaranteeExtension, Documentation, LilyExtension, MessageDescriptor,
-    OperationDescriptor, PayloadSchema, PreparedAsyncApi, RabbitMqDeadLetterDescriptor,
-    RabbitMqExchangeKind, RabbitMqMainTopologyDescriptor, RabbitMqQueueType,
-    RabbitMqRetryAttemptDescriptor, RabbitMqRetryBucketDescriptor, RabbitMqTopologyExtension,
-    RabbitMqTopologyOwnership, SettlementExtension, TransportContribution, TransportKind,
+    Action, AmqpQueueBinding, ChannelBinding, ChannelDescriptor, DeliveryGuaranteeExtension,
+    Documentation, LilyExtension, MessageDescriptor, OperationDescriptor, PayloadSchema,
+    PreparedAsyncApi, RabbitMqDeadLetterDescriptor, RabbitMqExchangeKind,
+    RabbitMqMainTopologyDescriptor, RabbitMqQueueType, RabbitMqRetryAttemptDescriptor,
+    RabbitMqRetryBucketDescriptor, RabbitMqTopologyExtension, RabbitMqTopologyOwnership,
+    SettlementExtension, TransportContribution, TransportKind, amqp_server_names, prepare_document,
 };
 use lily_asyncapi::{AsyncApiBuildError, AsyncApiConfig, AsyncApiService};
 use lily_config::{

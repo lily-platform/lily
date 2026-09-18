@@ -14,6 +14,13 @@ applications with shared DI services, real databases, messaging and facade clien
 The [facade qualification guide](tests/qualification/FACADE.md) describes the
 compatibility, regression and live example checks.
 
+## Rust toolchain
+
+Rust 1.96.1 is the currently supported and tested toolchain, pinned in
+`rust-toolchain.toml`. All published crates use edition 2024 and inherit
+`rust-version = "1.96.1"` from the workspace. Cargo treats this value as a
+minimum compiler version; newer toolchains are not currently validated.
+
 ## License
 
 Lily is dual-licensed under either the [MIT License](LICENSE-MIT) or the

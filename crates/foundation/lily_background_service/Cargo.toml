@@ -2,9 +2,12 @@
 name = "lily_background_service"
 version = "0.1.0"
 edition = "2024"
-description = "Supervised background services with owned DI scopes and bounded host shutdown"
+description = "Supervised background services with scoped dependency injection and bounded shutdown"
 license.workspace = true
 repository.workspace = true
+homepage.workspace = true
+keywords = ["lilyrs", "background-service", "async", "tokio", "shutdown"]
+categories = ["asynchronous", "concurrency"]
 rust-version.workspace = true
 
 [dependencies]

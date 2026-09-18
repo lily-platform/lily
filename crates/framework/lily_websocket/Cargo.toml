@@ -2,13 +2,13 @@
 name = "lily_websocket"
 version = "0.1.0"
 edition = "2024"
-description.workspace = true
+description = "WebSocket application framework with typed controllers and application-owned lifecycle"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme = "README.md"
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "websocket", "realtime", "framework", "async"]
+categories = ["web-programming::websocket", "asynchronous"]
 rust-version.workspace = true
 
 [features]

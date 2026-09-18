@@ -19,7 +19,7 @@ use lily_consumer::Consumer;
 use lily_error::injection::InjectionError;
 use lily_injection::Injectable;
 use lily_injection::ServiceTrait;
-use lily_queue::{queue, queue_service, Json, QueueHandlerError};
+use lily_queue::{Json, QueueHandlerError, queue, queue_service};
 use serde::{Deserialize, Serialize};
 // =============================================================================
 // Message DTOs

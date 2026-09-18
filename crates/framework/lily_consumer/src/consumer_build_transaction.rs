@@ -5,12 +5,12 @@ use lily_error::application::consumer::{
 };
 use lily_injection::{
     __private::{
-        begin_application_container_build, ApplicationContainerBuild,
-        ApplicationContainerBuildOutcome,
+        ApplicationContainerBuild, ApplicationContainerBuildOutcome,
+        begin_application_container_build,
     },
     ApplicationContainer, ApplicationContainerBuilder, ProcessContext,
 };
-use lily_queue::__private::{register_queue_lifecycle, QueueRuntimeHandle, QueueShutdownDeadlines};
+use lily_queue::__private::{QueueRuntimeHandle, QueueShutdownDeadlines, register_queue_lifecycle};
 use lily_shutdown::{FrameworkShutdownCoordinator, ShutdownSignal, ShutdownState};
 use lily_trace::TracingRuntimeOwner;
 use std::{
@@ -18,8 +18,8 @@ use std::{
     panic::AssertUnwindSafe,
     pin::Pin,
     sync::{
-        atomic::{AtomicBool, Ordering},
         Arc,
+        atomic::{AtomicBool, Ordering},
     },
     task::{Context, Poll},
     time::Duration,
@@ -29,8 +29,9 @@ use tokio_util::sync::CancellationToken;
 use tracing::Instrument;
 
 use super::{
-    runtime_owner::ConsumerRuntimeOwner, shutdown_failure, shutdown_report_has_primary_failure,
-    shutdown_report_reconciled, shutdown_report_requires_aggregate, Consumer,
+    Consumer, runtime_owner::ConsumerRuntimeOwner, shutdown_failure,
+    shutdown_report_has_primary_failure, shutdown_report_reconciled,
+    shutdown_report_requires_aggregate,
 };
 
 /// Result of polling one caller-owned startup activity against the optional
@@ -234,10 +235,11 @@ impl ConsumerBuildTransaction {
     /// intervening await or a second cleanup authority.
     pub(super) fn commit(&mut self) -> ConsumerBuildCommit {
         debug_assert!(self.di_build.is_none());
-        debug_assert!(self
-            .active_activity
-            .as_ref()
-            .is_none_or(|activity| activity.is_complete()));
+        debug_assert!(
+            self.active_activity
+                .as_ref()
+                .is_none_or(|activity| activity.is_complete())
+        );
         self.active_activity.take();
         ConsumerBuildCommit {
             runtime: self.runtime.clone(),
@@ -621,9 +623,9 @@ mod tests {
     use lily_injection::Injectable;
     use lily_injection::ServiceTrait;
     use lily_queue::__private::{
-        queue_runtime, queue_service_test_seed, QueueServiceTestLifecycleCall,
+        QueueServiceTestLifecycleCall, queue_runtime, queue_service_test_seed,
     };
-    use std::sync::{atomic::AtomicUsize, Mutex};
+    use std::sync::{Mutex, atomic::AtomicUsize};
 
     #[derive(Default, Injectable)]
     #[service(lifetime = "Singleton")]

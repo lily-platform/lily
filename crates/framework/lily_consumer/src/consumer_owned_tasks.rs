@@ -1,8 +1,8 @@
 //! Actual joins retained independently of public runtime/rollback waiters.
 
 use futures_util::{
-    future::{BoxFuture, Shared},
     FutureExt,
+    future::{BoxFuture, Shared},
 };
 use lily_error::application::consumer::ConsumerError;
 use std::{

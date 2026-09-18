@@ -2,13 +2,13 @@
 name = "lily_injectable_derive"
 version = "0.1.0"
 edition = "2024"
-description.workspace = true
+description = "Constructor injection and service registration derives for Lilyrs dependency injection"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme.workspace = true
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "dependency-injection", "derive", "proc-macro", "services"]
+categories = ["rust-patterns", "development-tools"]
 rust-version.workspace = true
 exclude = ["examples/**", "tests/**"]
 

@@ -2,13 +2,13 @@
 name = "lily_queue_client"
 version = "0.1.0"
 edition = "2024"
-description.workspace = true
+description = "Asynchronous RabbitMQ publishing with bounded admission and supervised connections"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme = "README.md"
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "rabbitmq", "amqp", "publisher", "messaging"]
+categories = ["network-programming", "asynchronous"]
 rust-version.workspace = true
 
 [dependencies]

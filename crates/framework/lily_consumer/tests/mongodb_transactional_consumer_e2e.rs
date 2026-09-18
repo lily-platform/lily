@@ -16,14 +16,15 @@ use std::{
     path::{Path, PathBuf},
     process::{Child, Command, Stdio},
     sync::{
-        atomic::{AtomicBool, Ordering},
         Arc,
+        atomic::{AtomicBool, Ordering},
     },
     time::{Duration, Instant},
 };
 
 use async_trait::async_trait;
 use lapin::{
+    BasicProperties, Channel, Connection, ConnectionProperties, ExchangeKind,
     message::BasicGetMessage,
     options::{
         BasicAckOptions, BasicGetOptions, BasicPublishOptions, ConfirmSelectOptions,
@@ -31,7 +32,6 @@ use lapin::{
         QueueDeleteOptions,
     },
     types::{AMQPValue, FieldTable},
-    BasicProperties, Channel, Connection, ConnectionProperties, ExchangeKind,
 };
 #[cfg(feature = "transactional-inbox-mongodb-factory")]
 use lily_config::DatabaseCellConfig;
@@ -52,9 +52,9 @@ use lily_queue::__private::{
     install_outbox_post_confirm_probe, install_rabbitmq_post_handler_settlement_probe,
 };
 use lily_queue::{
-    queue, queue_service, DeliveryCancellation, DeliveryCancellationReason, Json,
-    MongoInboxOutboxMigrator, MongoTransaction, PublishContentKind, QueueHandlerError,
-    TransactionalOutboxMessage,
+    DeliveryCancellation, DeliveryCancellationReason, Json, MongoInboxOutboxMigrator,
+    MongoTransaction, PublishContentKind, QueueHandlerError, TransactionalOutboxMessage, queue,
+    queue_service,
 };
 use serde::{Deserialize, Serialize};
 use tempfile::TempDir;
@@ -832,11 +832,13 @@ async fn mongodb_transactional_consumer_two_process_e2e() {
         .expect("ACK output");
     sleep(Duration::from_millis(500)).await;
     assert_eq!(invocation_count(&invocations), 1);
-    assert!(rabbit
-        .basic_get(OUTPUT_QUEUE.into(), BasicGetOptions::default())
-        .await
-        .expect("inspect duplicate output")
-        .is_none());
+    assert!(
+        rabbit
+            .basic_get(OUTPUT_QUEUE.into(), BasicGetOptions::default())
+            .await
+            .expect("inspect duplicate output")
+            .is_none()
+    );
     let evidence_a = child_a.evidence();
     let evidence_b = child_b.evidence();
     assert!(evidence_a.inbox_body_attempts + evidence_b.inbox_body_attempts >= 1);
@@ -849,19 +851,23 @@ async fn mongodb_transactional_consumer_two_process_e2e() {
             + evidence_b.inbox_post_commit_release_failures,
         0
     );
-    assert!(rabbit
-        .basic_get(INPUT_QUEUE.into(), BasicGetOptions::default())
-        .await
-        .expect("inspect deferred duplicate input")
-        .is_none());
-    assert!(rabbit
-        .basic_get(
-            format!("{INPUT_QUEUE}.dlq.v2").into(),
-            BasicGetOptions::default(),
-        )
-        .await
-        .expect("inspect duplicate dead-letter queue")
-        .is_none());
+    assert!(
+        rabbit
+            .basic_get(INPUT_QUEUE.into(), BasicGetOptions::default())
+            .await
+            .expect("inspect deferred duplicate input")
+            .is_none()
+    );
+    assert!(
+        rabbit
+            .basic_get(
+                format!("{INPUT_QUEUE}.dlq.v2").into(),
+                BasicGetOptions::default(),
+            )
+            .await
+            .expect("inspect duplicate dead-letter queue")
+            .is_none()
+    );
 
     // Kill after MongoDB commit and before input settlement. Redelivery must
     // observe AlreadyCompleted and never invoke the handler again.
@@ -988,19 +994,23 @@ async fn mongodb_transactional_consumer_two_process_e2e() {
         .ack(BasicAckOptions::default())
         .await
         .expect("ACK shutdown qualification input");
-    assert!(rabbit
-        .basic_get(
-            format!("{INPUT_QUEUE}.dlq.v2").into(),
-            BasicGetOptions::default(),
-        )
-        .await
-        .expect("inspect shutdown dead-letter queue")
-        .is_none());
-    assert!(rabbit
-        .basic_get(OUTPUT_QUEUE.into(), BasicGetOptions::default())
-        .await
-        .expect("inspect shutdown output queue")
-        .is_none());
+    assert!(
+        rabbit
+            .basic_get(
+                format!("{INPUT_QUEUE}.dlq.v2").into(),
+                BasicGetOptions::default(),
+            )
+            .await
+            .expect("inspect shutdown dead-letter queue")
+            .is_none()
+    );
+    assert!(
+        rabbit
+            .basic_get(OUTPUT_QUEUE.into(), BasicGetOptions::default())
+            .await
+            .expect("inspect shutdown output queue")
+            .is_none()
+    );
 
     cleanup_rabbit(&rabbit).await;
 }

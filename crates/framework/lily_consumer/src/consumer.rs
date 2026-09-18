@@ -11,6 +11,13 @@ use lily_error::application::consumer::{
 };
 use lily_injection::{ApplicationContainer, ApplicationContainerBuilder, DEFAULT_SHUTDOWN_TIMEOUT};
 #[cfg(any(
+    feature = "transactional-inbox-postgresql",
+    feature = "transactional-inbox-postgresql-factory",
+    feature = "transactional-inbox-mongodb",
+    feature = "transactional-inbox-mongodb-factory"
+))]
+use lily_queue::__private::PreparedTransactionalRuntime;
+#[cfg(any(
     feature = "transactional-inbox-mongodb",
     feature = "transactional-inbox-mongodb-factory"
 ))]
@@ -20,18 +27,11 @@ use lily_queue::__private::register_mongodb_transactional_runtime;
     feature = "transactional-inbox-postgresql-factory"
 ))]
 use lily_queue::__private::register_postgresql_transactional_runtime;
-#[cfg(any(
-    feature = "transactional-inbox-postgresql",
-    feature = "transactional-inbox-postgresql-factory",
-    feature = "transactional-inbox-mongodb",
-    feature = "transactional-inbox-mongodb-factory"
-))]
-use lily_queue::__private::PreparedTransactionalRuntime;
 use lily_queue::{
     __private::{
+        QueueGuardRegistration, QueueMiddlewareRegistration, QueueRuntimeHandle,
         get_all_queue_handlers, queue_guard_registration, queue_middleware_registration,
-        queue_runtime, register_compiled_dispatch, QueueGuardRegistration,
-        QueueMiddlewareRegistration, QueueRuntimeHandle,
+        queue_runtime, register_compiled_dispatch,
     },
     QueueGuard, QueueMiddleware, QueueService,
 };
@@ -42,7 +42,7 @@ use lily_shutdown::{
 };
 use lily_trace::prelude::*;
 use std::{path::Path, sync::Arc, time::Duration};
-use tokio::sync::{oneshot, Mutex};
+use tokio::sync::{Mutex, oneshot};
 #[cfg(test)]
 use tokio::task::JoinHandle;
 use tokio_util::sync::CancellationToken;
@@ -58,14 +58,14 @@ use crate::plan::invalid_materialized_plan;
 #[cfg(feature = "asyncapi")]
 use crate::asyncapi::{ConsumerDocument, PreparedConsumerAsyncApi};
 use crate::{
+    ConsumerOperationalSnapshot, ConsumerShutdownSnapshot,
     operational::{
-        aggregate_readiness, classify_admission, classify_runtime, ConsumerOperationalState,
+        ConsumerOperationalState, aggregate_readiness, classify_admission, classify_runtime,
     },
     plan::{
         ConsumerExecutionPlan, ConsumerExecutionPlanBinding, ConsumerExecutionPlanError,
         ValidatedTraceCells,
     },
-    ConsumerOperationalSnapshot, ConsumerShutdownSnapshot,
 };
 
 #[path = "consumer_build_transaction.rs"]
@@ -81,7 +81,7 @@ use owned_tasks::OwnedTask;
 #[path = "consumer_runtime_qualification_tests.rs"]
 mod runtime_qualification_tests;
 
-use build_transaction::{poll_startup_activity, ConsumerBuildTransaction, StartupActivityOutcome};
+use build_transaction::{ConsumerBuildTransaction, StartupActivityOutcome, poll_startup_activity};
 #[cfg(feature = "fuzzing")]
 pub(crate) use runtime_owner::exercise_runtime_ownership_for_fuzz;
 use runtime_owner::{ConsumerRuntimeWaiterGuard, ManagedStartupWaiterGuard};

@@ -2,13 +2,13 @@
 name = "lily_injection"
 version = "0.1.0"
 edition = "2024"
-description.workspace = true
+description = "Scoped dependency injection, service lifetimes, and application-owned cleanup"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme.workspace = true
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "dependency-injection", "scoped", "singleton", "async"]
+categories = ["rust-patterns", "asynchronous"]
 rust-version.workspace = true
 exclude = ["examples/**", "tests/**"]
 

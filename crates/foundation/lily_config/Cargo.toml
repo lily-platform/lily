@@ -2,13 +2,13 @@
 name = "lily_config"
 version = "0.1.0"
 edition = "2024"
-description.workspace = true
+description = "Validated TOML configuration, environment overrides, and immutable application settings"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 readme.workspace = true
-keywords.workspace = true
-categories.workspace = true
+keywords = ["lilyrs", "configuration", "toml", "environment", "secrets"]
+categories = ["config"]
 rust-version.workspace = true
 
 [features]
