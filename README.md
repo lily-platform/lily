@@ -16,6 +16,12 @@ applications with shared DI services, real databases, messaging and facade clien
 The [facade qualification guide](tests/qualification/FACADE.md) describes the
 compatibility, regression and live example checks.
 
+## Project history
+
+Lilyrs grew out of the experimental repository.
+The original repository is preserved as a historical archive of the project's
+early development. Active development continues in this repository.
+
 ## Rust toolchain
 
 Rust 1.96.1 is the currently supported and tested toolchain, pinned in
